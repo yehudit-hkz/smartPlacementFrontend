@@ -1,4 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body { height: 100%;  }
+body{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
+span,th,td,.mat-paginator{font-family: 'Varela Round', sans-serif;}
+
+
+/*font-family: 'Arimo', sans-serif;
+font-family: 'Varela Round', sans-serif;*/
+// font-family: 'Anton', sans-serif;
+// font-family: 'Lobster', cursive;

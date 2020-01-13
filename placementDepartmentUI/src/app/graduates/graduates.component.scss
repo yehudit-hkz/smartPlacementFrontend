@@ -1,0 +1,44 @@
+table {
+  width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    text-align: right;
+  }
+
+//   ::ng-deep .mat-paginator {
+   
+//     // override material paginator page switch
+//     .mat-paginator-range-label {
+//         order: 2;
+//     }
+
+//     .mat-paginator-navigation-previous {
+//         order: 1;
+//     }
+//     .mat-paginator-navigation-next {
+//         order: 3;
+//     }
+// }
+  td, th {
+    width: 45%;
+  }
+  .example-icon {
+     padding-left: 200px;    
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+  .mat-icon {
+      color: rgb(93, 94, 93);
+    }
+  .mat-icon-button:hover
+  {
+     background-color:rgb(237, 238, 237);     
+    color: darken($color: #050505, $amount: 0);
+     border-radius: 240px;
+  }
+  
