@@ -11,6 +11,12 @@ import {
     MatTooltipModule,
     MatTabsModule,
     MatButtonModule,
+    MatSidenavModule,
+    MatListModule,
+    MatExpansionModule,
+    MatDividerModule,
+    MatCheckboxModule,
+    MatDialogModule,
 
 } from '@angular/material';
 
@@ -26,6 +32,12 @@ import {
         MatTooltipModule,
         MatTabsModule,
         MatButtonModule,
+        MatSidenavModule,
+        MatListModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatCheckboxModule,
+        MatDialogModule,
 
     ],
     exports: [
@@ -39,7 +51,12 @@ import {
         MatTooltipModule,
         MatTabsModule,
         MatButtonModule,
-
+        MatSidenavModule,
+        MatListModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatCheckboxModule,
+        MatDialogModule,
     ]
 })
 export class MaterialModule { }

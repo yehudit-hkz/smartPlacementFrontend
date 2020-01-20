@@ -15,4 +15,7 @@ export class StamService {
   {
     return this.http.get<Graduate[]>(this.baseURL+'Graduate');
   }
+  getGraduateByID(id){
+    return this.http.get<Graduate>(this.baseURL+"Graduate/Get?id="+id) ;
+  }
 }

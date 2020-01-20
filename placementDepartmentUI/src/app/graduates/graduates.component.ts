@@ -7,6 +7,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
+
+
 @Component({
   selector: 'app-graduates',
   templateUrl: './graduates.component.html',
@@ -14,6 +16,8 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class GraduatesComponent implements OnInit {
   graduates: MatTableDataSource<Graduate>;
+  panellist;
+  onelist:Graduate[];
   columnsToDisplay = ['Name',"City","action"];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -21,6 +25,8 @@ export class GraduatesComponent implements OnInit {
 
 
   constructor(public GTS :StamService){
+    this.onelist=[];
+    this.panellist=[]
     // this.graduates=new MatTableDataSource<Graduate>();
   }
  
@@ -31,7 +37,16 @@ export class GraduatesComponent implements OnInit {
        {
         //Assign the data to the data source for the table to render
         this.graduates = new MatTableDataSource(graduates);
+        this.onelist=graduates;
+        this.panellist=[
+          { name:"פעיל",sublist:[{City:"פעיל"},{City:"לא פעיל"}]},
+          { name:"מגדר",sublist:[{City:"זכר"},{City:"נקבה"}]},
+          { name:"עיר",sublist:this.onelist},
+          { name:"עיררר",sublist:this.onelist}
+
+      ];
         console.log(this.graduates);
+        console.log(this.panellist)
         this.graduates.sort = this.sort;
         this.graduates.paginator = this.paginator;
         this.graduates.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'

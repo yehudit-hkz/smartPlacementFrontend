@@ -32,13 +32,19 @@ table {
   .example-spacer {
     flex: 1 1 auto;
   }
-  .mat-icon {
-      color: rgb(93, 94, 93);
-    }
-  .mat-icon-button:hover
-  {
-     background-color:rgb(237, 238, 237);     
-    color: darken($color: #050505, $amount: 0);
-     border-radius: 240px;
+ 
+  .example-container {
+     position: absolute;
+    top: 120px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // background: #eee;
   }
-  
+  mat-sidenav{
+  width: 20%;
+  background: rgb(252, 252, 252);
+  } 
+  mat-sidenav-content{
+    background-color: white;
+  }

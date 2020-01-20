@@ -12,6 +12,8 @@ import { GraduatesComponent } from './graduates/graduates.component';
 import { GraduateDetailsComponent } from './graduate-details/graduate-details.component';
 import {StamService}from './services/stam.service';
 import { from } from 'rxjs';
+import { DeletionDialogComponent } from './deletion-dialog/deletion-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 export const ROUTES: Routes=[
   { path: 'graduates', component: GraduatesComponent },
@@ -23,7 +25,8 @@ export const ROUTES: Routes=[
   declarations: [
     AppComponent,
     GraduatesComponent,
-    GraduateDetailsComponent
+    GraduateDetailsComponent,
+    DeletionDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -32,8 +35,11 @@ export const ROUTES: Routes=[
     MaterialModule,
     HttpClientModule,
     RouterModule.forRoot(ROUTES),
+    FormsModule,
   ],
-  
+  entryComponents: [
+    DeletionDialogComponent
+  ],
   providers: [StamService],
   bootstrap: [AppComponent]
 })

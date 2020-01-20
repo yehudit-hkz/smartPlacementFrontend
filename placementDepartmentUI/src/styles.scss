@@ -2,8 +2,17 @@
 
 html, body { height: 100%;  }
 body{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
-span,th,td,.mat-paginator{font-family: 'Varela Round', sans-serif;}
+span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p{font-family: 'Varela Round', sans-serif;}
 
+.mat-icon-button {
+    color: rgb(93, 94, 93);
+  }
+.mat-icon-button:hover
+{
+   background-color:rgb(237, 237, 237);     
+  color: black;
+   border-radius: 240px;
+}
 
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
