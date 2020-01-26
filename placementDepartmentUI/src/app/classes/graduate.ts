@@ -8,5 +8,4 @@ export class Graduate{
     IsWorking:boolean;
     IsInterested:boolean;
     LinkToCV:string ;
-    constructor(){}
 }

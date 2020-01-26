@@ -1,0 +1,81 @@
+<br>
+<form [formGroup]="graduateForm" autocomplete novalidate (ngSubmit)="createGraduate(graduateForm.value)" >
+
+    <mat-form-field  >
+        <input matInput type="text" placeholder='ת"ז' formControlName="Id" required [readonly]="graduate.Id!=null"> 
+        <mat-error *ngIf="hasError('Id', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('Id', 'pattern')">הזן מספר זהות חוקי בעל 9 ספרות</mat-error>
+    </mat-form-field >
+<br>
+      <mat-form-field>
+        <input matInput type="text" placeholder="שם" formControlName="name" required >
+        <mat-error *ngIf="hasError('name', 'required')">זהו שדה חובה!</mat-error>
+      </mat-form-field>
+
+      <mat-form-field> 
+        <mat-select placeholder="עיר" formControlName="city" required>
+            <mat-option></mat-option>
+          <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
+      </mat-form-field>
+<br>
+      <mat-form-field>
+        <input matInput type="email" placeholder='דוא"ל' formControlName="email" required style="direction: ltr;" >
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="hasError('email', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('email', 'email')">הזן כתובת דוא"ל חוקית</mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput type="tel" placeholder='פלאפון' formControlName="phone" required >
+        <mat-icon matSuffix>call</mat-icon>
+        <mat-error *ngIf="hasError('phone', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('phone', 'pattern')">הזן מס' פלאפון חוקי</mat-error>
+      </mat-form-field>
+<br>
+      <mat-checkbox formControlName="IsWorking">
+          <span style="margin-right:10px;">עובד בתחום</span>
+        </mat-checkbox>
+        <mat-checkbox formControlName="IsInterested">
+            <span style="margin-right:10px;">פעיל</span>
+          </mat-checkbox>
+
+      <!-- <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dateOfBirth" id="dateOfBirth" 
+            readonly (click)="picker.open()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+       
+      <mat-form-field>
+        <input matInput type="text" placeholder="Owner's address" formControlName="address">
+        <mat-hint align="end">Not more then 100 characters long.</mat-hint>
+        <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
+        <mat-error *ngIf="hasError('address', 'maxlength')">You have more than 100 characters</mat-error>
+      </mat-form-field> -->
+      <br><br>
+      <div style="text-align: center;">
+        <button type="button" mat-raised-button (click)="onCancel()">ביטול</button>&nbsp;
+        <button mat-raised-button [disabled]="graduateForm.invalid||!graduateForm.dirty">{{graduate.Id==null?"הוסף":"עדכן"}}</button>  
+      </div>
+</form>
+<br><br><br>
+<!-- <br>
+<br>
+<p>
+    <mat-form-field style="direction: ltr;" appearance="outline">
+      <mat-label style="padding-right: 20px;">כמו שאני</mat-label>
+      <input matInput placeholder="היי">
+      <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
+      <mat-hint align="end">רמזון</mat-hint>
+    </mat-form-field>
+  </p>
+
+  <p>
+    <mat-form-field appearance="fill">
+      <mat-label >פחות כמו שאני </mat-label>
+      <input matInput placeholder="היי">
+      <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+      <mat-hint >רמזון</mat-hint>
+    </mat-form-field>
+  </p> -->

@@ -1,14 +1,11 @@
 <section id="wrapper" > 
-    
-<nav mat-tab-nav-bar class="mat-elevation-z8 ">
-    <img src="../assets/img/logo-b.png" height="50px">
-    &nbsp; &nbsp; &nbsp;
-    <a mat-tab-link
-     routerLink="/graduates"
-     routerLinkActive #rla="routerLinkActive"
-     [active]="rla.isActive">
-     בוגרים
-    </a>
-</nav>     
-            <article> <router-outlet></router-outlet> </article>     
-    </section> 
+    <mat-toolbar class="mat-elevation-z6">
+        <img src="../assets/img/logo-b.png" height="50px">
+        &nbsp; &nbsp; &nbsp;
+        <div >
+            <a mat-button routerLink="/graduates">בוגרים</a>
+        </div>
+
+      </mat-toolbar>
+        <article> <router-outlet></router-outlet> </article>     
+</section> 

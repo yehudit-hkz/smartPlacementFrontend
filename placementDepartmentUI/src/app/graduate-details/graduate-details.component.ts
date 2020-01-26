@@ -4,9 +4,6 @@ import{Graduate}from '../classes/graduate';
 import{StamService}from '../services/stam.service';
 import {MatDialog} from '@angular/material/dialog';
 import{DeletionDialogComponent}from '../deletion-dialog/deletion-dialog.component';
-
-
-
 import { from } from 'rxjs';
 
 @Component({
@@ -43,6 +40,7 @@ export class GraduateDetailsComponent implements OnInit {
       console.log('The dialog was closed');
       if(result==true)
       console.log(`Dialog result: ${result}`);
+      //remove and go back to the list
     });
   }
 }

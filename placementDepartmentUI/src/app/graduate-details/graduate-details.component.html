@@ -6,8 +6,9 @@
     <br>
     <div class="row">
         <span style="font-size: 28px;" class="col-md-8">{{graduate.Name}}</span>
+
         <div class="col-md-4" style="text-align: center;">
-            <a routerLink="/graduate-details/{{this.graduate.Id}}" routerLinkActive="activeLink" mat-icon-button>
+            <a routerLink="/graduate-editing/{{graduate.Id}}" routerLinkActive="activeLink" mat-icon-button>
                 <mat-icon  matTooltip="עריכה">edit</mat-icon>
             </a>
             <button (click)="openDeletionDialog()" mat-icon-button>
@@ -62,35 +63,7 @@
                 </tr>
                 <tr>
                     <td class="title"><b>דוא"ל</b></td>
-                    <td>{{graduate.Email}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>פעיל?</b></td>
-                    <td>{{graduate.IsInterested?"כן":"לא"}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>עובד?</b></td>
-                    <td>{{graduate.IsWorking?"כן":"לא"}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>קו"ח?</b></td>
-                    <td>{{graduate.LinkToCV?"כן":"לא"}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>ת"ז</b></td>
-                    <td>{{graduate.Id}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>עיר</b></td>
-                    <td>{{graduate.City}}</td>
-                </tr>
-                 <tr>
-                    <td class="title"><b>טלפון</b></td>
-                    <td>{{graduate.Phone}}</td>
-                </tr>
-                <tr>
-                    <td class="title"><b>דוא"ל</b></td>
-                    <td>{{graduate.Email}}</td>
+                    <td style="direction: ltr;">{{graduate.Email}}</td>
                 </tr>
                 <tr>
                     <td class="title"><b>פעיל?</b></td>
@@ -110,4 +83,7 @@
         <br><br>
         </div>
     </div>
+    <br><br>
+    <br><br>
+
 </div>

@@ -1,27 +1,27 @@
-table {
+table,mat-paginator {
   width: 100%;
   }
   
-  .mat-form-field {
-    font-size: 14px;
-    width: 100%;
-    text-align: right;
-  }
+  
 
-//   ::ng-deep .mat-paginator {
+  ::ng-deep .mat-paginator {
    
-//     // override material paginator page switch
-//     .mat-paginator-range-label {
-//         order: 2;
-//     }
+    // override material paginator page switch
+    // .mat-paginator-range-label {
+    //     order: 2;
+    // }
+    .mat-paginator-navigation-previous {
+        // order: 1;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+    .mat-paginator-navigation-next {
+        // order: 3;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}
 
-//     .mat-paginator-navigation-previous {
-//         order: 1;
-//     }
-//     .mat-paginator-navigation-next {
-//         order: 3;
-//     }
-// }
   td, th {
     width: 45%;
   }
@@ -35,7 +35,7 @@ table {
  
   .example-container {
      position: absolute;
-    top: 120px;
+    top: 150px;
     bottom: 0;
     left: 0;
     right: 0;
@@ -48,3 +48,4 @@ table {
   mat-sidenav-content{
     background-color: white;
   }
+  

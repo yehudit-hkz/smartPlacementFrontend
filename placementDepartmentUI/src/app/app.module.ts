@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {HttpClientModule}from '@angular/common/http';
-import { RouterModule, Routes } from '@angular/router';
 import{MaterialModule}from'./material.module';
 
 import { GraduatesComponent } from './graduates/graduates.component';
@@ -13,12 +12,12 @@ import { GraduateDetailsComponent } from './graduate-details/graduate-details.co
 import {StamService}from './services/stam.service';
 import { from } from 'rxjs';
 import { DeletionDialogComponent } from './deletion-dialog/deletion-dialog.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { GraduateFormComponent } from './graduate-form/graduate-form.component';
+import { NewGraduateComponent } from './new-graduate/new-graduate.component';
+import { GraduateEditingComponent } from './graduate-editing/graduate-editing.component';
 
-export const ROUTES: Routes=[
-  { path: 'graduates', component: GraduatesComponent },
-  {path:'graduate-details/:graduateID' ,component:GraduateDetailsComponent}
-];
+
  
 
 @NgModule({
@@ -26,7 +25,10 @@ export const ROUTES: Routes=[
     AppComponent,
     GraduatesComponent,
     GraduateDetailsComponent,
-    DeletionDialogComponent
+    DeletionDialogComponent,
+    GraduateFormComponent,
+    NewGraduateComponent,
+    GraduateEditingComponent
   ],
   imports: [
     BrowserModule,
@@ -34,8 +36,9 @@ export const ROUTES: Routes=[
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    RouterModule.forRoot(ROUTES),
     FormsModule,
+    ReactiveFormsModule,
+    
   ],
   entryComponents: [
     DeletionDialogComponent

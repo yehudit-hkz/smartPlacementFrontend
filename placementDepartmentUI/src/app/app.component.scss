@@ -2,8 +2,8 @@
  section{   
     width: 100%;   
 }  
-     nav {
-      background-color: white;
+mat-toolbar {
+      height: 55px !important;
       position: sticky;
       position: -webkit-sticky; /* For macOS/iOS Safari */
       top: 0; /* Sets the sticky toolbar to be on top */
@@ -14,9 +14,10 @@
     } 
 
 a{
-    color:rgb(23, 14, 61);
+    color:rgb(22, 11, 71);
     font-family: 'Varela Round', sans-serif;
     font-size: 18px;
+    text-decoration-line: none;
 }
 
 

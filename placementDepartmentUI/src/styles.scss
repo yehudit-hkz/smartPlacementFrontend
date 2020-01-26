@@ -2,7 +2,7 @@
 
 html, body { height: 100%;  }
 body{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
-span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p{font-family: 'Varela Round', sans-serif;}
+span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error{font-family: 'Varela Round', sans-serif !important;}
 
 .mat-icon-button {
     color: rgb(93, 94, 93);
@@ -13,7 +13,13 @@ span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p{font-family: 'Varela Ro
   color: black;
    border-radius: 240px;
 }
-
+.mat-toolbar {
+    height: 80px !important;
+  }
+.mat-form-field,.mat-select {
+    font-size: 16px;
+    text-align: right !important;
+  }
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;

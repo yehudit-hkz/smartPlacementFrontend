@@ -1,0 +1,12 @@
+<mat-toolbar>
+    <span>הוספת בוגר חדש</span>
+</mat-toolbar>
+<div class="container">
+    <div class="row">
+    <br>
+</div>
+    <div class="row">
+        <!-- [graduateForEdit]="graduate" (submitGraduate)="editDetails($event)" -->
+        <app-graduate-form (submitGraduate)="addNewGraduate($event)"  class="mat-elevation-z8 col-md-12"> </app-graduate-form>
+    </div>
+</div>

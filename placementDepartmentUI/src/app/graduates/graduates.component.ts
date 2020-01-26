@@ -61,7 +61,6 @@ export class GraduatesComponent implements OnInit {
  
    applyFilter(filterValue: string) {
      this.graduates.filter = filterValue.trim().toLowerCase();
- 
      if (this.graduates.paginator) {
        this.graduates.paginator.firstPage();
      }
