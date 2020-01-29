@@ -28,7 +28,7 @@ import { GraduateEditingComponent } from './graduate-editing/graduate-editing.co
     DeletionDialogComponent,
     GraduateFormComponent,
     NewGraduateComponent,
-    GraduateEditingComponent
+    GraduateEditingComponent,
   ],
   imports: [
     BrowserModule,

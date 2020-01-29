@@ -15,7 +15,6 @@ export class GraduateDetailsComponent implements OnInit {
   id:string;
   graduate:Graduate;
 
-
   constructor(
     private route:ActivatedRoute,
     public GTS :StamService,
@@ -30,6 +29,7 @@ export class GraduateDetailsComponent implements OnInit {
      err=>{console.log(err);}
     );
   }
+
   openDeletionDialog(): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
       width: '250px',

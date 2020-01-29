@@ -2,12 +2,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {StamService}from '../services/stam.service';
 import {Graduate}from '../classes/graduate';
 
-import { from } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
+export interface filter {
+  active: boolean;
+  name: string;
+  value: any;
 
+}
 
 @Component({
   selector: 'app-graduates',
@@ -17,32 +21,36 @@ import { MatTableDataSource } from '@angular/material/table';
 export class GraduatesComponent implements OnInit {
   graduates: MatTableDataSource<Graduate>;
   panellist;
-  onelist:Graduate[];
   columnsToDisplay = ['Name',"City","action"];
+
+  activeFilter: filter[] = [
+    { value: true, active: false, name: 'פעיל' },
+    { value: false, active: false, name: 'לא פעיל' },
+  ];
+  genderFilter: filter[] = [
+    { value: 'ז', active: false, name: 'זכר' },
+    { value: 'נ', active: false, name: 'נקבה' },
+  ];
+
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
 
   constructor(public GTS :StamService){
-    this.onelist=[];
     this.panellist=[]
-    // this.graduates=new MatTableDataSource<Graduate>();
   }
- 
- 
   
-   ngOnInit() {
+  ngOnInit() {
       this.GTS.GetAllGraduates().subscribe(graduates=>
        {
         //Assign the data to the data source for the table to render
         this.graduates = new MatTableDataSource(graduates);
-        this.onelist=graduates;
         this.panellist=[
-          { name:"פעיל",sublist:[{City:"פעיל"},{City:"לא פעיל"}]},
-          { name:"מגדר",sublist:[{City:"זכר"},{City:"נקבה"}]},
-          { name:"עיר",sublist:this.onelist},
-          { name:"עיררר",sublist:this.onelist}
+          { name:"פעיל",sublist:this.activeFilter},
+          { name:"מגדר",sublist:this.genderFilter},
+          // { name:"עיר",sublist:this.onelist},
+          // { name:"עיררר",sublist:this.onelist}
 
       ];
         console.log(this.graduates);
@@ -53,19 +61,41 @@ export class GraduatesComponent implements OnInit {
         this.graduates.paginator._intl.nextPageLabel     = 'עמוד הבא';
         this.graduates.paginator._intl.previousPageLabel = 'עמוד הקודם';
         this.graduates.paginator._intl.getRangeLabel = dutchRangeLabel;
+        this.graduates.filterPredicate=this.customFilterPredicate()
       } ,
        err=>{console.log(err);}
       );
-      
    }
+
+   customFilterPredicate() {
+    const myFilterPredicate = (data: Graduate, filter: string): boolean => {
+      let searchString = JSON.parse(filter);
+      return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 &&
+       (this.activeFilter.filter(isactive => !isactive.active).length === this.activeFilter.length ||
+          this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.IsInterested)) &&
+          (this.genderFilter.filter(gender => !gender.active).length === this.activeFilter.length ||
+             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.Gender));
+    }
+    return myFilterPredicate;
+  }
  
    applyFilter(filterValue: string) {
-     this.graduates.filter = filterValue.trim().toLowerCase();
+     let filter={value:filterValue};
+     this.graduates.filter =JSON.stringify(filter);
      if (this.graduates.paginator) {
        this.graduates.paginator.firstPage();
      }
    }
+
+   mytoString(data:any) {
+    let string="";
+   Object.keys(data).forEach(k => {
+     string+=data[k]
+   });
+   return string;
  }
+ }
+ 
  
 
 //for translate paginator label

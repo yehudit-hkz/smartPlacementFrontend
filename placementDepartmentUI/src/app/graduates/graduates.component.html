@@ -12,11 +12,13 @@
      <mat-expansion-panel-header >
               {{item.name}}
           </mat-expansion-panel-header>
-          <mat-selection-list >
-            <mat-list-option  checkboxPosition="before" *ngFor="let subItem of item.sublist" >
-              <span style="margin-right: 10px;">{{subItem.City}}</span>
+          <mat-selection-list  >
+            <mat-list-option  checkboxPosition="before" (click)="subItem.active=!subItem.active;applyFilter(filtering.value)" [selected]="subItem.active" *ngFor="let subItem of item.sublist" >
+              <span style="margin-right: 10px;">{{subItem.name}}</span>
             </mat-list-option>
           </mat-selection-list>
+          <!-- <mat-checkbox (change)="applyFilter(filtering.value)" [(ngModel)]="subItem.active" *ngFor="let subItem of item.sublist">{{subItem.name}}<br></mat-checkbox> -->
+
         </mat-expansion-panel >
       </mat-accordion>
     </mat-sidenav>
@@ -25,7 +27,7 @@
   &nbsp;
   <div class="row justify-content-between">
   <mat-form-field class="col-md-5 ">
-    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="חיפוש חופשי">
+    <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי">
   </mat-form-field>
   <div class="col-md-1" style="text-align: center;">
   <a mat-icon-button routerLink="/new-graduate" routerLinkActive="activeLink">

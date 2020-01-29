@@ -1,5 +1,6 @@
 export class Graduate{
     Id:string;
+    Gender:string;
     Name:string;
     City:string;
     Phone:string;

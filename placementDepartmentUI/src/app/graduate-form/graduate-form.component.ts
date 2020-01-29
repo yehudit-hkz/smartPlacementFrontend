@@ -25,6 +25,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
     console.log("ch "+this.graduate);
     this.graduateForm = new FormGroup({
       Id: new FormControl(this.graduate.Id, [Validators.required,Validators.pattern('^([0-9]{9})$')]),
+      gender: new FormControl(this.graduate.Gender, [Validators.required]),
       name: new FormControl(this.graduate.Name, [Validators.required]),
       city: new FormControl(this.graduate.City, [Validators.required]),
       email: new FormControl(this.graduate.Email, [Validators.required,Validators.email]),

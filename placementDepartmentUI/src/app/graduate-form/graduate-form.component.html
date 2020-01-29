@@ -6,6 +6,15 @@
         <mat-error *ngIf="hasError('Id', 'required')">זהו שדה חובה!</mat-error>
         <mat-error *ngIf="hasError('Id', 'pattern')">הזן מספר זהות חוקי בעל 9 ספרות</mat-error>
     </mat-form-field >
+    <mat-form-field > 
+      <mat-select placeholder="מגדר" formControlName="gender" required [disabled]="graduate.Id!=null" >
+        <!-- [disabled]="graduate.Id!=null" -->
+          <mat-option></mat-option>
+        <mat-option value="ז">זכר</mat-option>
+        <mat-option value="נ">נקבה</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('gender', 'required')">נא לבחור מגדר</mat-error>
+    </mat-form-field>
 <br>
       <mat-form-field>
         <input matInput type="text" placeholder="שם" formControlName="name" required >
@@ -59,7 +68,7 @@
         <button mat-raised-button [disabled]="graduateForm.invalid||!graduateForm.dirty">{{graduate.Id==null?"הוסף":"עדכן"}}</button>  
       </div>
 </form>
-<br><br><br>
+<br>
 <!-- <br>
 <br>
 <p>
