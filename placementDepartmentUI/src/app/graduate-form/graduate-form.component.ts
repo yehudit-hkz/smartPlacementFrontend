@@ -33,7 +33,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
       IsWorking: new FormControl(this.graduate.IsWorking),
       IsInterested: new FormControl(this.graduate.IsInterested),
       // name: new FormControl('', [Validators.required, Validators.maxLength(60)]),
-      // dateOfBirth: new FormControl(new Date()),
+       myDate: new FormControl(!this.graduate.myDate?new Date():this.graduate.myDate),
       // address: new FormControl('', [Validators.required, Validators.maxLength(100)])
     });
   }

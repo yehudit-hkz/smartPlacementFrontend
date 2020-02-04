@@ -31,14 +31,19 @@ export class GraduatesComponent implements OnInit {
     { value: 'ז', active: false, name: 'זכר' },
     { value: 'נ', active: false, name: 'נקבה' },
   ];
-
+  branchFilter: filter[]=[];
+  expertiseFilter: filter[]=[];
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-
   constructor(public GTS :StamService){
-    this.panellist=[]
+    this.panellist=[
+      { name:"פעיל",sublist:this.activeFilter},
+      { name:"מגדר",sublist:this.genderFilter},
+      { name:"שלוחה",sublist:this.branchFilter},
+      { name:"תחום הכשרה",sublist:this.expertiseFilter}
+  ];
   }
   
   ngOnInit() {
@@ -46,15 +51,8 @@ export class GraduatesComponent implements OnInit {
        {
         //Assign the data to the data source for the table to render
         this.graduates = new MatTableDataSource(graduates);
-        this.panellist=[
-          { name:"פעיל",sublist:this.activeFilter},
-          { name:"מגדר",sublist:this.genderFilter},
-          // { name:"עיר",sublist:this.onelist},
-          // { name:"עיררר",sublist:this.onelist}
-
-      ];
         console.log(this.graduates);
-        console.log(this.panellist)
+        console.log(this.panellist);
         this.graduates.sort = this.sort;
         this.graduates.paginator = this.paginator;
         this.graduates.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
@@ -65,6 +63,25 @@ export class GraduatesComponent implements OnInit {
       } ,
        err=>{console.log(err);}
       );
+      
+   }
+  nitializeList(itemName:string){
+    switch (itemName) {
+      case 'שלוחה': 
+        if(this.branchFilter.length==0)
+          {
+          //go to service
+            this.branchFilter.push({value: 'ז', active: false, name: 'זכר'})
+          }
+          break;
+      case 'תחום הכשרה':
+        if(this.expertiseFilter.length==0)
+          {
+            //go to service
+            this.expertiseFilter.push({value: 'ז', active: false, name: 'זכר'})
+          }
+          break;
+    }
    }
 
    customFilterPredicate() {

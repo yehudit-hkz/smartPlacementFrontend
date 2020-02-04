@@ -9,4 +9,11 @@ export class Graduate{
     IsWorking:boolean;
     IsInterested:boolean;
     LinkToCV:string ;
+    myDate:Date
+}
+export class GraduateLanguages{
+    graduateId:string;
+    languageId:number;
+    languageName:string;
+    level:number;
 }

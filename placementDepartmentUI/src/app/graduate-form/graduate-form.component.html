@@ -41,6 +41,12 @@
         <mat-error *ngIf="hasError('phone', 'required')">זהו שדה חובה!</mat-error>
         <mat-error *ngIf="hasError('phone', 'pattern')">הזן מס' פלאפון חוקי</mat-error>
       </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="תאריך" formControlName="myDate" id="dateOfBirth" 
+            readonly (click)="picker.open()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
 <br>
       <mat-checkbox formControlName="IsWorking">
           <span style="margin-right:10px;">עובד בתחום</span>
@@ -49,14 +55,9 @@
             <span style="margin-right:10px;">פעיל</span>
           </mat-checkbox>
 
-      <!-- <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Choose a date of birth" formControlName="dateOfBirth" id="dateOfBirth" 
-            readonly (click)="picker.open()">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
+     
        
-      <mat-form-field>
+      <!-- <mat-form-field>
         <input matInput type="text" placeholder="Owner's address" formControlName="address">
         <mat-hint align="end">Not more then 100 characters long.</mat-hint>
         <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
