@@ -1,0 +1,74 @@
+table,mat-paginator {
+    width: 100%;
+    }
+    td, th {
+      width: 17.5%;
+      padding-right: 5px !important;
+    }
+    
+  
+      ::ng-deep .mat-paginator {
+      
+        // override material paginator page switch
+        // .mat-paginator-range-label {
+        //     order: 2;
+        // }
+        .mat-paginator-navigation-previous {
+            // order: 1;
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+        }
+        .mat-paginator-navigation-next {
+            // order: 3;
+            -webkit-transform: scaleX(-1);
+            transform: scaleX(-1);
+        }
+    }
+    ::ng-deep .mat-tooltip {
+      background: rgb(93, 94, 93) !important;
+      font-size: 14px;
+  }
+//   .arrow-up{
+//     width: 0; 
+//     height: 0; 
+//     border-top: 10px solid transparent;
+//     border-bottom: 10px solid transparent;
+    
+//     border-left: 10px solid rgb(93, 94, 93); 
+// }
+// span {
+//   padding: 10px;
+//   display: inline;
+// }
+
+// [matTooltip] {
+//   position: relative;
+// }
+
+// // [title]:hover:before {
+// //   background: #333;
+// //   top: 100%;
+// //   background: rgba(0, 0, 0, .8);
+// //   border-radius: 5px;
+// //   color: #fff;
+// //   content: attr(title);
+// //   padding: 5px 15px;
+// //   position: absolute;
+// //   z-index: 98;
+// //   width: auto;
+// //   margin-top: 10px;
+// // }
+
+// [matTooltip]:hover:after {
+ 
+//   width: 0; 
+//   height: 0; 
+//   border-top: 5px solid transparent;
+//   border-bottom: 5px solid transparent;
+  
+//   border-left: 10px solid rgb(93, 94, 93); 
+//   content: '';
+//   position: absolute;
+//   top: 40%;
+//   right: 100%;
+// }

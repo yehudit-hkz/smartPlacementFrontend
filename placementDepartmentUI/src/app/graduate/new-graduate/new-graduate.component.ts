@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Graduate } from '../classes/graduate';
+import { Graduate } from '../../classes/graduate';
 
 @Component({
   selector: 'app-new-graduate',

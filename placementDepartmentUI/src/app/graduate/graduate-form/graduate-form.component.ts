@@ -1,7 +1,7 @@
 import { Component, OnInit ,Output, EventEmitter, Input, OnChanges} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
-import{Graduate}from '../classes/graduate';
+import{Graduate}from '../../classes/graduate';
 
 @Component({
   selector: 'app-graduate-form',

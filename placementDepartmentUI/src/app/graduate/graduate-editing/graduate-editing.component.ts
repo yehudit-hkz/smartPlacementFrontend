@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Graduate } from '../classes/graduate';
+import { Graduate } from '../../classes/graduate';
 import { ActivatedRoute } from '@angular/router';
-import { StamService } from '../services/stam.service';
+import { StamService } from '../../services/stam.service';
 @Component({
   selector: 'app-graduate-editing',
   templateUrl: './graduate-editing.component.html',

@@ -1,0 +1,48 @@
+<mat-toolbar>
+    <span>{{company.Id==null?"הוספת חברה חדשה":"עריכת חברה"}}</span>
+</mat-toolbar>
+<div class="container mat-elevation-z4">
+    <br><br>
+<form [formGroup]="companyForm" autocomplete novalidate (ngSubmit)="createCompany(companyForm.value)" >
+    <div class="row ">
+      <mat-form-field class="col-md-3">
+        <input matInput type="text" placeholder="שם" formControlName="name" required >
+        <mat-error *ngIf="hasError('name', 'required')">זהו שדה חובה!</mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-3"> 
+        <mat-select placeholder="תחום עיקרי" formControlName="subject" required>
+            <mat-option></mat-option>
+          <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('subject', 'required')">נא לבחור תחום</mat-error>
+      </mat-form-field>
+    </div>
+    <br>
+    <div class="row ">
+      <mat-form-field class="col-md-4" >
+        <textarea rows="3" matInput placeholder='תאור פעילות החברה' formControlName="descriptiovOfActivity"  ></textarea>
+      </mat-form-field >
+    </div>
+    <br><br>
+    <div class="row ">
+        <mat-icon class="col-md-1" style="align-self: center;text-align: center;">pin_drop</mat-icon>
+        <mat-form-field class="col-md-3"> 
+          <mat-select placeholder="עיר" formControlName="city" required>
+              <mat-option></mat-option>
+            <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input matInput placeholder='כתובת' formControlName="address" >
+        </mat-form-field>
+      </div>
+      <br>
+      <div class="row justify-content-center">
+        <button mat-raised-button (click)="onCancel()">ביטול</button>&nbsp;
+        <button mat-raised-button [disabled]="companyForm.invalid||!companyForm.dirty">{{company.Id==null?"הוסף":"עדכן"}}</button>
+        </div>
+        </form>
+        <br><br>
+</div>
+

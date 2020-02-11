@@ -1,7 +1,10 @@
 table,mat-paginator {
   width: 100%;
   }
-  
+  td, th {
+    width: 21.5%;
+    padding-right: 5px !important;
+  }
   
 
   ::ng-deep .mat-paginator {
@@ -22,9 +25,7 @@ table,mat-paginator {
     }
 }
 
-  td, th {
-    width: 45%;
-  }
+ 
   .example-icon {
      padding-left: 200px;    
   }

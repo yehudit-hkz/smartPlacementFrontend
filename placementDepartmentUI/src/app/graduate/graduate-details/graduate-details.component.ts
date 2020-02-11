@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import{Graduate}from '../classes/graduate';
-import{StamService}from '../services/stam.service';
-import {MatDialog} from '@angular/material/dialog';
-import{DeletionDialogComponent}from '../deletion-dialog/deletion-dialog.component';
+import{Graduate}from '../../classes/graduate';
+import{StamService}from '../../services/stam.service';
+import {MatDialog,MatSnackBar} from '@angular/material';
+import{DeletionDialogComponent}from '../../deletion-dialog/deletion-dialog.component';
+import { Location } from '@angular/common';
+
 import { from } from 'rxjs';
 
 @Component({
@@ -18,7 +20,9 @@ export class GraduateDetailsComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     public GTS :StamService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private location: Location
     ) {}
 
   ngOnInit() {
@@ -28,19 +32,32 @@ export class GraduateDetailsComponent implements OnInit {
       this.graduate=graduate,
      err=>{console.log(err);}
     );
+    this.GTS.getstr().subscribe(
+      dd=>console.log(dd),
+      err=>console.log(err)
+    )
   }
 
   openDeletionDialog(): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
       width: '250px',
-      data: {name: this.graduate.Name , type: "בוגר"}
+      data: {name: this.graduate.firstName+" "+this.graduate.lastName , type: "בוגר"}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      if(result==true)
-      console.log(`Dialog result: ${result}`);
-      //remove and go back to the list
+      if(result==true){
+        console.log(`Dialog result: ${result}`);
+        //remove and go back to the list
+        this.snackBar.open("הבוגר נמחק בהצלחה!", "סגור", {
+          duration: 6000,
+          direction:"rtl",
+          
+
+        });  
+        this.location.back();
+      }
+     
     });
   }
   openCVFile()

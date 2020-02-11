@@ -8,22 +8,27 @@
         <span style="font-size: 28px;" class="col-md-8">{{graduate.Name}}</span>
 
         <div class="col-md-4" style="text-align: center;">
-            <button (click)="openCVFile()" mat-icon-button>
+            <!-- <button (click)="openCVFile()" mat-icon-button>
                 <mat-icon matTooltip='פתיחת קובץ קו"ח'>insert_drive_file</mat-icon>
-           </button> 
+           </button>  -->
+            <a target="_blank" href="http://localhost:50748/resumeFile/206672834.pdf" mat-icon-button>
+                <mat-icon matTooltip='פתיחת קובץ קו"ח'>insert_drive_file</mat-icon>
+            </a>‏
             <a routerLink="/graduate-editing/{{graduate.Id}}" routerLinkActive="activeLink" mat-icon-button>
-                <mat-icon  matTooltip="עריכה">edit</mat-icon>
+                <mat-icon matTooltip="עריכה">edit</mat-icon>
             </a>
             <button (click)="openDeletionDialog()" mat-icon-button>
-                 <mat-icon matTooltip="מחיקה">delete</mat-icon>
-            </button> 
+                <mat-icon matTooltip="מחיקה">delete</mat-icon>
+            </button>
+
+
         </div>
     </div>
-      <mat-divider></mat-divider>
-      <br>
+    <mat-divider></mat-divider>
+    <br>
     <div class="row">
         <div class="col-md-8">
-            <table >
+            <table>
                 <tr>
                     <td class="title"><b>ת"ז</b></td>
                     <td>{{graduate.Id}}</td>
@@ -36,7 +41,7 @@
                     <td class="title"><b>עיר</b></td>
                     <td>{{graduate.City}}</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="title"><b>טלפון</b></td>
                     <td>{{graduate.Phone}}</td>
                 </tr>
@@ -68,7 +73,7 @@
                     <td class="title"><b>עיר</b></td>
                     <td>{{graduate.City}}</td>
                 </tr>
-                 <tr>
+                <tr>
                     <td class="title"><b>טלפון</b></td>
                     <td>{{graduate.Phone}}</td>
                 </tr>
@@ -89,9 +94,9 @@
                     <td>{{graduate.LinkToCV?"כן":"לא"}}</td>
                 </tr>
             </table>
-        <br><br>
-        <mat-divider></mat-divider>
-        <br><br>
+            <br><br>
+            <mat-divider></mat-divider>
+            <br><br>
         </div>
     </div>
     <br><br>

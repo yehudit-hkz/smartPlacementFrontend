@@ -65,7 +65,7 @@
       </mat-form-field> -->
       <br><br>
       <div style="text-align: center;">
-        <button type="button" mat-raised-button (click)="onCancel()">ביטול</button>&nbsp;
+        <button mat-raised-button (click)="onCancel()">ביטול</button>&nbsp;
         <button mat-raised-button [disabled]="graduateForm.invalid||!graduateForm.dirty">{{graduate.Id==null?"הוסף":"עדכן"}}</button>  
       </div>
 </form>
@@ -89,3 +89,10 @@
       <mat-hint >רמזון</mat-hint>
     </mat-form-field>
   </p> -->
+  
+  <div dir="rtl">
+    <mat-form-field appearance="outline" >
+      <mat-label>שדה תאריך</mat-label>
+      <input matInput placeholder="יש למלא את השדה">
+    </mat-form-field>
+   </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {StamService}from '../services/stam.service';
-import {Graduate}from '../classes/graduate';
+import {StamService}from '../../services/stam.service';
+import {Graduate}from '../../classes/graduate';
 
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -21,7 +21,7 @@ export interface filter {
 export class GraduatesComponent implements OnInit {
   graduates: MatTableDataSource<Graduate>;
   panellist;
-  columnsToDisplay = ['Name',"City","action"];
+  columnsToDisplay = ['Name',"Expertise","Branch","endYear","action"];
 
   activeFilter: filter[] = [
     { value: true, active: false, name: 'פעיל' },
@@ -65,7 +65,7 @@ export class GraduatesComponent implements OnInit {
       );
       
    }
-  nitializeList(itemName:string){
+   initializeList(itemName:string){
     switch (itemName) {
       case 'שלוחה': 
         if(this.branchFilter.length==0)
