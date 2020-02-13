@@ -1,0 +1,54 @@
+<div class="container">
+  <br>
+  <div class="row justify-content-between">
+    <!-- <h4 class="col-md-4">{{graduateID?"משרות שהותאמו":"מועמדים למשרה"}}</h4> -->
+    <h4 class="col-md-4">משרות שהותאמו:</h4>
+<mat-form-field class="col-md-4">
+  <mat-select placeholder="סנן לפי סטטוס" (click)="initializeList()" (selectionChange)="applyFilter($event.value)">
+      <mat-option></mat-option>
+      <mat-option *ngFor="let s of statusList" [value]="s.Id">
+        {{s.description}} 
+      </mat-option>
+  </mat-select>
+</mat-form-field>
+</div>
+<div class="row ">
+<table mat-table [dataSource]="jobsCoordination"class="col-md-12 mat-elevation-z2"  matSort >
+    <ng-container matColumnDef="jobSubject">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header> מקצוע  </th>
+      <td mat-cell *matCellDef="let jc"> {{jc.jobSubject}} </td>
+    </ng-container>
+    <ng-container matColumnDef="candidateName">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header> שם המועמד </th>
+      <td mat-cell *matCellDef="let jc"> {{jc.candidateFName}}&nbsp;{{jc.candidateLName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 18% !important;"> סטטוס </th>
+      <td mat-cell *matCellDef="let jc" style="width: 18% !important;">
+        <mat-select (click)="initializeList()" [(ngModel)]="jc.status">
+        <mat-option *ngFor="let s of statusList" [value]="s">{{s.description}}</mat-option>
+      </mat-select>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef style="width: 7% !important;"></th>
+      <td mat-cell *matCellDef="let jc" style="text-align: center;width: 7% !important;"> 
+        <button (click)="updateStatus(jc)" mat-icon-button>
+            <mat-icon matTooltip="שמור">save</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="dateReceived" >
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header class="date"> תאריך רישום </th>
+      <td mat-cell *matCellDef="let jc" class="date"> {{jc.dateReceived|date:'MM/dd/yyyy'}} </td>
+    </ng-container>
+    <ng-container matColumnDef="lastUpdateDate" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="date">תאריך עדכון אחרון </th>
+        <td mat-cell *matCellDef="let jc"class="date" >{{jc.lastUpdateDate|date:'MM/dd/yyyy'}} </td>
+      </ng-container>
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+</table>
+  </div>
+  <br>
+  </div>

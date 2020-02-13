@@ -19,6 +19,7 @@ import { GraduateEditingComponent } from './graduate/graduate-editing/graduate-e
 import { CompaniesComponent } from './company/companies/companies.component';
 import { ShortStrPipe } from './pipes/short-str.pipe';
 import { CompanyFormComponent } from './company/company-form/company-form.component';
+import { JobsCoordinationComponent } from './jobs/jobs-coordination/jobs-coordination.component';
 
 
  
@@ -35,6 +36,7 @@ import { CompanyFormComponent } from './company/company-form/company-form.compon
     CompaniesComponent,
     ShortStrPipe,
     CompanyFormComponent,
+    JobsCoordinationComponent,
   ],
   imports: [
     BrowserModule,

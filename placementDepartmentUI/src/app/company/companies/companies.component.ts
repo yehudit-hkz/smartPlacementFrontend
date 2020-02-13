@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {Company} from '../../classes/company'
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { StamService } from '../../services/stam.service';
-import { from, Subject } from 'rxjs';
-import { City } from 'src/app/classes/my-enum-list';
+import { Subject } from 'src/app/classes/my-enum-list';
 import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
 @Component({
   selector: 'app-companies',
@@ -13,6 +12,9 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
 export class CompaniesComponent implements OnInit {
   companies: MatTableDataSource<Company>;
   columnsToDisplay = ["name","address","city","subject","descriptiovOfActivity","action"];
+
+  subjectList:Subject[]=[
+  ];
   
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -37,6 +39,7 @@ export class CompaniesComponent implements OnInit {
     c2.descriptiovOfActivity="בית תוכנה בתחום הרפואי"
     let c3=new Company();
     c3.Id=1234;
+    c.Subject=c1.Subject=c2.Subject=c3.Subject=this.subjectList[0];
     c3.descriptiovOfActivity= "בוגרת המרכז החרדי ממגמת הנדסאי אדריכלות שפתחה עסק עצמאי"
     //Assign the data to the data source for the table to render
        this.companies = new MatTableDataSource([c3,c,c1,c2]);
@@ -47,12 +50,46 @@ export class CompaniesComponent implements OnInit {
        this.companies.paginator._intl.nextPageLabel     = 'עמוד הבא';
        this.companies.paginator._intl.previousPageLabel = 'עמוד הקודם';
        this.companies.paginator._intl.getRangeLabel = dutchRangeLabel;
-      // this.companies.filterPredicate=this.customFilterPredicate()
+      //  this.companies.filterPredicate=this.customFilterPredicate()
     //  } ,
     //   err=>{console.log(err);}
     //  );
     
   }
+  initializeList(itemName:string){
+    console.log("initi");
+        if(this.subjectList.length==0)
+          {
+            //go to service
+            this.subjectList=[
+              {Id:1,name:'aaaaa'},
+              {Id:2,name:'bbbbb'},
+              {Id:3,name:'ccccc'},
+              {Id:4,name:'sssss'},
+            ]
+          }
+    }
+    // customFilterPredicate() {
+    //   const myFilterPredicate = (data: Company, filter: string): boolean => {
+    //     let searchString = JSON.parse(filter);
+    //     return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 &&
+    //      (this.activeFilter.filter(isactive => !isactive.active).length === this.activeFilter.length ||
+    //         this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.IsInterested)) &&
+    //         (this.genderFilter.filter(gender => !gender.active).length === this.activeFilter.length ||
+    //            this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.Gender));
+    //   }
+    //   return myFilterPredicate;
+    // }
+   
+    //  applyFilter(filterValue: string) {
+    //    let filter={value:filterValue};
+    //    this.companies.filter =JSON.stringify(filter);
+    //    if (this.companies.paginator) {
+    //      this.companies.paginator.firstPage();
+    //    }
+    //  }
+  
+     
 
   openDeletionDialog(company:Company): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
@@ -64,7 +101,7 @@ export class CompaniesComponent implements OnInit {
       console.log('The dialog was closed');
       if(result==true){
         console.log(`Dialog result: ${result}`);
-        //remove and go back to the list
+        //remove
         this.snackBar.open("החברה נמחקה בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",
@@ -72,6 +109,14 @@ export class CompaniesComponent implements OnInit {
       }
     });
   }
+
+  mytoString(data:any) {
+    let string="";
+   Object.keys(data).forEach(k => {
+     string+=data[k]
+   });
+   return string;
+ }
 
 }
 

@@ -8,7 +8,7 @@ import { StamService } from '../../services/stam.service';
   styleUrls: ['./graduate-editing.component.scss']
 })
 export class GraduateEditingComponent implements OnInit {
-
+  number:number=12;
   id:string;
   graduate:Graduate;
 
@@ -38,6 +38,6 @@ export class GraduateEditingComponent implements OnInit {
     //     this.location.back();
     //   })
     //)
-    console.log(newGraduate)
+    console.log(" קגןא"+newGraduate)
   }
 }

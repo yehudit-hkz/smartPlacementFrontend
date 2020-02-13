@@ -10,7 +10,7 @@
     </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/company-form/-" routerLinkActive="activeLink">
-      <mat-icon matTooltip="הוספת חברה חדשה">add</mat-icon>
+      <mat-icon matTooltip="הוספת חברה חדשה" >add</mat-icon>
     </a>
     <span >חדש</span>
     </div>
@@ -19,10 +19,9 @@
     <!-- <mat-icon>filter_list</mat-icon>&nbsp;&nbsp; -->
     <label>סנן לפי:</label> &nbsp;&nbsp;
     <mat-form-field class="col-md-3" > 
-        <mat-select placeholder="תחום עיקרי" >
+        <mat-select placeholder="תחום עיקרי" multiple>
             <mat-option></mat-option>
           <mat-option value="נ">נקבה</mat-option>
-          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
         </mat-select>
     </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-form-field class="col-md-4 " > 
@@ -63,7 +62,7 @@
                 <mat-icon matTooltip="אנשי קשר">group</mat-icon>            
             </a>
              <a routerLink="/company-form/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
-              <mat-icon  matTooltip="עריכה">edit</mat-icon>
+              <mat-icon   matTooltip="עריכה">edit</mat-icon>
             </a>
             <button (click)="openDeletionDialog(c)" mat-icon-button>
                 <mat-icon matTooltip="מחיקה">delete</mat-icon>
@@ -84,3 +83,7 @@
 <br>
 <br>
 <!-- <span  matTooltip="hjgjkgjgk" matTooltipPosition="left"><span>Save</span></span> -->
+<br>
+<br>
+<br>
+<br>

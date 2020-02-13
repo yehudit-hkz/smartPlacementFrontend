@@ -24,6 +24,9 @@ span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label 
 .mat-tooltip {
     direction: rtl !important;
   }
+th.date,td.date{
+  width: 12% !important;
+}
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;
