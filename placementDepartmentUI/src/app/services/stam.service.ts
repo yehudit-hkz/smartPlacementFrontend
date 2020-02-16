@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams,HttpErrorResponse} from '@angular/common/http';
-import {Observable, from } from 'rxjs';
+import {Observable, from, observable } from 'rxjs';
 import{Graduate}from '../classes/graduate';
 import{Company}from '../classes/company';
 
@@ -20,6 +20,9 @@ ssss="http://localhost:55968/"
   }
   getGraduateByID(id){
     return this.http.get<Graduate>(this.baseURL+"Graduate/Get?id="+id) ;
+  }
+  save(newg:Graduate){
+    return this.http.post(this.baseURL+'Graduate',newg);
   }
   getFile(id): Observable<Blob> {   
       //const options = { responseType: 'blob' }; there is no use of this

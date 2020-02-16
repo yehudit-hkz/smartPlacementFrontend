@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {Company} from '../../classes/company'
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { StamService } from '../../services/stam.service';
-import { Subject } from 'src/app/classes/my-enum-list';
+import { Subject, City } from 'src/app/classes/my-enum-list';
 import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
 @Component({
   selector: 'app-companies',
@@ -15,14 +15,24 @@ export class CompaniesComponent implements OnInit {
 
   subjectList:Subject[]=[
   ];
-  
+  subjecFilter:Subject;
+  subjecByJobsFilter:Subject;
+
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(public GTS :StamService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    ) { }
+    ) {
+      this.subjectList=[
+        {Id:1,name:'aaaaa'},
+        {Id:2,name:'bbbbb'},
+        {Id:3,name:'ccccc'},
+        {Id:4,name:'sssss'},
+      ]
+     }
 
   ngOnInit() {
     // this.GTS.getCMPN().subscribe(companies=>
@@ -39,7 +49,8 @@ export class CompaniesComponent implements OnInit {
     c2.descriptiovOfActivity="בית תוכנה בתחום הרפואי"
     let c3=new Company();
     c3.Id=1234;
-    c.Subject=c1.Subject=c2.Subject=c3.Subject=this.subjectList[0];
+    c.Subject=c1.Subject={Id:2,name:'bbbbb'};
+    c2.Subject=c3.Subject={Id:1,name:'aaaaa'};
     c3.descriptiovOfActivity= "בוגרת המרכז החרדי ממגמת הנדסאי אדריכלות שפתחה עסק עצמאי"
     //Assign the data to the data source for the table to render
        this.companies = new MatTableDataSource([c3,c,c1,c2]);
@@ -50,13 +61,13 @@ export class CompaniesComponent implements OnInit {
        this.companies.paginator._intl.nextPageLabel     = 'עמוד הבא';
        this.companies.paginator._intl.previousPageLabel = 'עמוד הקודם';
        this.companies.paginator._intl.getRangeLabel = dutchRangeLabel;
-      //  this.companies.filterPredicate=this.customFilterPredicate()
+     this.companies.filterPredicate=this.customFilterPredicate()
     //  } ,
     //   err=>{console.log(err);}
     //  );
     
   }
-  initializeList(itemName:string){
+  initializeList(){
     console.log("initi");
         if(this.subjectList.length==0)
           {
@@ -69,25 +80,33 @@ export class CompaniesComponent implements OnInit {
             ]
           }
     }
-    // customFilterPredicate() {
-    //   const myFilterPredicate = (data: Company, filter: string): boolean => {
-    //     let searchString = JSON.parse(filter);
-    //     return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 &&
-    //      (this.activeFilter.filter(isactive => !isactive.active).length === this.activeFilter.length ||
-    //         this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.IsInterested)) &&
-    //         (this.genderFilter.filter(gender => !gender.active).length === this.activeFilter.length ||
-    //            this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.Gender));
-    //   }
-    //   return myFilterPredicate;
-    // }
+    customFilterPredicate() {
+      const myFilterPredicate = (data: Company, filter: string): boolean => {
+        let searchString = JSON.parse(filter);
+        // alert(this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 );
+        // alert(this.subjecFilter.Id+" "+!this.subjecFilter );
+        // alert(data.Subject.Id+" "+ (data.Subject.Id==this.subjecFilter.Id));
+        // alert(this.subjecByJobsFilter+" "+data.Subject.Id+" "+!this.subjecByJobsFilter || (data.Subject.Id==this.subjecByJobsFilter.Id));
+        
+
+        
+        return (this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1) &&
+       (!this.subjecFilter && !this.subjecByJobsFilter)||
+        (!!this.subjecFilter && data.Subject.Id==this.subjecFilter.Id) ||
+        // //this filter will be by to the jobs of contact of this company 
+         (!!this.subjecByJobsFilter && data.Subject.Id==this.subjecByJobsFilter.Id);
+
+      }
+      return myFilterPredicate;
+    }
    
-    //  applyFilter(filterValue: string) {
-    //    let filter={value:filterValue};
-    //    this.companies.filter =JSON.stringify(filter);
-    //    if (this.companies.paginator) {
-    //      this.companies.paginator.firstPage();
-    //    }
-    //  }
+     applyFilter(filterValue: string) {
+    let filter={value:filterValue};
+       this.companies.filter =JSON.stringify(filter);
+       if (this.companies.paginator) {
+         this.companies.paginator.firstPage();
+       }
+     }
   
      
 
@@ -113,7 +132,11 @@ export class CompaniesComponent implements OnInit {
   mytoString(data:any) {
     let string="";
    Object.keys(data).forEach(k => {
-     string+=data[k]
+     if(k=="City")
+      string+=data[k].name;
+    else if(k=="Subject")
+      string+=data[k].name;
+    else string+=data[k]
    });
    return string;
  }

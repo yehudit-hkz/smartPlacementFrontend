@@ -6,7 +6,7 @@
 
     <div class="row justify-content-between">
     <mat-form-field class="col-md-5 ">
-      <input matInput type="search" (keyup)="applyFilter($event.target.value)"  value="" placeholder="חיפוש חופשי">
+      <input matInput type="search" (keyup)="applyFilter($event.target.value)" #filtering  value="" placeholder="חיפוש חופשי">
     </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/company-form/-" routerLinkActive="activeLink">
@@ -19,15 +19,15 @@
     <!-- <mat-icon>filter_list</mat-icon>&nbsp;&nbsp; -->
     <label>סנן לפי:</label> &nbsp;&nbsp;
     <mat-form-field class="col-md-3" > 
-        <mat-select placeholder="תחום עיקרי" multiple>
+        <mat-select [(ngModel)]="subjecFilter" (selectionChange)="applyFilter(filtering.value)" (click)="initializeList()" placeholder="תחום עיקרי">
             <mat-option></mat-option>
-          <mat-option value="נ">נקבה</mat-option>
-        </mat-select>
+            <mat-option *ngFor="let s of subjectList" [value]="s" >{{s.name}}</mat-option>
+          </mat-select>
     </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <mat-form-field class="col-md-4 " > 
-        <mat-select placeholder='תחום עפ"י משרות' >
+        <mat-select [(ngModel)]="subjecByJobsFilter" (selectionChange)="applyFilter(filtering.value)" (click)="initializeList()" placeholder='תחום עפ"י משרות' >
             <mat-option></mat-option>
-          <mat-option value="נ">נקבה</mat-option>
+          <mat-option *ngFor="let s of subjectList" [value]="s">{{s.name}}</mat-option>
         </mat-select>
       </mat-form-field>
   </div >
@@ -49,7 +49,7 @@
         </ng-container>
         <ng-container matColumnDef="subject">
           <th mat-header-cell *matHeaderCellDef  mat-sort-header> תחום עיקרי </th>
-          <td mat-cell *matCellDef="let c"> {{c.Subject}} </td>
+          <td mat-cell *matCellDef="let c"> {{c.Subject.name}} </td>
         </ng-container>
         <ng-container matColumnDef="descriptiovOfActivity">
             <th mat-header-cell *matHeaderCellDef  style="text-align: right;"> תאור הפעילות  </th>

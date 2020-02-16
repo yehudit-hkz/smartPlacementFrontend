@@ -61,7 +61,10 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         newGraduate.Phone=graduateFormValue.phone;
         newGraduate.IsInterested=graduateFormValue.IsInterested;
         newGraduate.IsWorking=graduateFormValue.IsWorking;
-      //   newGraduate.LinkToCV=this.graduate.LinkToCV;
+        newGraduate.subject="dfgf";
+        newGraduate.Gender='נ';
+        newGraduate.myDate=new Date();
+        newGraduate.LinkToCV=this.graduate.LinkToCV;
     this.submitGraduate.emit(newGraduate);
      this.location.back();
 

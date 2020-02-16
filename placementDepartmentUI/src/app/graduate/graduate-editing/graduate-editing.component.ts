@@ -27,6 +27,7 @@ export class GraduateEditingComponent implements OnInit {
   }
 
   editDetailsGraduate(newGraduate:Graduate){
+   this.GTS.save(newGraduate).subscribe(re=>console.log(re),err=>console.log(err))  ;
     // let apiUrl = 'api/owner';
     // this.repository.create(apiUrl, owner)
     //   .subscribe(res => {
@@ -38,6 +39,6 @@ export class GraduateEditingComponent implements OnInit {
     //     this.location.back();
     //   })
     //)
-    console.log(" קגןא"+newGraduate)
+    console.log(" "+newGraduate)
   }
 }

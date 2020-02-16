@@ -4,8 +4,9 @@ export class JobsCoordination{
     Id:number;
     dateReceived:Date;
     lastUpdateDate:Date; 
-    candidateFName:string;
-    candidateLName:string;
+    candidateId:string;
+    candidateName:string;
+    jobId:number;
     jobSubject:Subject;
     status:JobCoordinationStatus;
 }

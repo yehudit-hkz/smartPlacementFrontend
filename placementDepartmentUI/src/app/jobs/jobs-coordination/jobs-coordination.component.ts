@@ -38,7 +38,7 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
   })
   export class JobsCoordinationComponent implements OnInit {
   jobsCoordination: MatTableDataSource<JobsCoordination>;
-  columnsToDisplay = ["jobSubject","candidateName","status","action","dateReceived","lastUpdateDate"];//,"action"];
+  columnsToDisplay = ["jobId","jobSubject","candidateName","status","action","dateReceived","lastUpdateDate"];//,"action"];
 
   // @Input('graduateID') gId:string;   
   // @Input('jobID') jId:number;
@@ -56,8 +56,8 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
     c.status=this.statusList[0];
     c.dateReceived=new Date();
     c.lastUpdateDate=new Date();
-    c.candidateFName="כע" ;
-    c.candidateLName="כגעכגעגכעג" ;  
+    c.candidateName="כע כגעכגעג כעג" ;
+    c.jobId=12345; 
     //Assign the data to the data source for the table to render
        this.jobsCoordination = new MatTableDataSource([c,c,c,c]);
        console.log(this.jobsCoordination.data);
@@ -65,7 +65,7 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
        this.jobsCoordination.filterPredicate=this.customFilterPredicate()
 
   }
-  initializeList(itemName:string){
+  initializeList(){
     console.log("initi");
         if(this.statusList.length==0)
           {

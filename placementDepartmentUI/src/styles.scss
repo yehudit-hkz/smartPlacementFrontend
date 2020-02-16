@@ -3,7 +3,7 @@
 html, body { height: 100%;  }
 
 body{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
-span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label ,.mat-tooltip{font-family: 'Varela Round', sans-serif !important;}
+span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label ,.mat-tooltip,a{font-family: 'Varela Round', sans-serif !important;}
 
 .mat-icon-button {
     color: rgb(93, 94, 93);
@@ -26,6 +26,12 @@ span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label 
   }
 th.date,td.date{
   width: 12% !important;
+}
+a.mat-button{
+  color:rgb(22, 11, 71);
+  font-size: 18px;
+  text-decoration-line: none !important;
+      // color:rgb(22, 11, 71) !important;
 }
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/

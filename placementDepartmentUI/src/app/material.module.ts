@@ -22,6 +22,7 @@ import {
     MatSnackBarModule,
 
 } from '@angular/material';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 @NgModule({
     imports: [
@@ -44,7 +45,7 @@ import {
         MatNativeDateModule,
         MatSelectModule,
         MatSnackBarModule,
-
+        MaterialFileInputModule,
     ],
     exports: [
         MatToolbarModule,
@@ -66,6 +67,7 @@ import {
         MatNativeDateModule,
         MatSelectModule,
         MatSnackBarModule,
+        MaterialFileInputModule,
 
     ]
 })
