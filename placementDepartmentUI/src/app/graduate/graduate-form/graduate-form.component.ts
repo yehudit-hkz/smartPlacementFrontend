@@ -29,7 +29,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
       name: new FormControl(this.graduate.Name, [Validators.required]),
       city: new FormControl(this.graduate.City, [Validators.required]),
       email: new FormControl(this.graduate.Email, [Validators.required,Validators.email]),
-      phone: new FormControl(this.graduate.Phone, [Validators.required,Validators.pattern("^([0-9]{9,15})$")]),
+      phone: new FormControl(this.graduate.Phone, [Validators.required,Validators.pattern("^([0-9]{9,10})$")]),
       IsWorking: new FormControl(this.graduate.IsWorking),
       IsInterested: new FormControl(this.graduate.IsInterested),
       // name: new FormControl('', [Validators.required, Validators.maxLength(60)]),

@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {StamService}from '../../services/stam.service';
 import {Graduate}from '../../classes/graduate';
 
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 
 export interface filter {
   active: boolean;

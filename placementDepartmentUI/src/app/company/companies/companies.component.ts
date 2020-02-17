@@ -40,15 +40,16 @@ export class CompaniesComponent implements OnInit {
     //     if(companies==null)
     let c=new Company();
     c.Id=1234;
+    c.name="dfdffgfgfgd"
     c.descriptiovOfActivity="קבוצת יעל היא קבוצת IT מהמובילות בישראל, המתמחה בפתרונות עסקיים מבוססי טכנולוגיה ועוסקת ביישום והטמעה של מגוון מוצרי תוכנה וחומרה מהמובילים בעולם. פעילות הקבוצה כוללת פרויקטי אינטגרציה, יישום מערכות ERP ו-CRM, הטמעת פתרונות פיננסיים, BI ואנליטיקה, פתרונות ענן, דיגיטל וניהול תוכן ומסמכים. זאת לצד ניסיון רב במתן שירותי מיקור חוץ, ייעוץ והדרכה. "
     let c1=new Company();
-    c1.Id=1234;
+    c1.Id=12345;
     c1.descriptiovOfActivity="חברת ISR Corp מציעה ללקוחותיה פתרונות ויישומים מתקדמים, הנותנים פתרון טוב ויעיל , למגוון רחב של לקוחות. המערכת מבוססת על מספר מוצרי מדף הניתנים להתאמה במהירות וביעילות. החברה מספקת את מוצריה למגוון פלחי השוק השונים."  
     let c2=new Company();
-    c2.Id=1234;
+    c2.Id=12346;
     c2.descriptiovOfActivity="בית תוכנה בתחום הרפואי"
     let c3=new Company();
-    c3.Id=1234;
+    c3.Id=12347;
     c.Subject=c1.Subject={Id:2,name:'bbbbb'};
     c2.Subject=c3.Subject={Id:1,name:'aaaaa'};
     c3.descriptiovOfActivity= "בוגרת המרכז החרדי ממגמת הנדסאי אדריכלות שפתחה עסק עצמאי"
@@ -83,13 +84,6 @@ export class CompaniesComponent implements OnInit {
     customFilterPredicate() {
       const myFilterPredicate = (data: Company, filter: string): boolean => {
         let searchString = JSON.parse(filter);
-        // alert(this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 );
-        // alert(this.subjecFilter.Id+" "+!this.subjecFilter );
-        // alert(data.Subject.Id+" "+ (data.Subject.Id==this.subjecFilter.Id));
-        // alert(this.subjecByJobsFilter+" "+data.Subject.Id+" "+!this.subjecByJobsFilter || (data.Subject.Id==this.subjecByJobsFilter.Id));
-        
-
-        
         return (this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1) &&
        (!this.subjecFilter && !this.subjecByJobsFilter)||
         (!!this.subjecFilter && data.Subject.Id==this.subjecFilter.Id) ||

@@ -1,0 +1,53 @@
+<mat-toolbar>
+    <span>{{contact.Id==null?"הוספת איש קשר חדש":"עריכת איש קשר"}}</span>
+</mat-toolbar>
+<br>
+<div class="container mat-elevation-z4">
+    <br><br>
+<form [formGroup]="contactForm" autocomplete novalidate (ngSubmit)="createContact(contactForm.value)" >
+    <div class="row ">
+      <mat-form-field class="col-md-3">
+        <input matInput type="text" placeholder="שם" formControlName="name" required >
+        <mat-error *ngIf="hasError('name', 'required')">זהו שדה חובה!</mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-3"> 
+        <mat-select placeholder="חברה" formControlName="Company" required>
+            <mat-option></mat-option>
+          <!-- <mat-option *ngFor="let c of companyList" [value]="c.Id">{{c.name}}</mat-option> -->
+          <mat-option *ngFor="let c of companyList" value="3">{{c}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('Company', 'required')">נא לבחור חברה</mat-error>
+      </mat-form-field>
+        <a mat-icon-button routerLink="/company-form/-" routerLinkActive="activeLink">
+          <mat-icon matTooltip="הוספת חברה חדשה" >add</mat-icon>
+        </a>
+        <span >חדש</span>
+    </div>
+    <br><br>
+    <div class="row ">
+        <mat-form-field class="col-md-3"> 
+            <input matInput type="tel" placeholder="טלפון משרד" formControlName="officePhone" >
+            <mat-error *ngIf="hasError('officePhone', 'pattern')">הזן מס' טלאפון חוקי</mat-error>
+          </mat-form-field>
+          <mat-form-field class="col-md-3"> 
+            <input matInput type="tel" placeholder="פלאפון" formControlName="phone" >
+            <mat-error *ngIf="hasError('phone', 'pattern')">הזן מס' פלאפון חוקי</mat-error>
+          </mat-form-field>
+        <mat-icon style="align-self: center;text-align: center;">call</mat-icon>
+      </div>
+      <br>
+    <div class="row ">
+      <mat-form-field>
+        <input matInput type="email" placeholder='דוא"ל' formControlName="email" style="direction: ltr;" >
+        <mat-icon matSuffix>email</mat-icon>
+        <mat-error *ngIf="hasError('email', 'email')">הזן כתובת דוא"ל חוקית</mat-error>
+      </mat-form-field>
+  </div>
+  <br>
+      <div class="row justify-content-center">
+        <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
+        <button mat-raised-button type="submit" [disabled]="contactForm.invalid||!contactForm.dirty">{{contact.Id==null?"הוסף":"עדכן"}}</button>
+        </div>
+        </form>
+        <br><br>
+</div>

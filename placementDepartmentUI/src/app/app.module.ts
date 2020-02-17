@@ -20,6 +20,8 @@ import { CompaniesComponent } from './company/companies/companies.component';
 import { ShortStrPipe } from './pipes/short-str.pipe';
 import { CompanyFormComponent } from './company/company-form/company-form.component';
 import { JobsCoordinationComponent } from './jobs/jobs-coordination/jobs-coordination.component';
+import { ContactsComponent } from './contact/contacts/contacts.component';
+import { ContactFormComponent } from './contact/contact-form/contact-form.component';
 
 
  
@@ -37,6 +39,8 @@ import { JobsCoordinationComponent } from './jobs/jobs-coordination/jobs-coordin
     ShortStrPipe,
     CompanyFormComponent,
     JobsCoordinationComponent,
+    ContactsComponent,
+    ContactFormComponent,
   ],
   imports: [
     BrowserModule,
