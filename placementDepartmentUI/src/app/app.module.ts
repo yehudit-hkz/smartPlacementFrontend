@@ -24,7 +24,6 @@ import { ContactsComponent } from './contact/contacts/contacts.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
 
 
- 
 
 @NgModule({
   declarations: [
@@ -55,7 +54,9 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
   entryComponents: [
     DeletionDialogComponent
   ],
-  providers: [StamService],
+  providers: [
+    StamService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {StamService}from '../../services/stam.service';
+import {MainService}from '../../services/main.service';
 import {Graduate}from '../../classes/graduate';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -35,7 +35,7 @@ export class GraduatesComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(public GTS :StamService){
+  constructor(public service :MainService){
     this.panellist=[
       { name:"פעיל",sublist:this.activeFilter},
       { name:"מגדר",sublist:this.genderFilter},
@@ -45,7 +45,7 @@ export class GraduatesComponent implements OnInit {
   }
   
   ngOnInit() {
-      this.GTS.GetAllGraduates().subscribe(graduates=>
+      this.service.GetAllList("Graduate").subscribe(graduates=>
        {
         //Assign the data to the data source for the table to render
         this.graduates = new MatTableDataSource(graduates);
@@ -87,9 +87,9 @@ export class GraduatesComponent implements OnInit {
       let searchString = JSON.parse(filter);
       return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 &&
        (this.activeFilter.filter(isactive => !isactive.active).length === this.activeFilter.length ||
-          this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.IsInterested)) &&
+          this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.isActive)) &&
           (this.genderFilter.filter(gender => !gender.active).length === this.activeFilter.length ||
-             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.Gender));
+             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.gender));
     }
     return myFilterPredicate;
   }

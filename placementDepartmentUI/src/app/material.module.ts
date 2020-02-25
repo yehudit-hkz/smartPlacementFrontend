@@ -20,6 +20,8 @@ import {
     MatNativeDateModule,
     MatSelectModule,
     MatSnackBarModule,
+    MAT_DATE_LOCALE,
+    MatRadioModule,
 
 } from '@angular/material';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
@@ -46,6 +48,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatSelectModule,
         MatSnackBarModule,
         MaterialFileInputModule,
+        MatRadioModule,
+
     ],
     exports: [
         MatToolbarModule,
@@ -68,7 +72,11 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatSelectModule,
         MatSnackBarModule,
         MaterialFileInputModule,
+        MatRadioModule,
 
+    ],
+    providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'he-IL' },
     ]
 })
 export class MaterialModule { }

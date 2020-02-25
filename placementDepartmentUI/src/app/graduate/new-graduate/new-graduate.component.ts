@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Graduate } from '../../classes/graduate';
+import { MainService } from '../../services/main.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-new-graduate',
@@ -8,22 +10,22 @@ import { Graduate } from '../../classes/graduate';
 })
 export class NewGraduateComponent implements OnInit {
 
-  constructor() { }
+  constructor(private snackBar: MatSnackBar,public service: MainService) { }
 
   ngOnInit() {
   }
   addNewGraduate(newGraduate:Graduate){
-    // let apiUrl = 'api/owner';
-    // this.repository.create(apiUrl, owner)
-    //   .subscribe(res => {
-    //     //this is temporary, until we create our dialogs
-    //     this.location.back();
-    //   },
-    //   (error => {
-    //     //temporary as well
-    //     this.location.back();
-    //   })
-    //)
+    this.service.Save('Graduate', newGraduate)
+      .subscribe(res => {
+        this.snackBar.open("הבוגר נוסף בהצלחה!", "סגור", {
+          duration: 6000,
+          direction:"rtl",
+        });  
+      },
+      (error => {
+        //temporary as well
+      })
+    )
     console.log(newGraduate);
   }
 }
