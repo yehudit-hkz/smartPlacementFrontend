@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {MainService}from '../../services/main.service';
+import {ListsService}from '../../services/lists.service';
 import {Graduate}from '../../classes/graduate';
 
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -35,7 +36,8 @@ export class GraduatesComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(public service :MainService){
+  constructor(public Mservice :MainService,
+   public Lservice:ListsService){
     this.panellist=[
       { name:"פעיל",sublist:this.activeFilter},
       { name:"מגדר",sublist:this.genderFilter},
@@ -45,7 +47,7 @@ export class GraduatesComponent implements OnInit {
   }
   
   ngOnInit() {
-      this.service.GetAllList("Graduate").subscribe(graduates=>
+      this.Mservice.GetAllList("Graduate").subscribe(graduates=>
        {
         //Assign the data to the data source for the table to render
         this.graduates = new MatTableDataSource(graduates);
@@ -61,36 +63,27 @@ export class GraduatesComponent implements OnInit {
       } ,
        err=>{console.log(err);}
       );
-      
+      this.Lservice.GetAllList('Branch').subscribe(res=>res.forEach(b=>
+        this.branchFilter.push({value:b.Id,active:false,name:b.name})
+        ));
+        this.Lservice.GetAllList('Expertise').subscribe(res=>res.forEach(e=>
+          this.expertiseFilter.push({value:e.Id,active:false,name:e.name})
+          ));
    }
-   initializeList(itemName:string){
-    switch (itemName) {
-      case 'שלוחה': 
-        if(this.branchFilter.length==0)
-          {
-          //go to service
-            this.branchFilter.push({value: 'ז', active: false, name: 'זכר'})
-          }
-          break;
-      case 'תחום הכשרה':
-        if(this.expertiseFilter.length==0)
-          {
-            //go to service
-            this.expertiseFilter.push({value: 'ז', active: false, name: 'זכר'})
-          }
-          break;
-    }
-   }
-
+   
    customFilterPredicate() {
     const myFilterPredicate = (data: Graduate, filter: string): boolean => {
       let searchString = JSON.parse(filter);
       return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1 &&
        (this.activeFilter.filter(isactive => !isactive.active).length === this.activeFilter.length ||
           this.activeFilter.filter(isactive => isactive.active).some(isactive => isactive.value === data.isActive)) &&
-          (this.genderFilter.filter(gender => !gender.active).length === this.activeFilter.length ||
-             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.gender));
-    }
+          (this.genderFilter.filter(gender => !gender.active).length === this.genderFilter.length ||
+             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.gender))&&
+             (this.branchFilter.filter(branch => !branch.active).length === this.branchFilter.length ||
+             this.branchFilter.filter(branch => branch.active).some(branch => branch.value === data.Branch.Id)) &&
+             (this.expertiseFilter.filter(expertise => !expertise.active).length === this.expertiseFilter.length ||
+             this.expertiseFilter.filter(expertise => expertise.active).some(expertise => expertise.value === data.Expertise.Id));
+  }
     return myFilterPredicate;
   }
  

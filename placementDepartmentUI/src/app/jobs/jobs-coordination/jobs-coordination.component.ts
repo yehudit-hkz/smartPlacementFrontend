@@ -28,8 +28,7 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import {JobsCoordination} from '../../classes/jobsCoordination';
 import {JobCoordinationStatus} from '../../classes/my-enum-list';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { StamService } from '../../services/stam.service';
-import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
+import { EnumListsService } from '../../services/enum-lists.service';
 
 @Component({
     selector: 'app-jobs-coordination',
@@ -37,6 +36,7 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
     styleUrls: ['./jobs-coordination.component.scss']
   })
   export class JobsCoordinationComponent implements OnInit {
+
   jobsCoordination: MatTableDataSource<JobsCoordination>;
   columnsToDisplay = ["jobId","jobSubject","candidateName","status","action","dateReceived","lastUpdateDate"];//,"action"];
 
@@ -45,15 +45,12 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
   
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  statusList:JobCoordinationStatus[]=[
-  ];
 
-  constructor(public GTS :StamService) { }
+  constructor(public Eservice :EnumListsService) { }
 
   ngOnInit() {
     let c=new JobsCoordination();
     c.Id=1234;
-    c.status=this.statusList[0];
     c.dateReceived=new Date();
     c.lastUpdateDate=new Date();
     c.candidateName="כע כגעכגעג כעג" ;
@@ -63,21 +60,8 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
        console.log(this.jobsCoordination.data);
        this.jobsCoordination.sort = this.sort;
        this.jobsCoordination.filterPredicate=this.customFilterPredicate()
-
   }
-  initializeList(){
-    console.log("initi");
-        if(this.statusList.length==0)
-          {
-            //go to service
-            this.statusList=[
-              {Id:1,description:'aaaaa'},
-              {Id:2,description:'bbbbb'},
-              {Id:3,description:'ccccc'},
-              {Id:4,description:'sssss'},
-            ]
-          }
-    }
+ 
   updateStatus(jobsCoordinationForEdit:JobsCoordination): void {
     alert(jobsCoordinationForEdit.status.description);
     //go to service for edit

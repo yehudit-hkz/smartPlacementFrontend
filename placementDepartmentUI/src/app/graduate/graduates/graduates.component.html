@@ -8,7 +8,7 @@
       <mat-divider [inset]="true"></mat-divider>
       <br>
       <mat-accordion  multi="true">
-        <mat-expansion-panel  *ngFor="let item of panellist" (opened)="initializeList(item.name)" class="mat-elevation-z0" >
+        <mat-expansion-panel  *ngFor="let item of panellist" class="mat-elevation-z0" >
      <mat-expansion-panel-header >
               {{item.name}}
           </mat-expansion-panel-header>

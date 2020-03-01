@@ -2,8 +2,10 @@ import { Component, OnInit ,Output, EventEmitter, Input, OnChanges} from '@angul
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Location } from '@angular/common';
 import { Graduate }from '../../classes/graduate';
-import { City, Branch, Expertise, Language  } from '../../classes/my-enum-list';
-import { MainService } from '../../services/main.service'
+import { City, Branch, Expertise } from '../../classes/my-enum-list';
+import { MainService } from '../../services/main.service';
+import { EnumListsService } from '../../services/enum-lists.service';
+import { ListsService } from '../../services/lists.service';
 import { from } from 'rxjs';
 @Component({
   selector: 'app-graduate-form',
@@ -14,31 +16,22 @@ export class GraduateFormComponent implements OnChanges,OnInit {
  @Input('graduateForEdit') graduate= new Graduate();
  @Output() submitGraduate= new EventEmitter<Graduate>();
 
-  cities:City[];
-  branches:Branch[];
-  expertise:Expertise[];
-  languages:Language[];
   graduateForm: FormGroup;
   maxDate = new Date(new Date().getFullYear()-16, 11, 31);
   minDate = new Date(new Date().getFullYear() - 80, 0, 1);
 
- 
   constructor(private location: Location,
-    public service:MainService) {
-    this.cities=[];
-    this.branches=[];
-    this.expertise=[];
-    this.languages=[];
-   }
+    public Mservice:MainService,
+    public Eservice:EnumListsService,
+    public Lservice:ListsService) {}
  ngOnInit(){
-  console.log(this.graduate);
+  console.log("in "+this.graduate);
    this.ngOnChanges();
  }
  
   ngOnChanges() {
-//    Languages:GraduateLanguages[];
+    // Languages:GraduateLanguages[];
    // linkToCV:string;
-
     console.log("ch "+this.graduate);
     this.graduateForm = new FormGroup({
       Id: new FormControl(this.graduate.Id, [Validators.required,Validators.pattern('^([0-9]{9})$')]),
@@ -48,16 +41,19 @@ export class GraduateFormComponent implements OnChanges,OnInit {
       dateOfBirth: new FormControl(this.graduate.dateOfBirth,[Validators.required]),
       address: new FormControl(this.graduate.address, []),
       zipCode: new FormControl(this.graduate.zipCode, [Validators.pattern('^([0-9]{10})$')]),
-      city: new FormControl(this.graduate.City, [Validators.required]),
+      city: new FormControl(
+        this.graduate.Id? this.Eservice.cities.find(c=>this.graduate.City.Id==c.Id):"",
+         [Validators.required]),
       email: new FormControl(this.graduate.email, [Validators.required,Validators.email,Validators.maxLength(50)]),
       phone: new FormControl(this.graduate.phone, [Validators.required,Validators.pattern("^([0-9]{9,10})$")]),
-      branch: new FormControl(this.graduate.Branch, [Validators.required]),
-      expertise: new FormControl(this.graduate.Expertise, [Validators.required]),
+      branch: new FormControl(
+        this.graduate.Id? this.Lservice.branches.find(b=> this.graduate.Branch.Id==b.Id):"",
+         [Validators.required]),
+      expertise: new FormControl(
+       this.graduate.Id? this.Lservice.expertise.find(e=>this.graduate.Expertise.Id==e.Id):"",
+         [Validators.required]),
       startYear: new FormControl(this.graduate.startYear, [Validators.required,Validators.maxLength(4)]),
       endYear: new FormControl(this.graduate.endYear, [Validators.required,Validators.maxLength(4)]),
-      //by myself
-     // dateOfRegistration: new FormControl(!this.graduate.dateOfRegistration?new Date():this.graduate.dateOfRegistration, [Validators.required]),
-     // lastUpdate: new FormControl(this.graduate.lastUpdate, [Validators.required]),
       didGraduate: new FormControl(this.graduate.didGraduate, []),
       hasDiploma: new FormControl(this.graduate.hasDiploma, []),
       isWorkerInProfession: new FormControl(this.graduate.isWorkerInProfession, []),
@@ -91,7 +87,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         newGraduate.gender=graduateFormValue.gender;
         newGraduate.lastName=graduateFormValue.lastName;
         newGraduate.firstName=graduateFormValue.firstName;
-        if( typeof(graduateFormValue.dateOfBirth)=="string" ) {
+        if( typeof(graduateFormValue.dateOfBirth)=="string" )  {
           newGraduate.dateOfBirth = graduateFormValue.dateOfBirth;
         }
         else{
@@ -103,7 +99,6 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         newGraduate.zipCode=graduateFormValue.zipCode;
         newGraduate.phone=graduateFormValue.phone;
         newGraduate.email=graduateFormValue.email;
-        // newGraduate.Languages=this.graduate.Languages; 
         newGraduate.Branch=graduateFormValue.branch;
         newGraduate.Expertise=graduateFormValue.expertise;
         newGraduate.startYear=graduateFormValue.startYear;
@@ -132,7 +127,7 @@ executeUploadFile(fileToUpload: File ,name:string){
     let _formData = new FormData();
     name += fileToUpload.name.substr(fileToUpload.name.lastIndexOf('.'));;
     _formData.append("file", fileToUpload, name);
-    this.service.UploadCVFile(_formData).subscribe(res => { })
+    this.Mservice.UploadCVFile(_formData).subscribe(res => { })
     console.log(fileToUpload);
 }
 }

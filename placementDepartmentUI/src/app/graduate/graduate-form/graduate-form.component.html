@@ -40,7 +40,7 @@
         <mat-icon style="align-self: center;text-align: center;">pin_drop</mat-icon>
         <mat-form-field class="col-md-3"> 
           <mat-select placeholder="עיר" formControlName="city" required>
-            <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+            <mat-option *ngFor="let c of Eservice.cities" [value]="c">{{c.name}}</mat-option>
           </mat-select>
           <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
         </mat-form-field>
@@ -85,13 +85,13 @@
       <div class="row">
         <mat-form-field class="col-md-3">
         <mat-select placeholder="שלוחה" formControlName="branch" required>
-          <mat-option *ngFor="let b of branches" [value]="b">{{b}}</mat-option>
+          <mat-option *ngFor="let b of Lservice.branches" [value]="b">{{b.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('branch', 'required')">נא לבחור שלוחה</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3"> 
         <mat-select placeholder="תחום הכשרה" formControlName="expertise" required>
-          <mat-option *ngFor="let e of expertise" [value]="e">{{e}}</mat-option>
+          <mat-option *ngFor="let e of Lservice.expertise" [value]="e">{{e.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('expertise', 'required')">נא לבחור תחום הכשרה</mat-error>
       </mat-form-field>

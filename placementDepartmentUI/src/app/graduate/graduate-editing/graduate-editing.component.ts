@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./graduate-editing.component.scss']
 })
 export class GraduateEditingComponent implements OnInit {
-  number:number=12;
   id:string;
   graduate:Graduate;
 
@@ -17,7 +16,8 @@ export class GraduateEditingComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     public service :MainService,
-    private snackBar: MatSnackBar) { }
+    private snackBar: MatSnackBar
+    ) { }
 
   ngOnInit() {
     this.route.params.subscribe((params)=>
