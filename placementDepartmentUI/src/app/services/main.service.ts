@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Graduate } from '../classes/graduate';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +14,9 @@ export class MainService {
   GetAllList(controller:string):Observable<any[]>
   {
     return this.http.get<any[]>(`${this.apiURL}${controller}/GetAll`);
+  }
+  GetContactsByCompany(id:number){
+    return this.http.get<any>(`${this.apiURL}Contact/GetByCompany?idCompany=${id}`) ;
   }
   GetByID(controller:string,id){
     return this.http.get<any>(`${this.apiURL}${controller}/GetById?id=${id}`) ;

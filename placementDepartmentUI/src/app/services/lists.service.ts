@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ListsService {
- private apiURL="http://localhost:55968/api/";
+ private   apiURL="http://localhost:55968/api/";
   branches:Branch[]
   expertise:Expertise[];
   subjects:Subject[];
@@ -19,7 +19,7 @@ export class ListsService {
         res=>this.expertise=res,
         err=>console.log(err));
     this.GetAllList('Subject').subscribe(
-          res=>this.expertise=res,
+          res=>this.subjects  =res,
           err=>console.log(err));
    }
   GetAllList(controller:string):Observable<any[]>

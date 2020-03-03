@@ -6,7 +6,7 @@ export class Expertise{//
     Id:number;
     name:string;
 }
-export class Subject{
+export class Subject{//
     Id:number;
     name:string;
 }

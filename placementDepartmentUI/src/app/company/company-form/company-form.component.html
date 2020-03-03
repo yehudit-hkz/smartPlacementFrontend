@@ -13,7 +13,7 @@
       <mat-form-field class="col-md-3"> 
         <mat-select placeholder="תחום עיקרי" formControlName="subject" required>
             <mat-option></mat-option>
-          <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+          <mat-option *ngFor="let s of Lservice.subjects" [value]="s">{{s.name}}</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('subject', 'required')">נא לבחור תחום</mat-error>
       </mat-form-field>
@@ -21,7 +21,7 @@
     <br>
     <div class="row ">
       <mat-form-field class="col-md-4" >
-        <textarea rows="3" matInput placeholder='תאור פעילות החברה' formControlName="descriptiovOfActivity"  ></textarea>
+        <textarea rows="4" matInput placeholder='תאור פעילות החברה' formControlName="descriptiovOfActivity"  ></textarea>
       </mat-form-field >
     </div>
     <br><br>
@@ -30,7 +30,7 @@
         <mat-form-field class="col-md-3"> 
           <mat-select placeholder="עיר" formControlName="city" required>
               <mat-option></mat-option>
-            <mat-option *ngFor="let c of cities" [value]="c">{{c}}</mat-option>
+            <mat-option *ngFor="let c of Eservice.cities" [value]="c">{{c.name}}</mat-option>
           </mat-select>
           <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
         </mat-form-field>

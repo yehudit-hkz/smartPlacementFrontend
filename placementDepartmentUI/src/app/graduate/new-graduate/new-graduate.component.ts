@@ -25,7 +25,7 @@ export class NewGraduateComponent implements OnInit {
       (error => {
         //temporary as well
       })
-    )
+    );
     console.log(newGraduate);
   }
 }

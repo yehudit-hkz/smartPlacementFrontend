@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import{Contact}from '../../classes/contact'
+import { MainService } from 'src/app/services/main.service';
+import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
 
 @Component({
   selector: 'app-contacts',
@@ -16,33 +18,25 @@ export class ContactsComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor(private route:ActivatedRoute) { 
+  constructor(private route:ActivatedRoute,
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    public Mservice: MainService) { 
   }
 
   ngOnInit() {
     this.route.params.subscribe((params)=>
     this.companyId=params.companyID);
-    let c=new Contact();
-    c.name="jkhk";
-
-    c.officePhone="7653";
-    c.phone='12345';
-    c.email="sd@gmail.com";
-    let c1=new Contact();
-    c1.name="erty";
-    c1.officePhone="567890";
-    c1.phone='1234567';
-    c1.email="sdd@gmail.com";
-    c.CompanyName=c1.CompanyName="heter"
-    c.Id=c1.Id=12
-
-    this.contacts = new MatTableDataSource([c,c1,c]);
-    this.contacts.sort = this.sort;
-       this.contacts.paginator = this.paginator;
-       this.contacts.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
-       this.contacts.paginator._intl.nextPageLabel     = 'עמוד הבא';
-       this.contacts.paginator._intl.previousPageLabel = 'עמוד הקודם';
-       this.contacts.paginator._intl.getRangeLabel = dutchRangeLabel;
+    this.Mservice.GetContactsByCompany(this.companyId).subscribe(
+      contacts=>{
+        this.contacts = new MatTableDataSource(contacts);
+        this.contacts.sort = this.sort;
+           this.contacts.paginator = this.paginator;
+           this.contacts.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
+           this.contacts.paginator._intl.nextPageLabel     = 'עמוד הבא';
+           this.contacts.paginator._intl.previousPageLabel = 'עמוד הקודם';
+           this.contacts.paginator._intl.getRangeLabel = dutchRangeLabel;}
+    )
   }
 
   applyFilter(filterValue: string) {
@@ -50,6 +44,23 @@ export class ContactsComponent implements OnInit {
     if (this.contacts.paginator) {
       this.contacts.paginator.firstPage();
     }
+  }
+  openDeletionDialog(contact:Contact): void {
+    const dialogRef = this.dialog.open(DeletionDialogComponent, {
+      width: '250px',
+      data: {name: contact.name , type: "איש קשר"}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result==true){
+        console.log(`Dialog result: ${result}`);
+        this.Mservice.Delete('Contact',contact.Id).subscribe(res=>{});
+        this.snackBar.open("האיש קשר נמחק בהצלחה!", "סגור", {
+          duration: 6000,
+          direction:"rtl",
+        });  
+      }
+    });
   }
 
 }
