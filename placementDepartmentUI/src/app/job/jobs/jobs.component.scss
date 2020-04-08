@@ -1,0 +1,102 @@
+  table,mat-paginator {
+    width: 100%;
+    }
+
+    td, th {
+      text-align: right !important;
+      width: 25%;
+      padding-right: 10px !important;
+    }
+    th.center, td.center{
+      text-align: center !important;
+    }
+
+  tr.example-detail-row {
+    height: 0;
+  }
+  
+  tr.example-element-row.example-expanded-row {
+    font-weight: bold;
+    font-style: italic;
+    // background:rgb(230, 230, 230 ); 
+    background: rgb(245, 245, 255);
+
+  }
+
+  tr.example-element-row:not(.example-expanded-row):hover {
+    background: whitesmoke;
+  }
+  
+  tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+  }
+  
+  .example-element-row td {
+    border-bottom-width: 0;
+  }
+  .example-element-row.example-expanded-row td {
+  color:rgb(29, 14, 95);
+  }
+  
+  .example-element-detail {
+    overflow: hidden;
+    color:rgb(29, 14, 95);
+    // display: flex;
+  }
+  
+  .example-element-diagram {
+    border: 1px solid #efefef;
+    padding: 8px;
+    margin: 8px 0;
+  }
+  
+  .element-item{
+    padding: 9px;
+    width: 86%;
+  }
+
+  .element-expanded{
+    background: rgb(251, 251, 251);
+
+  }
+  
+    ::ng-deep .mat-paginator {
+     
+      // override material paginator page switch
+      // .mat-paginator-range-label {
+      //     order: 2;
+      // }
+      .mat-paginator-navigation-previous {
+          // order: 1;
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+      }
+      .mat-paginator-navigation-next {
+          // order: 3;
+          -webkit-transform: scaleX(-1);
+          transform: scaleX(-1);
+      }
+  }
+        
+    .example-container {
+       position: absolute;
+      top: 150px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      // background: #eee;
+    }
+    mat-sidenav{
+    width: 20%;
+    background: rgb(252, 252, 252);
+    } 
+    mat-sidenav-content{
+      background-color: white;
+    }
+    .mat-sidenav-content-item{
+      margin-right: 10px !important;
+      font-size: 15px !important;
+    }
+    .example-spacer {
+      flex: 1 1 auto;
+    }

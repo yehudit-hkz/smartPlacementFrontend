@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject, City } from 'src/app/classes/my-enum-list';
+import { Subject, City } from '../../classes/my-enum-list';
+import { CompanyFilters } from '../../classes/filters';
 import {Company} from '../../classes/company';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { MainService } from '../../services/main.service';
 import { ListsService } from '../../services/lists.service';
-import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
+import { DeletionDialogComponent } from '../../deletion-dialog/deletion-dialog.component';
+
 @Component({
   selector: 'app-companies',
   templateUrl: './companies.component.html',
@@ -13,7 +15,7 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
 export class CompaniesComponent implements OnInit {
   companies: MatTableDataSource<Company>;
   columnsToDisplay = ["name","city","address","subject","descriptiovOfActivity","action"];
-
+  filters:CompanyFilters;
   subjecFilter:Subject;
   subjecByJobsFilter:Subject;
 
@@ -25,7 +27,9 @@ export class CompaniesComponent implements OnInit {
     public Lservice:ListsService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
-    ) { }
+    ) { 
+      this.filters = new CompanyFilters();
+    }
 
   ngOnInit() {
     this.Mservice.GetAllList('Company').subscribe(companies=>
@@ -33,11 +37,18 @@ export class CompaniesComponent implements OnInit {
        this.companies = new MatTableDataSource(companies);
        console.log(this.companies);
        this.companies.sort = this.sort;
+       this.companies.sortingDataAccessor= (item, property) => {
+        switch(property) {
+          case 'city': return item.City.name;
+          case 'subject': return item.Subject.name;
+          default: return item[property];
+        }
+      };
        this.companies.paginator = this.paginator;
        this.companies.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
        this.companies.paginator._intl.nextPageLabel     = 'עמוד הבא';
        this.companies.paginator._intl.previousPageLabel = 'עמוד הקודם';
-       this.companies.paginator._intl.getRangeLabel = dutchRangeLabel;
+       this.companies.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
        this.companies.filterPredicate=this.customFilterPredicate()
      } ,
       err=>{console.log(err);}
@@ -58,8 +69,13 @@ export class CompaniesComponent implements OnInit {
     }
    
      applyFilter(filterValue: string) {
-    let filter={value:filterValue};
-       this.companies.filter =JSON.stringify(filter);
+    // let filter={value:filterValue};
+    //    this.companies.filter =JSON.stringify(filter);
+    this.Mservice.GetListByFilters("Company",this.filters).subscribe(companies=>
+      {console.log(companies);
+      this.companies.data=companies},
+      err=>{console.log(err);}
+     );
        if (this.companies.paginator) {
          this.companies.paginator.firstPage();
        }
@@ -96,20 +112,4 @@ export class CompaniesComponent implements OnInit {
    return string;
  }
 
-}
-
-
-const dutchRangeLabel = (page: number, pageSize: number, length: number) => {
-  if (length == 0 || pageSize == 0) { return `0 מתוך ${length}`; }
-  
-  length = Math.max(length, 0);
-
-  const startIndex = page * pageSize;
-
-  // If the start index exceeds the list length, do not try and fix the end index to the end.
-  const endIndex = startIndex < length ?
-      Math.min(startIndex + pageSize, length) :
-      startIndex + pageSize;
-
-  return `${startIndex + 1} - ${endIndex} מתוך ${length}`;
 }

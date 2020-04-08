@@ -1,0 +1,63 @@
+<mat-toolbar>
+    <span>{{job.Id==null?"הוספת משרה חדשה":"עריכת משרה"}}</span>
+</mat-toolbar>
+<br>
+<div class="container mat-elevation-z4">
+    <br><br>
+<form [formGroup]="jobForm" autocomplete novalidate (ngSubmit)="createJob(jobForm.value)" >
+    <div class="row ">
+      <mat-form-field class="col-md-3">
+        <input matInput type="text" placeholder="כותרת משרה" formControlName="title" required >
+        <mat-error *ngIf="hasError('title', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('title', 'maxlength')">אפשרי עד 50 תווים</mat-error>
+      </mat-form-field>
+      <mat-form-field class="col-md-3"> 
+        <mat-select placeholder="מקצוע" formControlName="subject" required>
+            <mat-option></mat-option>
+          <mat-option *ngFor="let s of Lservice.subjects" [value]="s">{{s.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="hasError('subject', 'required')">נא לבחור מקצוע</mat-error>
+      </mat-form-field>
+    </div>
+    <br>
+    <div class="row ">
+      <mat-form-field class="col-md-4" >
+        <textarea rows="4" matInput placeholder='תיאור המשרה' formControlName="description"></textarea>
+      </mat-form-field >
+    </div>
+    <br><br>
+    <div class="row align-items-center">
+          <mat-checkbox class="col-md-3" formControlName="didSendCV">
+            <span class="text">נשלחו מועמדים</span>
+          </mat-checkbox>
+          <mat-checkbox class="col-md-2" #isActive formControlName="isActive">
+            <span class="text">משרה סגורה</span>
+          </mat-checkbox>
+          <mat-form-field class="col-md-3" *ngIf="isActive.checked">  
+            <mat-select placeholder="סיבת סגירת המשרה" formControlName="ReasonForClosing" >
+              <mat-option *ngFor="let r of Eservice.reasonsForClosing" [value]="r">{{r.description  }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        </div>
+    <!-- <div class="row ">
+        <mat-icon style="align-self: center;text-align: center;">pin_drop</mat-icon>
+        <mat-form-field class="col-md-3"> 
+          <mat-select placeholder="עיר" formControlName="city" required>
+              <mat-option></mat-option>
+            <mat-option *ngFor="let c of Eservice.cities" [value]="c">{{c.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input matInput placeholder='כתובת' formControlName="address" >
+        </mat-form-field>
+      </div> -->
+      <br><br>
+      <div class="row justify-content-center">
+        <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
+        <button mat-raised-button type="submit" [disabled]="jobForm.invalid||!jobForm.dirty">{{job.Id==null?"הוסף":"עדכן"}}</button>
+        </div>
+        </form>
+        <br><br>
+</div>
+

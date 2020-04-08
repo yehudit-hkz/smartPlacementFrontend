@@ -19,11 +19,38 @@ export class GraduateFormComponent implements OnChanges,OnInit {
   graduateForm: FormGroup;
   maxDate = new Date(new Date().getFullYear()-16, 11, 31);
   minDate = new Date(new Date().getFullYear() - 80, 0, 1);
+  
 
   constructor(private location: Location,
     public Mservice:MainService,
     public Eservice:EnumListsService,
-    public Lservice:ListsService) {}
+    public Lservice:ListsService) {
+      // this.graduateForm = new FormGroup({
+      //   Id: new FormControl("", [Validators.required,Validators.pattern('^([0-9]{9})$')]),
+      //   gender: new FormControl("", [Validators.required]),
+      //   lastName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
+      //   firstName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
+      //   dateOfBirth: new FormControl("",[Validators.required]),
+      //   address: new FormControl("", []),
+      //   zipCode: new FormControl("", [Validators.pattern('^([0-9]{10})$')]),
+      //   city: new FormControl("",[Validators.required]),
+      //   email: new FormControl("", [Validators.required,Validators.email,Validators.maxLength(50)]),
+      //   phone: new FormControl("", [Validators.required,Validators.pattern("^([0-9]{9,10})$")]),
+      //   branch: new FormControl("", [Validators.required]),
+      //   expertise: new FormControl("",[Validators.required]),
+      //   startYear: new FormControl("", [Validators.required,Validators.maxLength(4)]),
+      //   endYear: new FormControl("", [Validators.required,Validators.maxLength(4)]),
+      //   didGraduate: new FormControl("", []),
+      //   hasDiploma: new FormControl("", []),
+      //   isWorkerInProfession: new FormControl("", []),
+      //   companyName: new FormControl("", [Validators.maxLength(50)]),
+      //   role: new FormControl("", [Validators.maxLength(50)]),
+      //   placedByThePlacementDepartment: new FormControl("", []),
+      //   hasExperience: new FormControl("", []),
+      //   isActive: new FormControl("", []),
+      //   uploadfile: new FormControl()
+      // });
+    }
  ngOnInit(){
   console.log("in "+this.graduate);
    this.ngOnChanges();

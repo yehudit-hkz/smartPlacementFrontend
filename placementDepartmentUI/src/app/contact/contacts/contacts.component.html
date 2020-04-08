@@ -1,11 +1,11 @@
 <mat-toolbar>
-    <span >אנשי קשר -   '{{contacts?contacts.data[0].CompanyName:""}}'</span>
+    <span >אנשי קשר -   '{{contacts?contacts.data[0].companyName:""}}'</span>
 </mat-toolbar>
 <div class="container">
   <br><br>  
     <div class="row justify-content-between">
     <mat-form-field class="col-md-5 ">
-      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי">
+      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
     </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/contact-form/-" routerLinkActive="activeLink">
@@ -37,7 +37,7 @@
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let c" style="text-align: center;"> 
              <a routerLink="/graduate-editing/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
-              <mat-icon  matTooltip="משרות שהציע">work</mat-icon>
+              <mat-icon  matTooltip="משרות שהציע\ה">work</mat-icon>
             </a>
             <a routerLink="/contact-form/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
                 <mat-icon  matTooltip="עריכה">edit</mat-icon>

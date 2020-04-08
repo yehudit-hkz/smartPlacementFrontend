@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { StamService } from 'src/app/services/stam.service';
 import { Contact } from 'src/app/classes/contact';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -46,7 +45,7 @@ export class ContactFormComponent implements OnInit {
         officePhone : new FormControl(this.contact.officePhone,[Validators.pattern("^([0-9]{9,10})$")]),
         phone: new FormControl(this.contact.phone, [Validators.pattern("^([0-9]{9,10})$")]),
         email: new FormControl(this.contact.email,[Validators.email]),
-        Company: new FormControl(this.contact.CompanyId,[Validators.required]),
+        Company: new FormControl(this.contact.companyId,[Validators.required]),
       });
     },
     err=>{console.log(err)
@@ -79,7 +78,7 @@ export class ContactFormComponent implements OnInit {
        newContact.officePhone=contactFormValue.officePhone;
        newContact.phone=contactFormValue.phone;
        newContact.email=contactFormValue.email;
-       newContact.CompanyId=contactFormValue.Company;
+       newContact.companyId=contactFormValue.Company;
      console.log(newContact);
      if(this.contact.Id)
        //edit function;
@@ -94,7 +93,7 @@ export class ContactFormComponent implements OnInit {
       }); 
       else
       // add new function;
-      this.Mservice.Edit('Contact',newContact).subscribe(res => {
+      this.Mservice.Save  ('Contact',newContact).subscribe(res => {
         this.snackBar.open("האיש קשר נוסף בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",

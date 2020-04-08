@@ -1,0 +1,173 @@
+<mat-toolbar>
+    <span >משרות</span>
+    </mat-toolbar>
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav mode="side" position="end" opened  >
+        <mat-toolbar style="background-color: white;"><span>סינון</span></mat-toolbar>
+        <mat-divider [inset]="true"></mat-divider>
+        <br>
+        <mat-accordion  multi="true">
+          <mat-expansion-panel  *ngFor="let item of panelList" class="mat-elevation-z0" >
+            <mat-expansion-panel-header >
+                     <span>{{item.name}}</span>
+                     <span class="example-spacer"></span>
+                     <button style="
+                     margin-left: 15px;
+                     height:20px !important;
+                     width:20px !important;" 
+                     *ngIf="item.name=='תקופה'?periodValue:item.selecedlist.length>0" 
+                     (click)="item.name=='תקופה'?periodValue='':item.selecedlist=[];applyFilter(filtering.value);" 
+                     mat-icon-button>
+                     
+                      <mat-icon style="
+                      margin-top  : -30px;
+                      height:14px !important;
+                      width:14px !important;
+                      font-size:15px !important;" matTooltip="ניקוי">clear</mat-icon>
+                    </button>
+                 </mat-expansion-panel-header>
+                 <mat-selection-list *ngIf="item.name!='תקופה'" [(ngModel)]="item.selecedlist">
+                   <mat-list-option  
+                   checkboxPosition="before" 
+                   (click)="applyFilter(filtering.value)" 
+                   [value]="subItem.Id"
+                   *ngFor="let subItem of item.sublist" >
+                     <span class="mat-sidenav-content-item">{{subItem.name}}</span>
+                   </mat-list-option>
+                 </mat-selection-list>
+
+                 <mat-radio-group 
+                 [(ngModel)]="periodValue" 
+                 (change)="applyFilter(filtering.value)"
+                 *ngIf="item.name=='תקופה'" >
+                  <mat-radio-button style="margin: 7px;" value="1">
+                    <span class="mat-sidenav-content-item">חודש אחרון</span>
+                  </mat-radio-button><br>
+                  <mat-radio-button style="margin: 7px;" value="2">
+                    <span class="mat-sidenav-content-item">בין התאריכים:</span>
+                  </mat-radio-button>
+                  <br>
+                  <mat-form-field  style="max-width: 90px;font-size: 14px;margin-right: 10px;">
+                    <input matInput [matDatepicker]="spicker" [(ngModel)]='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
+                         readonly [max]="maxDate" (click)="spicker.open()">
+                    <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
+                    <mat-datepicker dir="rtl"  #spicker></mat-datepicker>
+                  </mat-form-field>
+                  <span> -</span>
+                  <mat-form-field style="max-width: 110px;font-size: 14px;margin-right: 10px;">
+                    <input matInput [matDatepicker]="epicker" [(ngModel)]='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
+                         readonly [max]="maxDate" (click)="epicker.open()">
+                    <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
+                    <mat-datepicker dir="rtl"  #epicker></mat-datepicker>
+                  </mat-form-field>
+                </mat-radio-group>
+               </mat-expansion-panel >
+        </mat-accordion>
+        
+      </mat-sidenav>
+      <mat-sidenav-content>
+  <div class="container">
+  <br>
+    <div class="row justify-content-between">
+    <mat-form-field class="col-md-5 ">
+      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
+    </mat-form-field>
+    <div class="col-md-1" style="text-align: center;">
+    <a mat-icon-button routerLink="/job-form/-" routerLinkActive="activeLink">
+      <mat-icon matTooltip="הוספת משרה חדשה">add</mat-icon>
+    </a>
+    <span >חדש</span>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 ">
+        <table mat-table [dataSource]="jobs" matSort multiTemplateDataRows class="mat-elevation-z4">
+  <ng-container matColumnDef="title" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> כותרת </th>
+    <td mat-cell *matCellDef="let j"> {{j.title}} </td>
+  </ng-container>
+  <ng-container matColumnDef="Subject" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> מקצוע </th>
+    <td mat-cell *matCellDef="let j"> {{j.Subject.name}} </td>
+  </ng-container>
+  <ng-container matColumnDef="isActive">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool center" > פעיל </th>
+    <td mat-cell *matCellDef="let j" class="bool center" >     
+      <mat-icon> {{j.isActive?"check":""}}</mat-icon>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="didSendCV" >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool center" > נשלחו קו"ח </th>
+    <td mat-cell *matCellDef="let j" class="bool center" > 
+      <mat-icon> {{j.didSendCV?"check":""}}</mat-icon>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="lastUpdateDate"  >
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="date center"> תאריך עדכון אחרון </th>
+    <td mat-cell *matCellDef="let j" class="date center"> {{j.lastUpdateDate|date:'dd/MM/yyyy'}} </td>
+  </ng-container>
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let j" class="center" style="width:12% !important;"> 
+       <a routerLink="/job-form/{{j.Id}}" routerLinkActive="activeLink" mat-icon-button>
+        <mat-icon  matTooltip="עריכה">edit</mat-icon>
+      </a>
+    </td>
+  </ng-container>
+
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail" >
+    <td mat-cell *matCellDef="let j" [attr.colspan]="columnsToDisplay.length" class="element-expanded">
+      <div class="example-element-detail"
+           [@detailExpand]="j == expandedElement ? 'expanded' : 'collapsed'">
+        <!-- <div class="example-element-diagram"> -->
+          <!-- <div ><b></b> {{element.Id}} </div> -->
+          <br>
+         
+          <div class="element-item"><b>תאריך רישום:</b> {{j.dateReceived |date:'dd/MM/yyyy'}}</div>
+          <div class="element-item"><b>שם החברה:</b> {{j.companyName}} </div>
+          <div class="element-item"><b>איש הקשר:</b> {{j.contactName}} </div>
+          <div class="element-item"><b>קולט המשרה:</b> {{j.gettingName}} </div>
+          <div class="element-item"><b>מטפל:</b> {{j.handlesName}} </div>
+          <div class="element-item"><b>תיאור:</b> {{j.description}} </div>
+          <!-- <br> -->
+        <div class="row">
+            <div class="element-item col-md-10" style="text-align: center;">
+                <b *ngIf="!j.isActive" >המשרה סגורה היות ו{{j.ReasonForClosing.description}}</b>
+          </div >
+          <div class="col-md-2 " style="text-align: center ;">
+          <button (click)="openDeletionDialog(j)" mat-icon-button>
+            <mat-icon matTooltip="מחיקה">delete</mat-icon>
+          </button>
+        </div>
+        </div>
+        <br>      
+        <mat-divider ></mat-divider>
+        <br>      
+        <!-- </div> -->
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay" ></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+      class="example-element-row" 
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"  class="example-detail-row"></tr>
+</table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+    <mat-paginator style="margin-top: 7px;"  [pageSizeOptions]="[ 5, 10, 25, 50, 100]"></mat-paginator>
+  </div>
+  </div>
+  </div>
+  </mat-sidenav-content>
+  </mat-sidenav-container>
+  
+
+
+

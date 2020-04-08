@@ -2,12 +2,19 @@
     <span>הוספת בוגר חדש</span>
 </mat-toolbar>
 <div class="container">
-    <div class="row">
+    <br><br>
+    <div class="row justify-content-end">
+        <button class="col-md-3"  mat-raised-button>
+            <mat-icon svgIcon="excel" style=" vertical-align: top;" ></mat-icon>&nbsp;
+            ייבוא בוגרים מאקסל</button>
+    </div>  
     <br>
-</div>
     <div class="row">
         <!-- [graduateForEdit]="graduate" (submitGraduate)="editDetails($event)" -->
-        <app-graduate-form (submitGraduate)="addNewGraduate($event)"  class="mat-elevation-z8 col-md-12"> </app-graduate-form>
+        <app-graduate-form (submitGraduate)="addNewGraduate($event)" class="mat-elevation-z8 col-md-12">
+        </app-graduate-form>
     </div>
     <br>
+    <br>
+    <br>    
 </div>

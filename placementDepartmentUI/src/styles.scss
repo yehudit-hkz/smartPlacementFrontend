@@ -27,9 +27,12 @@ span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label 
 th.date,td.date{
   width: 12% !important;
 }
+th.bool,td.bool{
+  width: 12% !important;
+}
 a.mat-button{
-  color:rgb(22, 11, 71);
-  font-size: 18px;
+  color:rgb(29, 14, 95);
+    font-size: 18px;
   text-decoration-line: none !important;
       // color:rgb(22, 11, 71) !important;
 }
@@ -37,6 +40,11 @@ a.mat-button{
   direction: rtl !important;
   text-align: right !important;
 }
+span.text{
+  margin-right:8px;
+}
+
+
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;

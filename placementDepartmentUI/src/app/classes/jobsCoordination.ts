@@ -8,5 +8,5 @@ export class JobsCoordination{
     candidateName:string;
     jobId:number;
     jobSubject:Subject;
-    status:JobCoordinationStatus;
+    Status:JobCoordinationStatus;
 }

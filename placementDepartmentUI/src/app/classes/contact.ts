@@ -4,6 +4,6 @@ export class Contact{
     officePhone:string;
     phone:string;
     email:string;
-    CompanyId:number;
-    CompanyName:string;
+    companyId:number;
+    companyName:string;
 }

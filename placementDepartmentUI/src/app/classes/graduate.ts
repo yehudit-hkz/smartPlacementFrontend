@@ -1,6 +1,6 @@
-import { City, Branch, Expertise } from './my-enum-list';
+    import { City, Branch, Expertise } from './my-enum-list';
 
-export class Graduate{
+    export class Graduate{
     Id:string;
     gender:string;
     lastName:string;

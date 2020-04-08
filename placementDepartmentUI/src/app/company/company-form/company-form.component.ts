@@ -1,4 +1,4 @@
-import { Component, OnInit ,Output, EventEmitter, Input, OnChanges} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -15,7 +15,6 @@ import { MatSnackBar } from '@angular/material';
 })
 export class CompanyFormComponent implements OnInit {
   company= new Company();
-  cities=["ירושלים","בני ברק"];
   companyForm: FormGroup;
   
    constructor(private location: Location,
@@ -44,10 +43,10 @@ export class CompanyFormComponent implements OnInit {
       this.companyForm = new FormGroup({
         name: new FormControl(this.company.name, [Validators.required]),
         subject: new FormControl(
-         this.company.Id? this.Lservice.subjects.find(s=>this.company.Subject.Id==s.Id):"",
+         this.Lservice.subjects.find(s=>this.company.Subject.Id==s.Id),
          [Validators.required]),
         city: new FormControl(
-         this.company.Id? this.Eservice.cities.find(c=>this.company.City.Id==c.Id):"",
+         this.Eservice.cities.find(c=>this.company.City.Id==c.Id),
          [Validators.required]),
         address: new FormControl(this.company.address),
         descriptiovOfActivity: new FormControl(this.company.descriptiovOfActivity),

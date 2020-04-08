@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import {MainService}from '../../services/main.service';
 import {ListsService}from '../../services/lists.service';
 import {Graduate}from '../../classes/graduate';
-
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 export interface filter {
   active: boolean;
@@ -20,7 +19,7 @@ export interface filter {
 export class GraduatesComponent implements OnInit {
   graduates: MatTableDataSource<Graduate>;
   panellist;
-  columnsToDisplay = ['Name',"Expertise","Branch","endYear","action"];
+  columnsToDisplay = ['name',"expertise","branch","endYear","action"];
 
   activeFilter: filter[] = [
     { value: true, active: false, name: 'פעיל' },
@@ -32,6 +31,8 @@ export class GraduatesComponent implements OnInit {
   ];
   branchFilter: filter[]=[];
   expertiseFilter: filter[]=[];
+
+  selectedOptions;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -53,12 +54,20 @@ export class GraduatesComponent implements OnInit {
         this.graduates = new MatTableDataSource(graduates);
         console.log(this.graduates);
         console.log(this.panellist);
+        this.graduates.sortingDataAccessor= (item, property) => {
+          switch(property) {
+            case 'name': return item.firstName +" "+ item.lastName;
+            case 'expertise': return item.Expertise.name;
+            case 'branch': return item.Branch.name;
+            default: return item[property];
+          }
+        };
         this.graduates.sort = this.sort;
         this.graduates.paginator = this.paginator;
         this.graduates.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
         this.graduates.paginator._intl.nextPageLabel     = 'עמוד הבא';
         this.graduates.paginator._intl.previousPageLabel = 'עמוד הקודם';
-        this.graduates.paginator._intl.getRangeLabel = dutchRangeLabel;
+        this.graduates.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
         this.graduates.filterPredicate=this.customFilterPredicate()
       } ,
        err=>{console.log(err);}
@@ -93,31 +102,20 @@ export class GraduatesComponent implements OnInit {
      if (this.graduates.paginator) {
        this.graduates.paginator.firstPage();
      }
+     console.log(this.selectedOptions)
    }
 
    mytoString(data:any) {
     let string="";
    Object.keys(data).forEach(k => {
-     string+=data[k]
+    if(k=="City")
+    string+=data[k].name;
+   else if(k=="Branch")
+    string+=data[k].name;
+    else if(k=="Expertise")
+    string+=data[k].name;
+   else if(k!="Languages") string+=data[k]
    });
    return string;
  }
  }
- 
- 
-
-//for translate paginator label
-const dutchRangeLabel = (page: number, pageSize: number, length: number) => {
-  if (length == 0 || pageSize == 0) { return `0 van ${length}`; }
-  
-  length = Math.max(length, 0);
-
-  const startIndex = page * pageSize;
-
-  // If the start index exceeds the list length, do not try and fix the end index to the end.
-  const endIndex = startIndex < length ?
-      Math.min(startIndex + pageSize, length) :
-      startIndex + pageSize;
-
-  return `${startIndex + 1} - ${endIndex} מתוך ${length}`;
-}

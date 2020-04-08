@@ -19,9 +19,11 @@ import { GraduateEditingComponent } from './graduate/graduate-editing/graduate-e
 import { CompaniesComponent } from './company/companies/companies.component';
 import { ShortStrPipe } from './pipes/short-str.pipe';
 import { CompanyFormComponent } from './company/company-form/company-form.component';
-import { JobsCoordinationComponent } from './jobs/jobs-coordination/jobs-coordination.component';
+import { JobsCoordinationComponent } from './job/jobs-coordination/jobs-coordination.component';
 import { ContactsComponent } from './contact/contacts/contacts.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
+import { JobsComponent } from './job/jobs/jobs.component';
+import { JobFormComponent } from './job/job-form/job-form.component';
 
 
 
@@ -40,6 +42,8 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
     JobsCoordinationComponent,
     ContactsComponent,
     ContactFormComponent,
+    JobsComponent,
+    JobFormComponent,
   ],
   imports: [
     BrowserModule,
