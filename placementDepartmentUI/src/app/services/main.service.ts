@@ -6,6 +6,13 @@ import { Contact } from '../classes/contact';
 import { Subject } from '../classes/my-enum-list';
 import { Graduate } from '../classes/graduate';
 
+//interface for api with lazy louding
+export interface ApiRes {
+  items: any[];
+  totalCount: number;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +22,10 @@ export class MainService {
   constructor(private http: HttpClient) { 
     this.apiURL=this.URL+"api/"
   }
-
+  GetLazyList(controller:string,sort:string, page:number, size:number,filters):Observable<ApiRes>
+  {
+    return this.http.get<ApiRes>(`${this.apiURL}${controller}/GetLazy?page=${page}&size=${size}&sort=${sort}`,{params: filters});
+  }
   GetAllList(controller:string):Observable<any[]>
   {
     return this.http.get<any[]>(`${this.apiURL}${controller}/GetAll`);
@@ -60,6 +70,8 @@ export class MainService {
   {
     return this.http.get<JobsCoordination[]>(`${this.apiURL}JobsCoordination/GetByJob?idJob=${idJob}`);
   }
+
+
 
 
 

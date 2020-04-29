@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild ,AfterViewInit } from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Job } from '../../classes/job';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
@@ -7,6 +7,9 @@ import { JobFilters } from '../../classes/filters';
 import { EnumListsService } from '../../services/enum-lists.service';
 import { ListsService } from '../../services/lists.service';
 import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
+  import {merge, Observable, of as observableOf} from 'rxjs';
+  import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+  
 
 @Component({
   selector: 'app-jobs',
@@ -20,10 +23,13 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
     ]),
   ],
 })
-export class JobsComponent implements OnInit {
+export class JobsComponent implements OnInit, AfterViewInit {
 
-  jobs : MatTableDataSource<Job>;
-  columnsToDisplay = ['title', 'Subject', 'isActive', 'didSendCV','lastUpdateDate','action'];
+  jobs : Job[]; 
+  columnsToDisplay = ['title', 'Subject.name', 'isActive', 'didSendCV','lastUpdateDate','action'];
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
   expandedElement: Job | null;
   filters:JobFilters;
   panelList;
@@ -37,13 +43,13 @@ export class JobsComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  constructor( public dialog: MatDialog,
+  constructor( 
+    public dialog: MatDialog,
     private snackBar: MatSnackBar,
     public Mservice :MainService,
     public Eservice:EnumListsService,
-    public Lservice:ListsService) {
-      this.filters=new JobFilters();
-      this.filters.subjects=[3];
+    public Lservice:ListsService) 
+    {
       this.sendCV=[
           {Id:true,name:'נשלחו'},
           {Id:false,name:'לא נשלחו'}
@@ -53,56 +59,97 @@ export class JobsComponent implements OnInit {
         {Id:false,name:'סגורה'}
     ];
   }
+  ngAfterViewInit() {
+    // If the user changes the sort order, reset back to the first page.
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.Mservice.GetLazyList( "Job",
+           " ,"+this.sort.active+" "+this.sort.direction,
+            this.paginator.pageIndex,this.paginator.pageSize,
+            this.filters);
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.resultsLength = data.totalCount;
+
+          return data.items;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          // Catch if the GitHub API has reached its rate limit. Return empty data.
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      ).subscribe(data =>this.jobs = data);
+  }
 
   ngOnInit() {
-    this.Mservice.GetAllList("Job").subscribe(graduates=>
-      {
-       //Assign the data to the data source for the table to render
-       this.jobs = new MatTableDataSource(graduates);
-       console.log(this.jobs);
-       this.jobs.sortingDataAccessor= (item, property) => {
-        switch(property) {
-          case 'Subject': return item.Subject.name;
-          default: return item[property];
-        }
-      };
-       this.jobs.sort = this.sort;
-       this.jobs.paginator = this.paginator;
-       this.jobs.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
-       this.jobs.paginator._intl.nextPageLabel     = 'עמוד הבא';
-       this.jobs.paginator._intl.previousPageLabel = 'עמוד הקודם';
-       this.jobs.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
-      //  this.jobs.filterPredicate=this.customFilterPredicate()
+      this.sort.active = "";
+      this.sort.direction = "";
+       this.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
+       this.paginator._intl.nextPageLabel     = 'עמוד הבא';
+       this.paginator._intl.previousPageLabel = 'עמוד הקודם';
+       this.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
       this.panelList=[
         { name:"שליחת מועמדים", sublist:this.sendCV, selecedlist:[]},
         { name:"פעילה", sublist:this.active, selecedlist:[]},
         { name:"תקופה", sublist:[], selecedlist:[]},
         { name:"מקצוע", sublist:this.Lservice.subjects, selecedlist:[]},
       ];
-       console.log(this.panelList);
-     } ,
-      err=>{console.log(err);}
-     );
-    
   }
   applyFilter(filterValue:string){
+
+    this.filters=new JobFilters();
     this.filters.sendCV=this.panelList[0].selecedlist;
     this.filters.active=this.panelList[1].selecedlist;
 
     this.filters.period=this.periodValue;
-    if(!this.endDateValue)this.endDateValue = new Date();
-    if(!this.startDateValue)this.startDateValue = this.endDateValue;
-    this.filters.startDate =this.startDateValue.toISOString(); 
-    this.filters.endDate =this.endDateValue.toISOString();
-
+    if(this.filters.period==2)
+    {
+      if(!this.endDateValue)this.endDateValue = new Date();
+      if(!this.startDateValue)this.startDateValue = this.endDateValue;
+      this.filters.startDate =this.startDateValue.toISOString(); 
+      this.filters.endDate =this.endDateValue.toISOString();
+    }
     this.filters.subjects=this.panelList[3].selecedlist;
-
-      this.Mservice.GetListByFilters("Job",this.filters).subscribe(jobs=>
-       {console.log(this.jobs);
-        this.jobs.data=jobs;},
-      err=>{console.log(err);}
-     );
+    this.paginator.pageIndex = 0;
+   merge().pipe(
+      startWith({}),
+      switchMap(() => {
+        this.isLoadingResults = true;
+        return this.Mservice.GetLazyList( "Job",
+         " ,"+this.sort.active+" "+this.sort.direction,
+          this.paginator.pageIndex,this.paginator.pageSize,
+          this.filters);
+      }),
+      map(data => {
+        // Flip flag to show that loading has finished.
+        this.isLoadingResults = false;
+        this.isRateLimitReached = false;
+        this.resultsLength = data.totalCount;
+        return data.items;
+      }),
+      catchError(() => {
+        this.isLoadingResults = false;
+        // Catch if the GitHub API has reached its rate limit. Return empty data.
+        this.isRateLimitReached = true;
+        return observableOf([]);
+      })
+    ).subscribe(data =>this.jobs = data);
   }
+
+cleanPeriod(){
+  this.periodValue='';
+  this.startDateValue='';
+  this.endDateValue='';
+}
 
   openDeletionDialog(job:Job): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {

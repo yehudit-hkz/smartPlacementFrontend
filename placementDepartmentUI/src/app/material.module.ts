@@ -22,6 +22,7 @@ import {
     MatSnackBarModule,
     MAT_DATE_LOCALE,
     MatRadioModule,
+    MatProgressSpinnerModule,
 
 } from '@angular/material';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
@@ -49,6 +50,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatSnackBarModule,
         MaterialFileInputModule,
         MatRadioModule,
+        MatProgressSpinnerModule,
 
     ],
     exports: [
@@ -73,6 +75,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatSnackBarModule,
         MaterialFileInputModule,
         MatRadioModule,
+        MatProgressSpinnerModule,
 
     ],
     providers: [

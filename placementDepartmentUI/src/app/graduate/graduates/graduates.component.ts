@@ -102,7 +102,8 @@ export class GraduatesComponent implements OnInit {
      if (this.graduates.paginator) {
        this.graduates.paginator.firstPage();
      }
-     console.log(this.selectedOptions)
+     console.log(this.selectedOptions);
+      console.log(this.graduates);
    }
 
    mytoString(data:any) {
