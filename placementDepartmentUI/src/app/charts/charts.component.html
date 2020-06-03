@@ -1,0 +1,142 @@
+<mat-toolbar>
+    <span >תרשימים</span>
+    </mat-toolbar>
+<div class="container">
+    <br><br>
+<mat-vertical-stepper linear  #stepper >
+    <ng-template matStepperIcon="edit" let-index="index">
+        <mat-icon *ngIf="index == 2">bar_chart</mat-icon>
+        <mat-icon *ngIf="index != 2">edit</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="done" let-index="index">
+        <mat-icon *ngIf="index == 2">bar_chart</mat-icon>
+        <mat-icon *ngIf="index != 2">done</mat-icon>
+    </ng-template>
+
+    <mat-step [stepControl]="typeFormGroup" >
+      <ng-template matStepLabel>
+        <span [ngStyle]="{'color': hasError('type', 'required') ? 'red' : 'black'}" class="text">בחר תרשים- *חובה</span>
+      </ng-template>
+      <form [formGroup]="typeFormGroup">
+            <mat-radio-group  aria-label="Select an option" formControlName="type" required>
+              <mat-radio-button value="1"><span class="text">משרות שנפתחו</span></mat-radio-button><br>
+              <mat-radio-button value="2"><span class="text">בוגרים מול משרות</span></mat-radio-button><br>
+              <mat-radio-button value="3"><span class="text">השמות</span></mat-radio-button>
+            </mat-radio-group>
+        <div>
+          <button mat-icon-button matStepperNext >
+            <mat-icon class="arrow"  matTooltip="הבא">arrow_back_ios</mat-icon>
+        </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="detailsFormGroup">
+      <form [formGroup]="detailsFormGroup">
+        <ng-template matStepLabel>
+          <span class="text">התאם פרטים</span>
+        </ng-template>
+      <div  *ngIf="typeFormGroup.value.type == 1 || typeFormGroup.value.type == 3">
+
+        <span class=" example-chip-list"> הגדר טווח תאריכים:</span><br>
+        <mat-form-field class="example-chip-list" >
+          <input matInput [matDatepicker]="spicker" formControlName='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
+              readonly [max]="maxDate" (click)="spicker.open()">
+          <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
+          <mat-datepicker dir="rtl"  #spicker></mat-datepicker>
+        </mat-form-field><br>
+        <span style="font-size: 18px;"><b>-</b></span><br><br>
+        <mat-form-field class=" example-chip-list">
+          <input matInput [matDatepicker]="epicker" formControlName='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
+              readonly [max]="maxDate" (click)="epicker.open()">
+          <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
+          <mat-datepicker dir="rtl"  #epicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div *ngIf="typeFormGroup.value.type == 2">
+        <mat-form-field class="example-chip-list">
+          <mat-chip-list #chipList >
+            <mat-chip
+              *ngFor="let fruit of detailsFormGroup.value.branches"
+              removable="true"
+              (removed)="remove(fruit)">
+              <mat-icon matChipRemove >cancel</mat-icon>
+                {{fruit.name}}
+            </mat-chip>
+            <input
+              placeholder="מכל השלוחות"
+            #fruitInput
+              [formControl]="fruitCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="selected($event)">
+            <mat-option *ngFor="let fruit of filteredFruits | async " [value]="fruit">
+              {{fruit.name}}
+            </mat-option>
+          <mat-option *ngIf="autoLength==0" style="text-align: center !important;" value="X">נא לבחור שלוחות הקיימות במערכת</mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br>
+        <mat-form-field  class="example-chip-list">
+              <mat-select formControlName="areas" multiple placeholder="מכל האיזורים" >
+            <mat-select-trigger>
+              <mat-chip-list>
+                <mat-chip *ngFor="let topping of detailsFormGroup.value.areas"
+                  [removable]="true" (removed)="onToppingRemoved(topping)">
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                  {{ topping }}
+                </mat-chip>
+              </mat-chip-list>
+            </mat-select-trigger>
+            <mat-option *ngFor="let topping of Eservice.areas" [value]="topping">{{topping}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br/>
+      </div>
+        <div class="row">
+          <button mat-icon-button matStepperPrevious >
+            <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
+        </button>
+          <button mat-icon-button matStepperNext (click)="resetChart();">
+            <mat-icon class="arrow" matTooltip="הבא">arrow_back_ios</mat-icon>
+        </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step >
+      <ng-template matStepLabel >
+        <span class="text">הצגת תרשים</span></ng-template>
+      <br><br>
+      <div class="row justify-content-center">
+        <div class="col-md-12" style="display: block">
+          <canvas baseChart 
+                [datasets]="barChartData" 
+              [labels]="barChartLabels" 
+              [options]="barChartOptions"
+              [legend]="barChartLegend" 
+              [chartType]="barChartType" 
+              [colors]="chartColors" 
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)">
+          </canvas>
+        </div>
+      </div>
+      <br>
+      <div class="row justify-content-between">
+        <div class="col-md-4">
+            <button mat-icon-button matStepperPrevious >
+                <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
+            </button>
+            <button mat-icon-button (click)="stepper.reset();" >
+                <mat-icon matTooltip="אפס">refresh</mat-icon>
+            </button>
+          </div>  
+        <button class="col-md-2"  mat-button (click)="randomize()">החלפת תרשים</button>
+    </div>
+    <br><br>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>
+    

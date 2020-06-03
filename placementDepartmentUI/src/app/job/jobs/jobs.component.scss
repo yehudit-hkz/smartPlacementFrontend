@@ -18,6 +18,7 @@
   tr.example-element-row.example-expanded-row {
     font-weight: bold;
     font-style: italic;
+    
     // background:rgb(230, 230, 230 ); 
     background: rgb(245, 245, 255);
 
@@ -89,12 +90,15 @@
     mat-sidenav{
     width: 20%;
     background: rgb(252, 252, 252);
+    border: 3px;
     } 
     mat-sidenav-content{
       background-color: white;
     }
     .mat-sidenav-content-item{
       margin-right: 10px !important;
+      color:white;
+      color: #6ddf8b;
       font-size: 15px !important;
     }
     .example-spacer {

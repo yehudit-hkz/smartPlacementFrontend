@@ -48,6 +48,7 @@ export class GraduatesComponent implements OnInit {
   }
   
   ngOnInit() {
+    this.Mservice.gggg().subscribe(res=>console.log(res));
       this.Mservice.GetAllList("Graduate").subscribe(graduates=>
        {
         //Assign the data to the data source for the table to render

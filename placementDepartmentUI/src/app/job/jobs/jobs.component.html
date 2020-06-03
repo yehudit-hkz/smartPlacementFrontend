@@ -18,7 +18,7 @@
                      height:20px !important;
                      width:20px !important;" 
                      *ngIf="item.name=='תקופה'?periodValue:item.selecedlist.length>0" 
-                     (click)="item.name=='תקופה'?periodValue='':item.selecedlist=[];applyFilter(filtering.value);" 
+                     (click)="item.name=='תקופה'?periodValue='':item.selecedlist=[];applyFilter();" 
                      mat-icon-button>
                       <mat-icon style="
                       margin-top  : -30px;
@@ -31,7 +31,7 @@
                  <mat-selection-list *ngIf="item.name!='תקופה'" [(ngModel)]="item.selecedlist">
                    <mat-list-option  
                    checkboxPosition="before" 
-                   (click)="applyFilter(filtering.value)" 
+                   (click)="applyFilter()" 
                    [value]="subItem.Id"
                    *ngFor="let subItem of item.sublist" >
                      <span class="mat-sidenav-content-item">{{subItem.name}}</span>
@@ -40,7 +40,7 @@
                  <!-- period  list -->
                  <mat-radio-group 
                  [(ngModel)]="periodValue" 
-                 (change)="applyFilter(filtering.value)"
+                 (change)="applyFilter()"
                  *ngIf="item.name=='תקופה'" >
                  <!-- radio -->
                       <mat-radio-button style="margin: 7px;" value="1">
@@ -72,11 +72,10 @@
       <mat-sidenav-content>
 <!-- main  -->
   <div class="container"  >
-  <br>
-    <div class="row justify-content-between">
-    <mat-form-field class="col-md-5 ">
+    <div class="row justify-content-end">
+    <!-- <mat-form-field class="col-md-5 ">
       <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
-    </mat-form-field>
+    </mat-form-field> -->
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/job-form/-" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת משרה חדשה">add</mat-icon>
@@ -84,6 +83,7 @@
     <span >חדש</span>
     </div>
   </div>
+  <br>
   <!-- job list -->
   <div class="row  table-container" >
     <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
@@ -105,19 +105,19 @@
     <td mat-cell *matCellDef="let j"> {{j.Subject.name}} </td>
   </ng-container>
   <ng-container matColumnDef="isActive">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool center" > פעיל </th>
-    <td mat-cell *matCellDef="let j" class="bool center" >     
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool " > פעיל </th>
+    <td mat-cell *matCellDef="let j" class="bool " >     
       <mat-icon> {{j.isActive?"check":""}}</mat-icon>
     </td>
   </ng-container>
   <ng-container matColumnDef="didSendCV" >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool center" > נשלחו קו"ח </th>
-    <td mat-cell *matCellDef="let j" class="bool center" > 
+    <th mat-header-cell *matHeaderCellDef mat-sort-header class="bool " > נשלחו קו"ח </th>
+    <td mat-cell *matCellDef="let j" class="bool " > 
       <mat-icon> {{j.didSendCV?"check":""}}</mat-icon>
     </td>
   </ng-container>
   <ng-container matColumnDef="lastUpdateDate"  >
-    <th mat-header-cell *matHeaderCellDef mat-sort-header class="date center"> תאריך עדכון אחרון </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="text-align: center !important;" class="date center"> תאריך עדכון אחרון </th>
     <td mat-cell *matCellDef="let j" class="date center"> {{j.lastUpdateDate|date:'dd/MM/yyyy'}} </td>
   </ng-container>
   <ng-container matColumnDef="action">
@@ -142,7 +142,10 @@
           <div class="element-item"><b>איש הקשר:</b> {{j.contactName}} </div>
           <div class="element-item"><b>קולט המשרה:</b> {{j.gettingName}} </div>
           <div class="element-item"><b>מטפל:</b> {{j.handlesName}} </div>
-          <div class="element-item"><b>תיאור:</b> {{j.description}} </div>
+          <div class="element-item">
+            <b>תיאור:</b> 
+            <pre style="white-space: pre-wrap;overflow-wrap: normal;">{{j.description}} </pre>
+          </div>
           <!-- <br> -->
         <div class="row">
             <div class="element-item col-md-10" style="text-align: center;">
@@ -178,8 +181,11 @@
   </div>
   </div>
   </div>
+  <br>
+  <br>
   </mat-sidenav-content>
   </mat-sidenav-container>
+
   
 
 

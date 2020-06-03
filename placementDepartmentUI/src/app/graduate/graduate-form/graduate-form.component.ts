@@ -142,6 +142,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         newGraduate.linkToCV=this.graduate.linkToCV;
         if(graduateFormValue.uploadfile!=null)
         {
+          console.log(graduateFormValue.uploadfile._files[0].mozFullPath)
           this.executeUploadFile(graduateFormValue.uploadfile._files[0],newGraduate.Id);
           newGraduate.linkToCV=`ResumeFile/${newGraduate.Id}.pdf`
 

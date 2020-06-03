@@ -87,7 +87,15 @@ export class JobsComponent implements OnInit, AfterViewInit {
           this.isRateLimitReached = true;
           return observableOf([]);
         })
-      ).subscribe(data =>this.jobs = data);
+      ).subscribe(data =>{
+        this.jobs = data; 
+          this.panelList=[
+          { name:"שליחת מועמדים", sublist:this.sendCV, selecedlist:[]},
+          { name:"פעילה", sublist:this.active, selecedlist:[]},
+          { name:"תקופה", sublist:[], selecedlist:[]},
+          { name:"מקצוע", sublist:this.Lservice.subjects, selecedlist:[]},
+        ];
+      });
   }
 
   ngOnInit() {
@@ -97,14 +105,9 @@ export class JobsComponent implements OnInit, AfterViewInit {
        this.paginator._intl.nextPageLabel     = 'עמוד הבא';
        this.paginator._intl.previousPageLabel = 'עמוד הקודם';
        this.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
-      this.panelList=[
-        { name:"שליחת מועמדים", sublist:this.sendCV, selecedlist:[]},
-        { name:"פעילה", sublist:this.active, selecedlist:[]},
-        { name:"תקופה", sublist:[], selecedlist:[]},
-        { name:"מקצוע", sublist:this.Lservice.subjects, selecedlist:[]},
-      ];
+     
   }
-  applyFilter(filterValue:string){
+  applyFilter(){
 
     this.filters=new JobFilters();
     this.filters.sendCV=this.panelList[0].selecedlist;

@@ -40,7 +40,7 @@ export class ContactsComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-   this.contacts.data[0].companyName
+  //  this.contacts.data[0].companyName
     this.contacts.filter =filterValue;
     if (this.contacts.paginator) {
       this.contacts.paginator.firstPage();

@@ -76,6 +76,7 @@ export class CompaniesComponent implements OnInit {
       this.companies.data=companies},
       err=>{console.log(err);}
      );
+     this.companies.filter =filterValue;
        if (this.companies.paginator) {
          this.companies.paginator.firstPage();
        }

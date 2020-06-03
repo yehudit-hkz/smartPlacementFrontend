@@ -2,8 +2,8 @@
 
 html, body { height: 100%;  }
 
-body{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
-span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label ,.mat-tooltip,a{font-family: 'Varela Round', sans-serif !important;}
+body,ng-template{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
+span,th,td,.mat-paginator,ng-template,mat-expansion-panel,mat-list,.matStepLabel,p,Input,.mat-error,label ,.mat-tooltip,a,pre,mat-chip{font-family: 'Varela Round', sans-serif !important;}
 
 .mat-icon-button {
     color: rgb(93, 94, 93);
@@ -18,7 +18,7 @@ span,th,td,.mat-paginator,mat-expansion-panel,mat-list,p,Input,.mat-error,label 
     height: 80px !important;
   }
 .mat-form-field,.mat-select {
-    font-size: 16px;
+    font-size: 15px;
     text-align: right !important;
   }
 .mat-tooltip {
@@ -32,18 +32,27 @@ th.bool,td.bool{
 }
 a.mat-button{
   color:rgb(29, 14, 95);
-    font-size: 18px;
-  text-decoration-line: none !important;
+  font-size: 18px;
+  text-decoration-line: none !important; 
+  font-weight: bold;
       // color:rgb(22, 11, 71) !important;
 }
+// a[tabindex]:focus {
+
+//   color:rgb(95, 14, 14);
+
+// }
 .mat-option{
   direction: rtl !important;
   text-align: right !important;
 }
 span.text{
   margin-right:8px;
+  font-size: 15px;
 }
-
+pre{
+  font-size: 14px;
+}
 
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/

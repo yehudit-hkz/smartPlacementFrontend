@@ -39,4 +39,7 @@ export class NewGraduateComponent implements OnInit {
     );
     console.log(newGraduate);
   }
+  importFromExcel(){
+    alert("importFromExcel ")
+  }
 }

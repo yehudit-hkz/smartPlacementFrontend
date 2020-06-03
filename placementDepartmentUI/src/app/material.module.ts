@@ -23,6 +23,9 @@ import {
     MAT_DATE_LOCALE,
     MatRadioModule,
     MatProgressSpinnerModule,
+    MatStepperModule,
+    MatAutocompleteModule,
+    MatChipsModule,
 
 } from '@angular/material';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
@@ -51,6 +54,9 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MaterialFileInputModule,
         MatRadioModule,
         MatProgressSpinnerModule,
+        MatStepperModule,
+        MatAutocompleteModule,
+        MatChipsModule,
 
     ],
     exports: [
@@ -76,6 +82,9 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MaterialFileInputModule,
         MatRadioModule,
         MatProgressSpinnerModule,
+        MatStepperModule,
+        MatAutocompleteModule,
+        MatChipsModule,
 
     ],
     providers: [

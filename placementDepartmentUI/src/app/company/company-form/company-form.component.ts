@@ -91,7 +91,7 @@ export class CompanyFormComponent implements OnInit {
       }); 
       else
       // add new function;
-      this.Mservice.Edit('Company',newCompany).subscribe(res => {
+      this.Mservice.Save('Company',newCompany).subscribe(res => {
         this.snackBar.open("החברה נוספה בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",

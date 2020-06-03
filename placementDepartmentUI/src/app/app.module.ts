@@ -5,12 +5,11 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {HttpClientModule}from '@angular/common/http';
-import{MaterialModule}from'./material.module';
+import {MaterialModule}from'./material.module';
+import { ChartsModule } from 'ng2-charts';
 
 import { GraduatesComponent } from './graduate/graduates/graduates.component';
 import { GraduateDetailsComponent } from './graduate/graduate-details/graduate-details.component';
-import {StamService}from './services/stam.service';
-import { from } from 'rxjs';
 import { DeletionDialogComponent } from './deletion-dialog/deletion-dialog.component';
 import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { GraduateFormComponent } from './graduate/graduate-form/graduate-form.component';
@@ -24,6 +23,7 @@ import { ContactsComponent } from './contact/contacts/contacts.component';
 import { ContactFormComponent } from './contact/contact-form/contact-form.component';
 import { JobsComponent } from './job/jobs/jobs.component';
 import { JobFormComponent } from './job/job-form/job-form.component';
+import { ChartsComponent } from './charts/charts.component';
 
 
 
@@ -44,6 +44,7 @@ import { JobFormComponent } from './job/job-form/job-form.component';
     ContactFormComponent,
     JobsComponent,
     JobFormComponent,
+    ChartsComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,14 +54,12 @@ import { JobFormComponent } from './job/job-form/job-form.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    ChartsModule,
   ],
   entryComponents: [
     DeletionDialogComponent
   ],
-  providers: [
-    StamService,
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

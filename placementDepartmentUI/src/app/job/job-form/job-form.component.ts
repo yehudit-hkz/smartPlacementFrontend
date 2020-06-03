@@ -97,6 +97,8 @@ export class JobFormComponent implements OnInit {
     newJob.didSendCV=jobFormValue.didSendCV;
     newJob.isActive=!jobFormValue.isActive;
     newJob.ReasonForClosing=jobFormValue.ReasonForClosing;
+    this.job.isActive=false;
+
      if(this.job.Id)
       //edit -function;
       this.Mservice.Edit('Job',this.job).subscribe(res => {
@@ -107,7 +109,7 @@ export class JobFormComponent implements OnInit {
      },
      error => {
        //temporary as well
-     }); 
+     });  
      else
      // add new -function;
      this.Mservice.Edit('Job',newJob).subscribe(res => {

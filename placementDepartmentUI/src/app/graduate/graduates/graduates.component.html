@@ -30,7 +30,8 @@
   &nbsp;
   <div class="row justify-content-between">
   <mat-form-field class="col-md-5 ">
-    <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
+    <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder=" חיפוש שם">
+    <mat-icon matPrefix style="margin: 10px;">search</mat-icon>
   </mat-form-field>
   <div class="col-md-1" style="text-align: center;">
   <a mat-icon-button routerLink="/new-graduate" routerLinkActive="activeLink">

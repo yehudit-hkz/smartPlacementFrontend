@@ -6,8 +6,9 @@
 
     <div class="row justify-content-between">
     <mat-form-field class="col-md-5 ">
-      <input matInput type="search" (keyup)="applyFilter($event.target.value)" #filtering  value="" placeholder="?חיפוש חופשי">
-    </mat-form-field>
+      <input matInput type="search" (keyup)="applyFilter($event.target.value)" #filtering  value="" placeholder="חיפוש חופשי">
+    <mat-icon matPrefix style="margin: 10px;">search</mat-icon>
+  </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/company-form/-" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת חברה חדשה" >add</mat-icon>

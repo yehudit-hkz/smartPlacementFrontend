@@ -10,6 +10,7 @@ import{ ContactsComponent } from './contact/contacts/contacts.component';
 import{ ContactFormComponent } from './contact/contact-form/contact-form.component';
 import{ JobsComponent } from './job/jobs/jobs.component'
 import{ JobFormComponent } from './job/job-form/job-form.component';
+import { ChartsComponent } from './charts/charts.component';
 
 const routes: Routes = [
     {path: 'graduates', component: GraduatesComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
     {path:'contact-form/:contactID',component:ContactFormComponent},
     {path:'jobs',component:JobsComponent},
     {path:'job-form/:jobID',component:JobFormComponent},
+    {path:'Charts',component:ChartsComponent},
 
 ];
 

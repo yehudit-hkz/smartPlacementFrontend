@@ -6,7 +6,8 @@
     <div class="row justify-content-between">
     <mat-form-field class="col-md-5 ">
       <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
-    </mat-form-field>
+    <mat-icon matPrefix style="margin: 10px;">search</mat-icon>
+  </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/contact-form/-" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת איש קשר">add</mat-icon>
