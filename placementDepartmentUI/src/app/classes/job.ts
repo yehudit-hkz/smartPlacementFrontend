@@ -10,7 +10,8 @@ export class Job{
     lastUpdateDate:Date;
     contactId:number;
     contactName:string;
-    companyName:string;
+    companyId:number;
+    companyName:string;     
     gettingId:number;
     gettingName:string;
     handlesId:number;

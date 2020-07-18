@@ -1,7 +1,11 @@
-<div mat-dialog-title><mat-icon style="padding-right: 110px;" color="warn">warning</mat-icon></div>
+<div mat-dialog-title>
+  <mat-icon style="padding-right: 130px;" color="warn">warning</mat-icon>
+</div>
 <mat-dialog-content>
   <span>האים הינך בטוח\ה שברצונך למחוק את ה</span>
   <span>{{data.type}} <b>{{data.name}}</b></span>
+  <br><br>
+  <span *ngIf="data.sub" style="font-size: 12px;">**בעת מחיקת ה{{data.type}} ימחקו {{data.sub}} </span>
 </mat-dialog-content>
 <br>
 <mat-dialog-actions>

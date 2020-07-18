@@ -2,9 +2,8 @@
 
 html, body { height: 100%;  }
 
-body,ng-template{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
-span,th,td,.mat-paginator,ng-template,mat-expansion-panel,mat-list,.matStepLabel,p,Input,.mat-error,label ,.mat-tooltip,a,pre,mat-chip{font-family: 'Varela Round', sans-serif !important;}
-
+body,ng-template,mat-dialog-content{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
+span,th,td,.mat-paginator,ng-template,mat-expansion-panel,mat-list,.matStepLabel,p,Input,.mat-error,label ,.mat-tooltip,a,pre,mat-chip,textarea,div,mat-dialog-title{font-family: 'Varela Round', sans-serif !important;}
 .mat-icon-button {
     color: rgb(93, 94, 93);
   }
@@ -31,7 +30,8 @@ th.bool,td.bool{
   width: 12% !important;
 }
 a.mat-button{
-  color:rgb(29, 14, 95);
+  // color:rgb(29, 14, 95);
+  color:rgb(36, 19, 110);
   font-size: 18px;
   text-decoration-line: none !important; 
   font-weight: bold;
@@ -53,7 +53,9 @@ span.text{
 pre{
   font-size: 14px;
 }
-
+.spacer {
+  flex: 1 1 auto;
+} 
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;

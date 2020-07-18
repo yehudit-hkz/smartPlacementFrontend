@@ -1,10 +1,18 @@
-<mat-toolbar>
+<mat-toolbar >
     <span>{{job.Id==null?"הוספת משרה חדשה":"עריכת משרה"}}</span>
+    <span class="spacer"></span>
+    <a *ngIf="job.Id!=null" [href]="location.path()+'#jobsCoordination'">
+    <button mat-icon-button  >
+      <mat-icon >people</mat-icon>
+    </button>
+  </a>
+  <span *ngIf="job.Id!=null" style="margin-left: 30px;font-size: 13px;">מועמדים</span>
+
 </mat-toolbar>
 <br>
 <div class="container mat-elevation-z4">
     <br><br>
-<form [formGroup]="jobForm" autocomplete novalidate (ngSubmit)="createJob(jobForm.value)" >
+<form [formGroup]="jobForm"  autocomplete novalidate (ngSubmit)="createJob(jobForm.value)" >
     <div class="row ">
       <mat-form-field class="col-md-3">
         <input matInput type="text" placeholder="כותרת משרה" formControlName="title" required >
@@ -21,13 +29,37 @@
     </div>
     <br>
     <div class="row ">
-      <mat-form-field class="col-md-4" >
-        <textarea rows="4" matInput placeholder='תיאור המשרה' formControlName="description"></textarea>
+      <mat-form-field class="col-md-6" >
+        <textarea rows="5" matInput placeholder='תיאור המשרה' formControlName="description"></textarea>
       </mat-form-field >
     </div>
     <br><br>
+    <div class="row ">
+      <mat-form-field class="col-md-3 readonly-wrapper"> 
+        <mat-select placeholder="חברה" formControlName="company" class="readonly-block" [disabled]="job.Id!=null" >
+          <!-- <mat-option ></mat-option> -->
+          <mat-option *ngFor="let cm of  Mservice.compenies" [value]="cm">{{cm.name}}</mat-option>
+        </mat-select>
+        <!-- <mat-error *ngIf="hasError('contact', 'required')">נא לבחור איש קשר</mat-error> -->
+      </mat-form-field>
+    <mat-form-field class="col-md-3"> 
+      <mat-select placeholder="איש הקשר" formControlName="contact" required>
+        <!-- <mat-option></mat-option> -->
+        <mat-option [value]="undefined" disabled *ngIf="jobForm.value.company.Contact==null" >יש לבחור קודם חברה</mat-option>
+        <mat-option *ngFor="let cn of jobForm.value.company.Contact" [value]="cn">{{cn.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('contact', 'required')">נא לבחור איש קשר</mat-error>
+    </mat-form-field>
+    <!-- <span *ngIf="job.Id==null">
+      <a  mat-icon-button routerLink="/contact-form/-/{{jobForm.value.company.Id==null?'-':jobForm.value.company.Id}}"  routerLinkActive="activeLink">
+        <mat-icon matTooltip="הוספת איש קשר חדש" >add</mat-icon>
+      </a>&nbsp;
+      <span  >חדש</span>
+    </span> -->
+  </div>
+  <br>
     <div class="row align-items-center">
-          <mat-checkbox class="col-md-3" formControlName="didSendCV">
+          <mat-checkbox class="col-md-3" #didSendCV formControlName="didSendCV">
             <span class="text">נשלחו מועמדים</span>
           </mat-checkbox>
           <mat-checkbox class="col-md-2" #isActive formControlName="isActive">
@@ -39,25 +71,26 @@
             </mat-select>
         </mat-form-field>
         </div>
-    <!-- <div class="row ">
-        <mat-icon style="align-self: center;text-align: center;">pin_drop</mat-icon>
-        <mat-form-field class="col-md-3"> 
-          <mat-select placeholder="עיר" formControlName="city" required>
-              <mat-option></mat-option>
-            <mat-option *ngFor="let c of Eservice.cities" [value]="c">{{c.name}}</mat-option>
-          </mat-select>
-          <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
-        </mat-form-field>
-        <mat-form-field class="col-md-3">
-          <input matInput placeholder='כתובת' formControlName="address" >
-        </mat-form-field>
-      </div> -->
       <br><br>
       <div class="row justify-content-center">
         <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
         <button mat-raised-button type="submit" [disabled]="jobForm.invalid||!jobForm.dirty">{{job.Id==null?"הוסף":"עדכן"}}</button>
         </div>
         </form>
-        <br><br>
+        <br>
+</div>
+<br><br>
+<div class="container">
+  <div class="row justify-content-center" *ngIf="job.Id!=null">
+   
+      <button (click)="MatchJobCandidates()" class="col-md-4" mat-stroked-button >
+        <a *ngIf="job.Id!=null" [href]="location.path()+'#jobsCoordination'"></a>
+        התאמת מועמדים למשרה
+      </button>
+  </div>
+<br><br>
+<div class="row"  *ngIf="job.Id!=null">
+      <app-jobs-coordination id="jobsCoordination" [jobID]='job.Id' (sendCndidate)="didSendCV.checked = true;" class="col-md-12"></app-jobs-coordination>
+    </div>
 </div>
 

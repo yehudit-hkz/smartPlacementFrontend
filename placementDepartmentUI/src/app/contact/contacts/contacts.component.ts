@@ -48,18 +48,21 @@ export class ContactsComponent implements OnInit {
   }
   openDeletionDialog(contact:Contact): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
-      width: '250px',
-      data: {name: contact.name , type: "איש קשר"}
+      width: '300px',
+      data: {name: contact.name , type: "איש קשר", sub:'המשרות שהציע'}
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result==true){
         console.log(`Dialog result: ${result}`);
-        this.Mservice.Delete('Contact',contact.Id).subscribe(res=>{});
-        this.snackBar.open("האיש קשר נמחק בהצלחה!", "סגור", {
-          duration: 6000,
-          direction:"rtl",
-        });  
+        this.Mservice.Delete('Contact',contact.Id).subscribe(res=>{
+          this.contacts.data = this.contacts.data.filter(c=> c.Id != contact.Id);
+          this.snackBar.open("האיש קשר נמחק בהצלחה!", "סגור", {
+            duration: 6000,
+            direction:"rtl",
+          });  
+        });
+        
       }
     });
   }

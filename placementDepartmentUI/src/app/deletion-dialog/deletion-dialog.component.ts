@@ -1,10 +1,11 @@
 import { Component, Inject } from '@angular/core';
 import {  MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
  
-export interface DialogData {
-  type: string;
-  name: string;
-}
+  export interface DialogData {
+    type: string;
+    name: string;
+    sub: string;
+  }
 
 
 @Component({

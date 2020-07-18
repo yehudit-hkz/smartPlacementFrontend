@@ -1,27 +1,39 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output,EventEmitter} from '@angular/core';
 import {JobsCoordination} from '../../classes/jobsCoordination';
 import { MatTableDataSource, MatSort } from '@angular/material';
 import { EnumListsService } from '../../services/enum-lists.service';
 import { MainService } from 'src/app/services/main.service';
+import {TextFieldModule} from '@angular/cdk/text-field';
+import { Location } from '@angular/common';
+import { FormControl } from '@angular/forms';
+
 
 @Component({
     selector: 'app-jobs-coordination',
     templateUrl: './jobs-coordination.component.html',
-    styleUrls: ['./jobs-coordination.component.scss']
+    styleUrls: ['./jobs-coordination.component.scss'] 
   })
-  export class JobsCoordinationComponent implements OnInit {
+  export class JobsCoordinationComponent implements OnInit  {
 
   jobsCoordination: MatTableDataSource<JobsCoordination>;
   columnsToDisplay = ["jobId","jobSubject","candidateName","status","action","dateReceived","lastUpdateDate"];//,"action"];
+  numOfInteresteds:number =0;
 
   @Input('graduateID') gId:string;   
   @Input('jobID') jId:number;
+  @Output() sendCndidate = new EventEmitter();
+
   
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-
+  OK:boolean=false;
   constructor(public Eservice :EnumListsService,
-    public Mservice:MainService) { }
+    public Mservice:MainService,
+    private location: Location) { 
+      this.jobsCoordination = new MatTableDataSource();
+        this.jobsCoordination.sort = this.sort;
+        this.jobsCoordination.filterPredicate=this.customFilterPredicate()
+    }
 
  ngOnInit(){
   console.log("in "+this.gId);
@@ -30,10 +42,8 @@ import { MainService } from 'src/app/services/main.service';
       this.Mservice.GetCoordinationByGraduate(this.gId).subscribe(jobsCoordination=>
        {
         //Assign the data to the data source for the table to render
-        this.jobsCoordination = new MatTableDataSource(jobsCoordination);
+        this.jobsCoordination.data=jobsCoordination;
         console.log(this.jobsCoordination);
-        this.jobsCoordination.sort = this.sort;
-        this.jobsCoordination.filterPredicate=this.customFilterPredicate()
       } ,
        err=>{console.log(err);}
       );
@@ -41,23 +51,40 @@ import { MainService } from 'src/app/services/main.service';
       this.Mservice.GetCoordinationByJob(this.jId).subscribe(jobsCoordination=>
        {
         //Assign the data to the data source for the table to render
-        this.jobsCoordination = new MatTableDataSource(jobsCoordination);
+        this.jobsCoordination.data = jobsCoordination; //= new MatTableDataSource(jobsCoordination);
         console.log(this.jobsCoordination);
-        this.jobsCoordination.sort = this.sort;
-        this.jobsCoordination.filterPredicate=this.customFilterPredicate()
-      } ,
+        this.numOfInteresteds=this.jobsCoordination.data.filter(jc=>jc.Status.description=='נענה להצעה').length;
+        } ,
        err=>{console.log(err);}
       ); 
     }
+    
   updateStatus(jobsCoordinationForEdit:JobsCoordination): void {
-    alert(jobsCoordinationForEdit.Status.description);
     //go to service for edit
-    this.Mservice.Edit('JobsCoordination',jobsCoordinationForEdit).subscribe(res=>{});
+    this.Mservice.Edit('JobsCoordination',jobsCoordinationForEdit).subscribe(res=>{this.ngOnInit();});
   }
+  SendCVToContact(Massege){
+    //go to func 'send CV' in Email cntrl.
+    this.Mservice.sendCoordinations(Massege.replace(/(\\r\\n)|([\r\n])/gmi, '<br/>'),this.jobsCoordination.filteredData)
+    .subscribe(res=>{
+        console.log(res); 
+        this.ngOnInit();
+        this.sendCndidate.emit();
+        this.applyFilter("");
+      });
+    this.OK=false;
+  }
+
+  OKsend(){
+    //filter Interesteds
+    this.applyFilter("נענה להצעה");
+    this.OK=true;
+  }
+
   customFilterPredicate() {
     const myFilterPredicate = (data: JobsCoordination, filter: string): boolean => {
       let searchString = JSON.parse(filter);
-      return !searchString.value || data.Status.Id==searchString.value;
+      return !searchString.value || data.Status.description==searchString.value;
     }
     return myFilterPredicate;
   }

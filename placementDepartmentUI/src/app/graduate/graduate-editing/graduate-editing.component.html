@@ -1,5 +1,13 @@
 <mat-toolbar>
     <span>עריכת בוגר</span>
+    <span class="spacer"></span>
+    <a [href]="location.path()+'#jobsCoordination'">
+    <button mat-icon-button  >
+      <mat-icon>work</mat-icon>
+    </button>
+  </a>
+  <span style="margin-left: 30px;font-size: 13px;">משרות</span>
+
 </mat-toolbar>
 <div class="container">
     <div class="row">
@@ -11,7 +19,7 @@
 <br><br>
 <br><br>
 <div class="row">
-<app-jobs-coordination [graduateID]='graduate.Id' class="col-md-12"></app-jobs-coordination>
+<app-jobs-coordination id="jobsCoordination" [graduateID]='graduate.Id' class="col-md-12"></app-jobs-coordination>
 </div>
 <br><br>
 </div>

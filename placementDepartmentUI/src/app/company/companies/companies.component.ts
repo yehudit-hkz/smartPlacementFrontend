@@ -16,9 +16,6 @@ export class CompaniesComponent implements OnInit {
   companies: MatTableDataSource<Company>;
   columnsToDisplay = ["name","city","address","subject","descriptiovOfActivity","action"];
   filters:CompanyFilters;
-  subjecFilter:Subject;
-  subjecByJobsFilter:Subject;
-
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -58,25 +55,21 @@ export class CompaniesComponent implements OnInit {
   customFilterPredicate() {
       const myFilterPredicate = (data: Company, filter: string): boolean => {
         let searchString = JSON.parse(filter);
-        return (this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1) &&
-       (!this.subjecFilter && !this.subjecByJobsFilter)||
-        (!!this.subjecFilter && data.Subject.Id==this.subjecFilter.Id) ||
-        // //this filter will be by to the jobs of contact of this company 
-         (!!this.subjecByJobsFilter && data.Subject.Id==this.subjecByJobsFilter.Id);
-
+        return this.mytoString(data).toLowerCase().indexOf(searchString.value.trim().toLowerCase()) !== -1;
       }
       return myFilterPredicate;
     }
    
      applyFilter(filterValue: string) {
-    // let filter={value:filterValue};
-    //    this.companies.filter =JSON.stringify(filter);
+    
     this.Mservice.GetListByFilters("Company",this.filters).subscribe(companies=>
       {console.log(companies);
       this.companies.data=companies},
       err=>{console.log(err);}
      );
-     this.companies.filter =filterValue;
+      let filter={value:filterValue};
+        this.companies.filter=JSON.stringify(filter);
+    //  this.companies.filter =filterValue;
        if (this.companies.paginator) {
          this.companies.paginator.firstPage();
        }
@@ -84,19 +77,22 @@ export class CompaniesComponent implements OnInit {
 
      openDeletionDialog(company:Company): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
-      width: '250px',
-      data: {name: company.name , type: "חברה"}
+      width: '300px',
+      data: {name: company.name , type: "חברה",sub:'האנשי קשר שלה'}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result==true){
         console.log(`Dialog result: ${result}`);
-        this.Mservice.Delete('Company',company.Id).subscribe(res=>{});
-        this.snackBar.open("החברה נמחקה בהצלחה!", "סגור", {
-          duration: 6000,
-          direction:"rtl",
-        });  
+        this.Mservice.Delete('Company',company.Id).subscribe(res=>{
+          this.companies.data = this.companies.data.filter(c=> c.Id != company.Id);
+          this.snackBar.open("החברה נמחקה בהצלחה!", "סגור", {
+            duration: 6000,
+            direction:"rtl",
+          });
+        });
+        
       }
     });
   }
@@ -108,6 +104,8 @@ export class CompaniesComponent implements OnInit {
       string+=data[k].name;
     else if(k=="Subject")
       string+=data[k].name;
+    else if(k=="descriptiovOfActivity")
+      string+=""
     else string+=data[k]
    });
    return string;

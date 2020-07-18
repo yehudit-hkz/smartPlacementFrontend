@@ -1,12 +1,15 @@
-<div class="container">
-  <br>
+<h6 *ngIf="jobsCoordination?.data.length == 0" >
+  <mat-icon>notification_important</mat-icon>
+  &nbsp; {{gId?"לא הוצעו משרות עבור הבוגר\\ת":"לא הותאמו בוגרים עבור משרה זו" }} 
+</h6>
+<div class="container" *ngIf="jobsCoordination?.data.length != 0">
+<br>
   <div class="row justify-content-between">
-    <!-- <h4 class="col-md-4">{{graduateID?"משרות שהותאמו":"מועמדים למשרה"}}</h4> -->
-    <h4 class="col-md-4">משרות שהותאמו:</h4>
-<mat-form-field class="col-md-4">
+    <h4 class="col-md-4">{{gId?"משרות שהותאמו":"מועמדים למשרה"}}</h4>
+<mat-form-field class="col-md-4" *ngIf="!OK">
   <mat-select placeholder="סנן לפי סטטוס"  (selectionChange)="applyFilter($event.value)">
       <mat-option></mat-option>
-      <mat-option *ngFor="let s of Eservice.jobCoordinationStatuses" [value]="s.Id">
+      <mat-option *ngFor="let s of Eservice.jobCoordinationStatuses" [value]="s.description">
         {{s.description}} 
       </mat-option>
   </mat-select>
@@ -17,26 +20,26 @@
   <ng-container matColumnDef="jobId">
     <th mat-header-cell *matHeaderCellDef  mat-sort-header class="date"> קוד משרה  </th>
     <td mat-cell *matCellDef="let jc" class="date"> 
-      <a  routerLink="." matTooltip="לפרטי המשרה">{{jc.jobId}}</a>
-      <!-- <span>{{jc.jobId}}</span> -->
+      <a  routerLink="/job-form/{{jc.jobId}}" *ngIf="gId" matTooltip="לפרטי המשרה">{{jc.jobId}}</a>
+      <span *ngIf="jId">{{jc.jobId}}</span>
     </td>
   </ng-container>
     <ng-container matColumnDef="jobSubject">
       <th mat-header-cell *matHeaderCellDef  mat-sort-header> מקצוע  </th>
-      <td mat-cell *matCellDef="let jc"> {{jc.jobSubject}} </td>
+      <td mat-cell *matCellDef="let jc"> {{jc.jobSubject.name}} </td>
     </ng-container>
     <ng-container matColumnDef="candidateName">
       <th mat-header-cell *matHeaderCellDef  mat-sort-header> שם המועמד </th>
       <td mat-cell *matCellDef="let jc"> 
-      <!-- <a routerLink="." matTooltip="לפרטי הבוגר"> {{jc.candidateName}}</a> -->
-      <span>{{jc.candidateName}}</span>
+      <a routerLink="/graduate-editing/{{jc.candidateId}}" *ngIf="jId" matTooltip="לפרטי הבוגר"> {{jc.candidateName}}</a>
+      <span *ngIf="gId">{{jc.candidateName}}</span>
       </td>
     </ng-container>
     <ng-container matColumnDef="status">
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20% !important;"> סטטוס </th>
       <td mat-cell *matCellDef="let jc" style="width: 20% !important;">
-        <mat-select  [(ngModel)]="jc.status">
-        <mat-option *ngFor="let s of Eservice.jobCoordinationStatuses" [value]="s">{{s.description}}</mat-option>
+        <mat-select  [(ngModel)]="jc.Status.Id">
+        <mat-option *ngFor="let s of Eservice.jobCoordinationStatuses" [value]="s.Id">{{s.description}}</mat-option>
       </mat-select>
         </td>
     </ng-container>
@@ -61,5 +64,33 @@
 </table>
   </div>
   <br>
+<br>
+<div class="row align-items-center" *ngIf="jId && numOfInteresteds > 0 && !OK" >
+<span>יש בוגר\ים שנענו להצעת משרה זו תרצה לפנות אותם למעסיק\ איש הקשר?</span> 
+<a [href]="location.path()+'#sendCV'">
+ <button (click)="OKsend()" mat-icon-button>
+  <mat-icon matTooltip="אישור">done</mat-icon>
+</button>
+</a>
+</div>
+<div *ngIf="OK" >
+  <div  class="row justify-content-center">
+  <mat-form-field  class="col-md-10"   appearance="fill">
+    <mat-label>גוף ההודעה</mat-label>
+    <textarea matInput 
+    #massege
+    cdkAutosizeMinRows="10"
+    cdkTextareaAutosize
+    #autosize="cdkTextareaAutosize"></textarea>
+  </mat-form-field>
+</div>
+<div id="sendCV" class="row justify-content-center">
+  <button (click)="SendCVToContact(massege.value)" mat-stroked-button>
+    <span>שליחת קו"ח למעסיק</span>
+  </button>
+</div>
+</div>
   </div>
+  <br>
+  <br>
   

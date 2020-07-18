@@ -1,4 +1,5 @@
-import{City,Subject} from '../classes/my-enum-list'
+import{City,Subject} from './my-enum-list'
+import { Contact } from './contact';
 
 export class Company{
 
@@ -7,5 +8,6 @@ export class Company{
     address:string;
     descriptiovOfActivity:string
     City:City; 
-    Subject: Subject 
+    Subject: Subject
+    Contact:Contact[];
 }

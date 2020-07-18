@@ -16,10 +16,12 @@
         </mat-select>
         <mat-error *ngIf="hasError('Company', 'required')">נא לבחור חברה</mat-error>
       </mat-form-field>
-        <a mat-icon-button routerLink="/company-form/-"  routerLinkActive="activeLink">
+      <!-- <span *ngIf="!this.contactForm.value.Company"> -->
+        <a  mat-icon-button routerLink="/company-form/-"  routerLinkActive="activeLink">
           <mat-icon matTooltip="הוספת חברה חדשה" >add</mat-icon>
         </a>&nbsp;
         <span  >חדש</span>
+      <!-- </span> -->
     </div>
     <br>
     <div class="row ">
@@ -36,9 +38,10 @@
       <br>
     <div class="row ">
       <mat-form-field class="col-md-3">
-        <input matInput type="email" placeholder='דוא"ל' formControlName="email" style="direction: ltr;" >
+        <input matInput type="email" placeholder='דוא"ל' formControlName="email" required style="direction: ltr;" >
         <mat-icon matSuffix>email</mat-icon>
         <mat-error *ngIf="hasError('email', 'email')">הזן כתובת דוא"ל חוקית</mat-error>
+        <mat-error *ngIf="hasError('email', 'required')">זהו שדה חובה!</mat-error>
       </mat-form-field>
   </div>
   <br><br>

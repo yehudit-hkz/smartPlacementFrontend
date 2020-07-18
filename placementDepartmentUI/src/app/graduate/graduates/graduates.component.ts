@@ -18,16 +18,15 @@ export interface filter {
 })
 export class GraduatesComponent implements OnInit {
   graduates: MatTableDataSource<Graduate>;
-  panellist;
   columnsToDisplay = ['name',"expertise","branch","endYear","action"];
-
+  panellist;
   activeFilter: filter[] = [
     { value: true, active: false, name: 'פעיל' },
     { value: false, active: false, name: 'לא פעיל' },
   ];
   genderFilter: filter[] = [
-    { value: 'ז', active: false, name: 'זכר' },
-    { value: 'נ', active: false, name: 'נקבה' },
+    { value: 'זכר', active: false, name: 'זכר' },
+    { value: 'נקבה', active: false, name: 'נקבה' },
   ];
   branchFilter: filter[]=[];
   expertiseFilter: filter[]=[];
@@ -55,15 +54,15 @@ export class GraduatesComponent implements OnInit {
         this.graduates = new MatTableDataSource(graduates);
         console.log(this.graduates);
         console.log(this.panellist);
-        this.graduates.sortingDataAccessor= (item, property) => {
-          switch(property) {
-            case 'name': return item.firstName +" "+ item.lastName;
-            case 'expertise': return item.Expertise.name;
-            case 'branch': return item.Branch.name;
-            default: return item[property];
-          }
-        };
-        this.graduates.sort = this.sort;
+          this.graduates.sortingDataAccessor= (item, property) => {
+            switch(property) {
+              case 'name': return item.firstName +" "+ item.lastName;
+              case 'expertise': return item.Expertise.name;
+              case 'branch': return item.Branch.name;
+              default: return item[property];
+            }
+          };
+          this.graduates.sort = this.sort;
         this.graduates.paginator = this.paginator;
         this.graduates.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
         this.graduates.paginator._intl.nextPageLabel     = 'עמוד הבא';

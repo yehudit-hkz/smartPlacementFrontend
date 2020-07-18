@@ -40,68 +40,94 @@
 
         <span class=" example-chip-list"> הגדר טווח תאריכים:</span><br>
         <mat-form-field class="example-chip-list" >
-          <input matInput [matDatepicker]="spicker" formControlName='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
-              readonly [max]="maxDate" (click)="spicker.open()">
+          <input matInput #start [matDatepicker]="spicker" formControlName='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
+              readonly [min]="minDate" [max]="maxDate" (click)="spicker.open()">
           <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
           <mat-datepicker dir="rtl"  #spicker></mat-datepicker>
         </mat-form-field><br>
-        <span style="font-size: 18px;"><b>-</b></span><br><br>
-        <mat-form-field class=" example-chip-list">
-          <input matInput [matDatepicker]="epicker" formControlName='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
-              readonly [max]="maxDate" (click)="epicker.open()">
+        <span style="font-size: 18px;"><b>-</b></span><br>
+        <mat-form-field class="example-chip-list">
+          <input matInput #end [matDatepicker]="epicker" formControlName='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
+              readonly [min]="minDate" [max]="maxDate" (click)="epicker.open()">
           <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
           <mat-datepicker dir="rtl"  #epicker></mat-datepicker>
         </mat-form-field>
-      </div>
-      <div *ngIf="typeFormGroup.value.type == 2">
-        <mat-form-field class="example-chip-list">
-          <mat-chip-list #chipList >
-            <mat-chip
-              *ngFor="let fruit of detailsFormGroup.value.branches"
-              removable="true"
-              (removed)="remove(fruit)">
-              <mat-icon matChipRemove >cancel</mat-icon>
-                {{fruit.name}}
-            </mat-chip>
-            <input
-              placeholder="מכל השלוחות"
-            #fruitInput
-              [formControl]="fruitCtrl"
-              [matAutocomplete]="auto"
-              [matChipInputFor]="chipList">
-          </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="selected($event)">
-            <mat-option *ngFor="let fruit of filteredFruits | async " [value]="fruit">
-              {{fruit.name}}
-            </mat-option>
-          <mat-option *ngIf="autoLength==0" style="text-align: center !important;" value="X">נא לבחור שלוחות הקיימות במערכת</mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
+        <mat-error *ngIf="start.value && end.value && start.value > end.value">טווח לא תקין</mat-error>
         <br>
-        <mat-form-field  class="example-chip-list">
-              <mat-select formControlName="areas" multiple placeholder="מכל האיזורים" >
-            <mat-select-trigger>
-              <mat-chip-list>
-                <mat-chip *ngFor="let topping of detailsFormGroup.value.areas"
-                  [removable]="true" (removed)="onToppingRemoved(topping)">
-                  <mat-icon matChipRemove>cancel</mat-icon>
-                  {{ topping }}
-                </mat-chip>
-              </mat-chip-list>
-            </mat-select-trigger>
-            <mat-option *ngFor="let topping of Eservice.areas" [value]="topping">{{topping}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <br/>
-      </div>
         <div class="row">
           <button mat-icon-button matStepperPrevious >
             <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
         </button>
-          <button mat-icon-button matStepperNext (click)="resetChart();">
+          <button mat-icon-button matStepperNext 
+              [disabled]="(!!start.value && !!end.value && start.value > end.value)" (click)="initChart();">
             <mat-icon class="arrow" matTooltip="הבא">arrow_back_ios</mat-icon>
         </button>
         </div>
+      </div>
+      <div *ngIf="typeFormGroup.value.type == 2">
+        <!-- <mat-form-field class="example-chip-list">
+      
+          <mat-chip-list #chipList >
+            <mat-chip
+              *ngFor="let branch of detailsFormGroup.value.branches"
+              removable="true"
+              (removed)="remove(branch)">
+              <mat-icon matChipRemove >cancel</mat-icon>
+                {{branch.name}}
+            </mat-chip>
+            <input
+              placeholder="בחר שלוחות"
+              #brachInput
+              [formControl]="branchCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="selected($event)">
+            <mat-option *ngFor="let branch of filteredBranches | async " [value]="branch">
+              {{branch.name}}
+            </mat-option>
+          <mat-option *ngIf="autoLength==0" style="text-align: center !important;" value="X">נא לבחור שלוחות הקיימות במערכת</mat-option>
+          </mat-autocomplete>
+        </mat-form-field> -->
+        <mat-form-field  class="example-chip-list">
+          <mat-select formControlName="branches" multiple placeholder="בחר שלוחות" >
+        <mat-select-trigger>
+          <mat-chip-list>
+            <mat-chip *ngFor="let branch of detailsFormGroup.value.branches"
+              [removable]="true" (removed)="onBrachRemoved(branch)">
+              <mat-icon matChipRemove>cancel</mat-icon>
+              {{ branch.name }}
+            </mat-chip>
+          </mat-chip-list>
+        </mat-select-trigger>
+        <mat-option *ngFor="let optBranch of Lservice.branches" [value]="optBranch">{{optBranch.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+        <br>
+        <mat-form-field  class="example-chip-list">
+              <mat-select formControlName="areas" multiple placeholder="בחר איזורים" >
+            <mat-select-trigger>
+              <mat-chip-list>
+                <mat-chip *ngFor="let areaVal of detailsFormGroup.value.areas"
+                  [removable]="true" (removed)="onAreaRemoved(areaVal)">
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                  {{ areaVal }}
+                </mat-chip>
+              </mat-chip-list>
+            </mat-select-trigger>
+            <mat-option *ngFor="let optArea of Eservice.areas" [value]="optArea">{{optArea}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br/>
+        <div class="row">
+          <button mat-icon-button matStepperPrevious >
+            <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
+        </button>
+          <button mat-icon-button matStepperNext (click)="initChart();">
+            <mat-icon class="arrow" matTooltip="הבא">arrow_back_ios</mat-icon>
+        </button>
+        </div>
+      </div>
       </form>
     </mat-step>
 
@@ -117,9 +143,9 @@
               [options]="barChartOptions"
               [legend]="barChartLegend" 
               [chartType]="barChartType" 
-              [colors]="chartColors" 
-              (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)">
+              [colors]="chartColors">
+              <!-- (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)" -->
           </canvas>
         </div>
       </div>

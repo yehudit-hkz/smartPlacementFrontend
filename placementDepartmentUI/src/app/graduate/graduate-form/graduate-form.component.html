@@ -29,8 +29,8 @@
       </mat-form-field>
       <mat-form-field class="col-md-3"> 
         <mat-select placeholder="מגדר" formControlName="gender" required >
-          <mat-option value="ז">זכר</mat-option>
-          <mat-option value="נ">נקבה</mat-option>
+          <mat-option value="זכר">זכר</mat-option>
+          <mat-option value="נקבה">נקבה</mat-option>
         </mat-select>
         <mat-error *ngIf="hasError('gender', 'required')">נא לבחור מגדר</mat-error>
       </mat-form-field>
@@ -96,17 +96,19 @@
         <mat-error *ngIf="hasError('expertise', 'required')">נא לבחור תחום הכשרה</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-2">
-        <input matInput type="text" placeholder="שנת תחילת הלימודים" formControlName="startYear" required >
+        <input matInput type="text" (change)="onStartYearChange(startY.value)" #startY placeholder="שנת תחילת הלימודים" formControlName="startYear" required >
         <mat-error *ngIf="hasError('startYear', 'required')">זהו שדה חובה!</mat-error>
-        <mat-error *ngIf="hasError('startYear', 'maxlength')">אפשרי עד 4 תווים</mat-error>
+        <mat-error *ngIf="hasError('startYear', 'max')">שנת ההתחלה לא תקינה</mat-error>
+        <mat-error *ngIf="hasError('startYear', 'pattern')">הזן שנה לועזית חוקית</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-2">  
         <input matInput type="text" placeholder="שנת סיום הלימודים" formControlName="endYear" required >
         <mat-error *ngIf="hasError('endYear', 'required')">זהו שדה חובה!</mat-error>
-        <mat-error *ngIf="hasError('endYear', 'maxlength')">אפשרי עד 4 תווים</mat-error>
+        <mat-error *ngIf="hasError('endYear', 'min')">שנת סיום קטנה משנת ההתחלה</mat-error>
+        <mat-error *ngIf="hasError('endYear', 'pattern')">הזן שנה לועזית חוקית או 'טרם'</mat-error>
       </mat-form-field>
       </div>
-      <br>
+        <br>
       <div class="row">
       <mat-checkbox class="col-md-3" formControlName="didGraduate">
           <span class="text">בוגר לימודים</span>
@@ -143,7 +145,7 @@
         </div>
       <br><br>
       <div class="row"> 
-        <mat-form-field class="col-md-3">
+        <mat-form-field class="col-md-5">
           <ngx-mat-file-input formControlName="uploadfile" placeholder='העלאת קובץ קו"ח'  accept=".doc,.docx,.pdf"></ngx-mat-file-input>
           <mat-icon matSuffix>folder</mat-icon>
         </mat-form-field>

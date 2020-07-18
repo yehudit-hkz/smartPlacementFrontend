@@ -3,6 +3,8 @@ import { Graduate } from '../../classes/graduate';
 import { ActivatedRoute } from '@angular/router';
 import { MainService } from '../../services/main.service';
 import { MatSnackBar } from '@angular/material';
+import { from } from 'rxjs';
+import { Location } from '@angular/common'
 @Component({
   selector: 'app-graduate-editing',
   templateUrl: './graduate-editing.component.html',
@@ -16,7 +18,8 @@ export class GraduateEditingComponent implements OnInit {
   constructor(
     private route:ActivatedRoute,
     public service :MainService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public location: Location
     ) { }
 
   ngOnInit() {
@@ -26,6 +29,7 @@ export class GraduateEditingComponent implements OnInit {
       {this.graduate=graduate;},
      err=>{console.log(err);}
     );
+    
   }
 
   editDetailsGraduate(editingGraduate:Graduate){

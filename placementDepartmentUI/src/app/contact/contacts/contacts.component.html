@@ -5,11 +5,11 @@
   <br><br>  
     <div class="row justify-content-between">
     <mat-form-field class="col-md-5 ">
-      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
+      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי">
     <mat-icon matPrefix style="margin: 10px;">search</mat-icon>
   </mat-form-field>
     <div class="col-md-1" style="text-align: center;">
-    <a mat-icon-button routerLink="/contact-form/-" routerLinkActive="activeLink">
+    <a mat-icon-button routerLink="/contact-form/-/{{companyId}}" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת איש קשר">add</mat-icon>
     </a>
     <span >חדש</span>
@@ -37,10 +37,10 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let c" style="text-align: center;"> 
-             <a routerLink="/graduate-editing/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
+             <!-- <a routerLink="/graduate-editing/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
               <mat-icon  matTooltip="משרות שהציע\ה">work</mat-icon>
-            </a>
-            <a routerLink="/contact-form/{{c.Id}}" routerLinkActive="activeLink" mat-icon-button>
+            </a> -->
+            <a routerLink="/contact-form/{{c.Id}}/{{companyId}}" routerLinkActive="activeLink" mat-icon-button>
                 <mat-icon  matTooltip="עריכה">edit</mat-icon>
               </a>
               <button (click)="openDeletionDialog(c)" mat-icon-button>

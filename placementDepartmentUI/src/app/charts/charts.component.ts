@@ -66,6 +66,8 @@ export class ChartsComponent implements OnInit {
   chartsDetails:ChartsDetails=new ChartsDetails();
   typeFormGroup: FormGroup;
   detailsFormGroup: FormGroup;
+  minDate: Date = new Date(1999,12,1);
+  maxDate: Date = new Date();
   autoLength;
   constructor(private _formBuilder: FormBuilder,
     private Lservice:ListsService,
@@ -78,15 +80,15 @@ export class ChartsComponent implements OnInit {
       type: ['', Validators.required]
     });
     this.detailsFormGroup = this._formBuilder.group({
-      startDateValue:[''],
-      endDateValue:[new Date()],
+      startDateValue:[],
+      endDateValue:[],
       areas:[[]],
       branches:[[]],
     });
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(//this.detailsFormGroup.controls["branches"].valueChanges.pipe(
-      startWith(null),
-      map((fruit: string | null) => fruit ? this._filter(fruit) : this.Lservice.branches));
-      this.fruitCtrl.valueChanges.subscribe(res=>{this.autoLength=this._filter(res).length;})
+    // this.filteredBranches = this.branchCtrl.valueChanges.pipe(  //this.detailsFormGroup.controls["branches"].valueChanges.pipe(
+    //   startWith(null),
+    //   map((branch: string | null) => branch ? this._filter(branch) : this.Lservice.branches));
+    //   this.branchCtrl.valueChanges.subscribe(res=>{this.autoLength=this._filter(res).length;})
   }
   
   public hasError = (controlName: string, errorName: string) =>{
@@ -94,13 +96,17 @@ export class ChartsComponent implements OnInit {
   }
 
   // events chart
-  resetChart(){
+  initChart(){
     console.log();
     this.barChartLabels=this.Lservice.subjects.map(s=>s.name);  
     this.chartsDetails.type=this.typeFormGroup.value.type;
     if(this.chartsDetails.type in [1,3]){
-    this.chartsDetails.start=this.detailsFormGroup.value.startDateValue.toISOString();
-    this.chartsDetails.end=this.detailsFormGroup.value.endDateValue.toISOString();
+    this.chartsDetails.start=this.detailsFormGroup.value.startDateValue!=null?
+    this.detailsFormGroup.value.startDateValue.toISOString():
+    new Date('2000-01-01').toISOString();
+    this.chartsDetails.end=this.detailsFormGroup.value.endDateValue!=null?
+    this.detailsFormGroup.value.endDateValue.toISOString():
+    this.maxDate.toISOString();
     }
     if(this.chartsDetails.type==2){
       this.chartsDetails.branches=this.detailsFormGroup.value.branches!=null?this.detailsFormGroup.value.branches.map(b=>b.Id):[];
@@ -129,43 +135,56 @@ export class ChartsComponent implements OnInit {
   }
   
 /////// outo complite with chips
-  fruitCtrl = new FormControl();
-  filteredFruits:Observable<Branch[]>;
+  // branchCtrl = new FormControl();
+  // filteredBranches:Observable<Branch[]>;
 
-  @ViewChild('fruitInput',{static:false}) fruitInput: ElementRef<HTMLInputElement>;
+  // @ViewChild('brachInput',{static:false}) brachInput: ElementRef<HTMLInputElement>;
   
-  remove(fruit: string): void {
-    const index = this.detailsFormGroup.value.branches.indexOf(fruit);
+  // remove(fruit: string): void {
+  //   const index = this.detailsFormGroup.value.branches.indexOf(fruit);
 
-    if (index >= 0) {
-      this.detailsFormGroup.value.branches.splice(index, 1);
-    }
-  }
+  //   if (index >= 0) {
+  //     this.detailsFormGroup.value.branches.splice(index, 1);
+  //   }
+  // }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    console.log(event.option.viewValue);
-    if(this.detailsFormGroup.value.branches==null)
-    this.detailsFormGroup.value.branches=[];
-    if(this.detailsFormGroup.value.branches==null)
-    this.detailsFormGroup.value.branches=[];
-   if(event.option.value!='X'){
-    this.detailsFormGroup.value.branches.push(event.option.value);
-    this.fruitInput.nativeElement.value = "";
-    this.fruitCtrl.setValue("");
-  }
-  }
+  // selected(event: MatAutocompleteSelectedEvent): void {
+  //   console.log(event.option.viewValue);
+  //   if(this.detailsFormGroup.value.branches==null)
+  //   this.detailsFormGroup.value.branches=[];
+  //   if(this.detailsFormGroup.value.branches==null)
+  //   this.detailsFormGroup.value.branches=[];
+  //  if(event.option.value!='X'){
+  //   this.detailsFormGroup.value.branches.push(event.option.value);
+  //   this.brachInput.nativeElement.value = "";
+  //   this.branchCtrl.setValue("");
+  // }
+  // }
 
-  private _filter(value: string):Branch[]{
-    const filterValue =  typeof(value)=="string" ? value.toLowerCase():"";
-    return this.Lservice.branches.filter(fruit => fruit.name.toLowerCase().indexOf(filterValue) === 0);
-  }
+  // private _filter(value: string):Branch[]{
+  //   const filterValue =  typeof(value)=="string" ? value.toLowerCase():"";
+  //   return this.Lservice.branches.filter(fruit => fruit.name.toLowerCase().indexOf(filterValue) === 0);
+  // }
 
   ////multi select with chips
 
-  onToppingRemoved(topping: string) {
-    const toppings = this.detailsFormGroup.value.areas as string[];
-    this.removeFirst(toppings, topping);
-    this.detailsFormGroup.setValue({["areas"]:toppings}); // To trigger change detection
+  onBrachRemoved(branche: string) {
+    const branches = this.detailsFormGroup.value.branches as string[];
+    this.removeFirst(branches, branche);
+    this.detailsFormGroup.setValue({["branches"]:branches}); // To trigger change detection
+  }
+
+  // private removeFirst<T>(array: T[], toRemove: T): void {
+  //   const index = array.indexOf(toRemove);
+  //   if (index !== -1) {
+  //     array.splice(index, 1);
+  //   }
+  // }
+
+  onAreaRemoved(area: string) {
+    const areas = this.detailsFormGroup.value.areas as string[];
+    this.removeFirst(areas, area);
+    this.detailsFormGroup.setValue({["areas"]:areas}); // To trigger change detection
   }
 
   private removeFirst<T>(array: T[], toRemove: T): void {

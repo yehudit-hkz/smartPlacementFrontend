@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Job }from '../../classes/job';
+import { Company } from '../../classes/company';
 import { MainService } from 'src/app/services/main.service';
 import { ListsService } from 'src/app/services/lists.service';
 import { EnumListsService } from 'src/app/services/enum-lists.service';
-import { MatSnackBar } from '@angular/material';
-
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatchJobCandidatesComponent } from '../../graduate/match-job-candidates/match-job-candidates.component';
+import { JobsCoordinationComponent } from '../../job/jobs-coordination/jobs-coordination.component'
 
 @Component({
   selector: 'app-job-form',
@@ -18,9 +20,12 @@ export class JobFormComponent implements OnInit {
   job= new Job();
   jobForm: FormGroup;
 
+  @ViewChild(JobsCoordinationComponent, { static: false }) childC: JobsCoordinationComponent;
+
   constructor(private location: Location,
     private snackBar: MatSnackBar,
     private route:ActivatedRoute,
+    public dialog: MatDialog,
     public Mservice :MainService,
     public Lservice :ListsService,
     public Eservice :EnumListsService) 
@@ -34,11 +39,12 @@ export class JobFormComponent implements OnInit {
         didSendCV: new FormControl(""),
         isActive: new FormControl(""),
         ReasonForClosing: new FormControl(""),
-        // companyName: new FormControl(""),
-        //contact: new FormControl("",[Validators.required]),
+        company : new FormControl(new Company()),
+        contact: new FormControl(null,[Validators.required]),
         // getting: new FormControl("",[Validators.required]),
         // handles  : new FormControl("",[Validators.required]),
       });
+      Mservice.compenies
      }
 
   ngOnInit() {
@@ -49,6 +55,7 @@ export class JobFormComponent implements OnInit {
   if(this.job.Id)
     this.Mservice.GetByID('Job',this.job.Id).subscribe(job=>
      { this.job=job;
+           let tepCopmpany=this.Mservice.compenies.find(cm=>this.job.companyId==cm.Id);
       this.jobForm = new FormGroup({
         title: new FormControl( this.job.title,[Validators.required,Validators.maxLength(50)]),
         subject: new FormControl(
@@ -62,9 +69,11 @@ export class JobFormComponent implements OnInit {
         isActive: new FormControl(!this.job.isActive),
         ReasonForClosing: new FormControl(
           this.job.ReasonForClosing?this.Eservice.reasonsForClosing.find(r=>this.job.ReasonForClosing.Id==r.Id):''),
+        company: new FormControl(tepCopmpany),
+          contact: new FormControl(
+            tepCopmpany.Contact.find(cn=>this.job.contactId==cn.Id),
+            [Validators.required]),
         //later:
-        // companyName: new FormControl(""),
-        // contact: new FormControl("",[Validators.required]),
         //// getting: new FormControl("",[Validators.required]),
         // handles  : new FormControl("",[Validators.required]),
       });
@@ -91,17 +100,20 @@ export class JobFormComponent implements OnInit {
     let newJob=new Job();
     if(this.job)
         newJob.Id=this.job.Id;
-    newJob.title=jobFormValue.name;
+    newJob.title=jobFormValue.title;
     newJob.Subject=jobFormValue.subject;
     newJob.description=jobFormValue.description;
     newJob.didSendCV=jobFormValue.didSendCV;
     newJob.isActive=!jobFormValue.isActive;
     newJob.ReasonForClosing=jobFormValue.ReasonForClosing;
-    this.job.isActive=false;
-
-     if(this.job.Id)
+    newJob.companyId=jobFormValue.company.Id;
+    newJob.contactId=jobFormValue.contact.Id;
+    newJob.gettingId=1;
+    newJob.handlesId=1;
+     if(this.job.Id){
+       newJob.dateReceived=this.job.dateReceived;
       //edit -function;
-      this.Mservice.Edit('Job',this.job).subscribe(res => {
+      this.Mservice.Edit('Job',newJob).subscribe(res => {
        this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
          duration: 6000,
          direction:"rtl",
@@ -109,10 +121,13 @@ export class JobFormComponent implements OnInit {
      },
      error => {
        //temporary as well
-     });  
-     else
+     });  }
+     else{
      // add new -function;
-     this.Mservice.Edit('Job',newJob).subscribe(res => {
+     this.Mservice.Save('Job',newJob).subscribe(res => {
+       console.log(res);
+       this.job.Id= res
+       this.job.Subject=newJob.Subject;
        this.snackBar.open("המשרה נוספה בהצלחה!", "סגור", {
          duration: 6000,
          direction:"rtl",
@@ -121,10 +136,22 @@ export class JobFormComponent implements OnInit {
      (error => {
        //temporary as well
      })
-   );
-     this.location.back();
+   );}
   }
-
+  MatchJobCandidates(){
+    const dialogRef = this.dialog.open(MatchJobCandidatesComponent, {
+      width: '99%',
+        data: {job:this.job.Id,subject:this.job.Subject.Id},
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      if(result==true){
+        console.log(`Dialog result: ${result}`);
+        // send offerd email
+        this.childC.ngOnInit();
+      }
+    });
+  }
 }
 
   

@@ -38,7 +38,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
   dates;
   periodValue;
   startDateValue;
-  endDateValue;
+  endDateValue = new Date();
   maxDate=new Date();
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -83,12 +83,13 @@ export class JobsComponent implements OnInit, AfterViewInit {
         }),
         catchError(() => {
           this.isLoadingResults = false;
-          // Catch if the GitHub API has reached its rate limit. Return empty data.
+          // Catch if the API has reached its rate limit. Return empty data.
           this.isRateLimitReached = true;
           return observableOf([]);
         })
       ).subscribe(data =>{
         this.jobs = data; 
+        if(!this.panelList)
           this.panelList=[
           { name:"שליחת מועמדים", sublist:this.sendCV, selecedlist:[]},
           { name:"פעילה", sublist:this.active, selecedlist:[]},
@@ -136,6 +137,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
         // Flip flag to show that loading has finished.
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
+
         this.resultsLength = data.totalCount;
         return data.items;
       }),
@@ -151,23 +153,26 @@ export class JobsComponent implements OnInit, AfterViewInit {
 cleanPeriod(){
   this.periodValue='';
   this.startDateValue='';
-  this.endDateValue='';
+  this.endDateValue=new Date();
 }
 
   openDeletionDialog(job:Job): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
-      width: '250px',
-      data: {name: job.title , type: "משרה"}
+      width: '300px',
+      data: {name: job.title , type: "משרה", sub:"ההתאמות שלה עבור הבוגרים"}
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       if(result==true){
         console.log(`Dialog result: ${result}`);
-        this.Mservice.Delete('Job',job.Id).subscribe(res=>{});
-        this.snackBar.open("המשרה נמחק בהצלחה!", "סגור", {
-          duration: 6000,
-          direction:"rtl",
-        });  
+        this.Mservice.Delete('Job',job.Id).subscribe(res=>{
+          this.jobs = this.jobs.filter(j=> j.Id != job.Id);
+          this.snackBar.open("המשרה נמחקה בהצלחה!", "סגור", {
+            duration: 6000,
+            direction:"rtl",
+          });  
+        });
+       
       }
     });
   }

@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobsCoordination } from '../classes/jobsCoordination';
 import { Contact } from '../classes/contact';
-import { Subject } from '../classes/my-enum-list';
 import { Graduate } from '../classes/graduate';
 import { ChartDataSets } from 'chart.js';
 import { ChartsDetails } from '../classes/chartDetails';
@@ -14,15 +13,18 @@ export interface ApiRes {
   totalCount: number;
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
   URL="http://localhost:55968/"
   apiURL;
+  compenies;
   constructor(private http: HttpClient) { 
     this.apiURL=this.URL+"api/"
+    this.GetAllList('Company').subscribe(
+      res=>this.compenies=res,
+      err=>console.log(err));
   } 
   GetLazyList(controller:string,sort:string, page:number, size:number,filters):Observable<ApiRes>
   {
@@ -42,15 +44,33 @@ export class MainService {
   }
   Save(controller:string,newObject):Observable<any>
   {
+    if(controller=='Company'){
+      this.GetAllList(controller).subscribe(
+        res=>this.compenies=res,
+        err=>console.log(err));
+    }
     return this.http.post(`${this.apiURL}${controller}/Save`,newObject);
   }
   Edit(controller:string,editingobject):Observable<any>
   {
+    if(controller=='Company'){
+      this.GetAllList(controller).subscribe(
+        res=>this.compenies=res,
+        err=>console.log(err));
+    }
     return this.http.put(`${this.apiURL}${controller}/Edit`,editingobject);
   }
   Delete(controller:string,id):Observable<any>
   {
+    if(controller=='Company'){
+      this.GetAllList(controller).subscribe(
+        res=>this.compenies=res,
+        err=>console.log(err));
+    }
       return this.http.delete(`${this.apiURL}${controller}/Delete?id=${id}`);
+  }
+  GetGraduateForJob(idSubject:number,idJob:number):Observable<Graduate[]>{
+    return this.http.get<any>(`${this.apiURL}Graduate/GetForJob?idSubject=${idSubject}&idJob=${idJob}`) ;
   }
   UploadCVFile(file):Observable<any>
   {
@@ -80,9 +100,18 @@ export class MainService {
   {
     return this.http.get<JobsCoordination[]>(`${this.apiURL}JobsCoordination/GetByGraduate?idGraduate=${idGraduate}`);
   }
+ 
   GetCoordinationByJob(idJob:number):Observable<JobsCoordination[]>
   {
     return this.http.get<JobsCoordination[]>(`${this.apiURL}JobsCoordination/GetByJob?idJob=${idJob}`);
+  }
+  SaveCoordinations(idJob:number,graduates:Graduate[]):Observable<any>
+  {
+    return this.http.post(`${this.apiURL}JobsCoordination/Save?idJob=${idJob}`,graduates);
+  }
+  sendCoordinations(massege:string,coordinatings:JobsCoordination[]):Observable<any>
+  {
+    return this.http.put(`${this.apiURL}JobsCoordination/sendCV?&massege=${massege}`,coordinatings);
   }
   GetChart(chartsDetails):Observable<ChartDataSets[]>
   {

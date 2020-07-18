@@ -24,6 +24,7 @@ import { ContactFormComponent } from './contact/contact-form/contact-form.compon
 import { JobsComponent } from './job/jobs/jobs.component';
 import { JobFormComponent } from './job/job-form/job-form.component';
 import { ChartsComponent } from './charts/charts.component';
+import { MatchJobCandidatesComponent } from './graduate/match-job-candidates/match-job-candidates.component';
 
 
 
@@ -45,6 +46,7 @@ import { ChartsComponent } from './charts/charts.component';
     JobsComponent,
     JobFormComponent,
     ChartsComponent,
+    MatchJobCandidatesComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,7 +59,8 @@ import { ChartsComponent } from './charts/charts.component';
     ChartsModule,
   ],
   entryComponents: [
-    DeletionDialogComponent
+    DeletionDialogComponent,
+    MatchJobCandidatesComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

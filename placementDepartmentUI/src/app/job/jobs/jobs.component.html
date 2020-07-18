@@ -46,24 +46,28 @@
                       <mat-radio-button style="margin: 7px;" value="1">
                         <span class="mat-sidenav-content-item">חודש אחרון</span>
                       </mat-radio-button><br>
-                      <mat-radio-button style="margin: 7px;" value="2">
+                      <mat-radio-button style="margin: 7px;" value="2" 
+                      [disabled]="!start.value || !end.value || (!!start.value && start.value > end.value)">
                         <span class="mat-sidenav-content-item">בין התאריכים:</span>
                       </mat-radio-button>
                       <br>
                  <!-- date -->
                       <mat-form-field  style="max-width: 90px;font-size: 14px;margin-right: 10px;">
-                        <input matInput [matDatepicker]="spicker" [(ngModel)]='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
-                            readonly [max]="maxDate" (click)="spicker.open()">
+                        <input matInput #start [matDatepicker]="spicker" [(ngModel)]='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
+                            readonly [max]="maxDate"
+                            (click)="spicker.open()">
                         <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
                         <mat-datepicker dir="rtl"  #spicker></mat-datepicker>
                       </mat-form-field>
                       <span> -</span>
                       <mat-form-field style="max-width: 110px;font-size: 14px;margin-right: 10px;">
-                        <input matInput [matDatepicker]="epicker" [(ngModel)]='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
-                            readonly [max]="maxDate" (click)="epicker.open()">
+                        <input matInput #end [matDatepicker]="epicker" [(ngModel)]='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
+                            readonly [max]="maxDate"
+                            (click)="epicker.open()">
                         <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
                         <mat-datepicker dir="rtl"  #epicker></mat-datepicker>
                       </mat-form-field>
+                      <mat-error *ngIf="(start.value && end.value && start.value > end.value)">טווח לא תקין</mat-error>
                 </mat-radio-group>
                </mat-expansion-panel >
         </mat-accordion>
@@ -73,9 +77,6 @@
 <!-- main  -->
   <div class="container"  >
     <div class="row justify-content-end">
-    <!-- <mat-form-field class="col-md-5 ">
-      <input matInput (keyup)="applyFilter($event.target.value)" value="" #filtering placeholder="חיפוש חופשי?">
-    </mat-form-field> -->
     <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/job-form/-" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת משרה חדשה">add</mat-icon>
@@ -89,7 +90,8 @@
     <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
       <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-        GitHub's API rate limit has been reached. It will be reset in one minute.
+  <mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
+     &nbsp; ארעה שגיאה בשרת      
       </div>
     </div>
     <!-- <div class="row"> -->

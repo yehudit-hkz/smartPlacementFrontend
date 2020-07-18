@@ -37,9 +37,9 @@ export class GraduateDetailsComponent implements OnInit {
 
   openDeletionDialog(): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
-      width: '250px',
+      width: '300px',
       // data: {name: this.graduate.firstName+" "+this.graduate.lastName , type: "בוגר"}
-      data: {name: this.graduate.firstName+' '+this.graduate.lastName , type: "בוגר"}
+      data: {name: this.graduate.firstName+' '+this.graduate.lastName , type: "בוגר", sub:"ההתאמות שלו למשרות"}
 
     });
 

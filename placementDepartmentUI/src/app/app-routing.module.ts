@@ -20,7 +20,7 @@ const routes: Routes = [
     {path:'companies' ,component:CompaniesComponent},
     {path:'company-form/:companyID',component:CompanyFormComponent},
     {path:'contacts/:companyID',component:ContactsComponent},
-    {path:'contact-form/:contactID',component:ContactFormComponent},
+    {path:'contact-form/:contactID/:companyID',component:ContactFormComponent},
     {path:'jobs',component:JobsComponent},
     {path:'job-form/:jobID',component:JobFormComponent},
     {path:'Charts',component:ChartsComponent},

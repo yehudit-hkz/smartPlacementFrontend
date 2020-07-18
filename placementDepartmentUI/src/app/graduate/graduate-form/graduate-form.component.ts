@@ -19,37 +19,36 @@ export class GraduateFormComponent implements OnChanges,OnInit {
   graduateForm: FormGroup;
   maxDate = new Date(new Date().getFullYear()-16, 11, 31);
   minDate = new Date(new Date().getFullYear() - 80, 0, 1);
-  
 
   constructor(private location: Location,
     public Mservice:MainService,
     public Eservice:EnumListsService,
     public Lservice:ListsService) {
-      // this.graduateForm = new FormGroup({
-      //   Id: new FormControl("", [Validators.required,Validators.pattern('^([0-9]{9})$')]),
-      //   gender: new FormControl("", [Validators.required]),
-      //   lastName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
-      //   firstName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
-      //   dateOfBirth: new FormControl("",[Validators.required]),
-      //   address: new FormControl("", []),
-      //   zipCode: new FormControl("", [Validators.pattern('^([0-9]{10})$')]),
-      //   city: new FormControl("",[Validators.required]),
-      //   email: new FormControl("", [Validators.required,Validators.email,Validators.maxLength(50)]),
-      //   phone: new FormControl("", [Validators.required,Validators.pattern("^([0-9]{9,10})$")]),
-      //   branch: new FormControl("", [Validators.required]),
-      //   expertise: new FormControl("",[Validators.required]),
-      //   startYear: new FormControl("", [Validators.required,Validators.maxLength(4)]),
-      //   endYear: new FormControl("", [Validators.required,Validators.maxLength(4)]),
-      //   didGraduate: new FormControl("", []),
-      //   hasDiploma: new FormControl("", []),
-      //   isWorkerInProfession: new FormControl("", []),
-      //   companyName: new FormControl("", [Validators.maxLength(50)]),
-      //   role: new FormControl("", [Validators.maxLength(50)]),
-      //   placedByThePlacementDepartment: new FormControl("", []),
-      //   hasExperience: new FormControl("", []),
-      //   isActive: new FormControl("", []),
-      //   uploadfile: new FormControl()
-      // });
+      this.graduateForm = new FormGroup({
+        Id: new FormControl("", [Validators.required,Validators.pattern('^([0-9]{9})$')]),
+        gender: new FormControl("", [Validators.required]),
+        lastName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
+        firstName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
+        dateOfBirth: new FormControl("",[Validators.required]),
+        address: new FormControl("", []),
+        zipCode: new FormControl("", [Validators.pattern('^([0-9]{10})$')]),
+        city: new FormControl("",[Validators.required]),
+        email: new FormControl("", [Validators.required,Validators.email,Validators.maxLength(50)]),
+        phone: new FormControl("", [Validators.required,Validators.pattern(/^0(([23489]{1}\d{7})|[57]{1}\d{8})$/)]),
+        branch: new FormControl("", [Validators.required]),
+        expertise: new FormControl("",[Validators.required]),
+        startYear: new FormControl("", [Validators.required,Validators.max((new Date()).getFullYear()),Validators.pattern("^([1-9][0-9]{3})$")]),
+        endYear: new FormControl("", [Validators.required,Validators.min((new Date(Number(""),1,1)).getFullYear()),Validators.pattern("^([1-9][0-9]{3})$|(טרם)")]),
+        didGraduate: new FormControl("", []),
+        hasDiploma: new FormControl("", []),
+        isWorkerInProfession: new FormControl("", []),
+        companyName: new FormControl("", [Validators.maxLength(50)]),
+        role: new FormControl("", [Validators.maxLength(50)]),
+        placedByThePlacementDepartment: new FormControl("", []),
+        hasExperience: new FormControl("", []),
+        isActive: new FormControl("", []),
+        uploadfile: new FormControl()
+      });
     }
  ngOnInit(){
   console.log("in "+this.graduate);
@@ -60,6 +59,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
     // Languages:GraduateLanguages[];
    // linkToCV:string;
     console.log("ch "+this.graduate);
+    if(this.graduate){
     this.graduateForm = new FormGroup({
       Id: new FormControl(this.graduate.Id, [Validators.required,Validators.pattern('^([0-9]{9})$')]),
       gender: new FormControl(this.graduate.gender, [Validators.required]),
@@ -72,15 +72,15 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         this.graduate.Id? this.Eservice.cities.find(c=>this.graduate.City.Id==c.Id):"",
          [Validators.required]),
       email: new FormControl(this.graduate.email, [Validators.required,Validators.email,Validators.maxLength(50)]),
-      phone: new FormControl(this.graduate.phone, [Validators.required,Validators.pattern("^([0-9]{9,10})$")]),
+      phone: new FormControl(this.graduate.phone, [Validators.required,Validators.pattern(/^0(([23489]{1}\d{7})|[57]{1}\d{8})$/)]),
       branch: new FormControl(
         this.graduate.Id? this.Lservice.branches.find(b=> this.graduate.Branch.Id==b.Id):"",
          [Validators.required]),
       expertise: new FormControl(
        this.graduate.Id? this.Lservice.expertise.find(e=>this.graduate.Expertise.Id==e.Id):"",
          [Validators.required]),
-      startYear: new FormControl(this.graduate.startYear, [Validators.required,Validators.maxLength(4)]),
-      endYear: new FormControl(this.graduate.endYear, [Validators.required,Validators.maxLength(4)]),
+      startYear: new FormControl(this.graduate.startYear, [Validators.required,Validators.max((new Date()).getFullYear()),Validators.pattern("^([1-9][0-9]{3})$")]),
+      endYear: new FormControl(this.graduate.endYear, [Validators.required,Validators.min((new Date(Number(this.graduate.startYear),1,1)).getFullYear()),Validators.pattern("^([1-9][0-9]{3})$|(טרם)")]),
       didGraduate: new FormControl(this.graduate.didGraduate, []),
       hasDiploma: new FormControl(this.graduate.hasDiploma, []),
       isWorkerInProfession: new FormControl(this.graduate.isWorkerInProfession, []),
@@ -92,9 +92,15 @@ export class GraduateFormComponent implements OnChanges,OnInit {
       uploadfile: new FormControl()
     });
   }
+  }
  
   public hasError = (controlName: string, errorName: string) =>{
     return this.graduateForm.controls[controlName].hasError(errorName);
+  }
+  onStartYearChange(value){
+    this.graduateForm.controls["endYear"].setValidators([Validators.required,Validators.min((new Date(Number(value),1,1)).getFullYear()),Validators.pattern("^([1-9][0-9]{3})$|(טרם)")])
+    this.graduateForm.controls["endYear"].updateValueAndValidity();
+    this.graduateForm.controls["endYear"].markAsTouched();
   }
  
   public onCancel = () => {
@@ -159,3 +165,4 @@ executeUploadFile(fileToUpload: File ,name:string){
     console.log(fileToUpload);
 }
 }
+
