@@ -171,7 +171,8 @@ cleanPeriod(){
             duration: 6000,
             direction:"rtl",
           });  
-        });
+        }
+        ,err=>this.Mservice.showServerError());
        
       }
     });

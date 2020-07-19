@@ -57,7 +57,8 @@ export class ContactFormComponent implements OnInit {
         Company: new FormControl(this.contact.companyId,[Validators.required]),
       });
     },
-    err=>{console.log(err)
+    err=>{
+      this.Mservice.showServerError()
     });
     this.Mservice.GetAllList('Company').subscribe(
       companies=> this.companyList=companies,
@@ -100,7 +101,7 @@ export class ContactFormComponent implements OnInit {
       this.location.back();
     },
       error => {
-        //temporary as well
+        this.Mservice.showServerError()
       }); 
       else
       // add new function;
@@ -112,7 +113,7 @@ export class ContactFormComponent implements OnInit {
       this.location.back();
       },
       (error => {
-        //temporary as well
+        this.Mservice.showServerError()
       })
     );
   }

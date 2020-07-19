@@ -27,7 +27,7 @@ export class GraduateEditingComponent implements OnInit {
     this.id=params.graduateID);
     this.service.GetByID('Graduate',this.id).subscribe(graduate=>
       {this.graduate=graduate;},
-     err=>{console.log(err);}
+     err=>{this.service.showServerError()}
     );
     
   }
@@ -40,7 +40,7 @@ export class GraduateEditingComponent implements OnInit {
     });  
   },
   error => {
-    //temporary as well
+    this.service.showServerError()
   }); 
     console.log(editingGraduate)
   }

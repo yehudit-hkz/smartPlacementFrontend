@@ -6,6 +6,7 @@ import { Contact } from '../classes/contact';
 import { Graduate } from '../classes/graduate';
 import { ChartDataSets } from 'chart.js';
 import { ChartsDetails } from '../classes/chartDetails';
+import { MatSnackBar } from '@angular/material';
 
 //interface for api with lazy louding
 export interface ApiRes {
@@ -20,7 +21,7 @@ export class MainService {
   URL="http://localhost:55968/"
   apiURL;
   compenies;
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, public snackBar: MatSnackBar) { 
     this.apiURL=this.URL+"api/"
     this.GetAllList('Company').subscribe(
       res=>this.compenies=res,
@@ -117,7 +118,14 @@ export class MainService {
   {
     return this.http.get<ChartDataSets[]>(`${this.apiURL}Chart`,{params: chartsDetails});
   }
-
+showServerError(){
+  this.snackBar.open("ארעה שגיאה בשרת", "סגור", {
+    duration: 8000,
+    direction:"rtl",
+    verticalPosition:'top',
+    panelClass:"err-msg"
+  })
+}
 
 
 

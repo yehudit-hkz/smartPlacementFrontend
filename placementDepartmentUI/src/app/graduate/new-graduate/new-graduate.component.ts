@@ -34,7 +34,7 @@ export class NewGraduateComponent implements OnInit {
         });  
       },
       (error => {
-        //temporary as well
+        this.service.showServerError()      
       })
     );
     console.log(newGraduate);

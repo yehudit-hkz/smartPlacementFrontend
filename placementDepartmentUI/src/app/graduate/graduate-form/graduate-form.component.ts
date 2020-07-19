@@ -31,7 +31,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
         firstName: new FormControl("", [Validators.required,Validators.maxLength(50)]),
         dateOfBirth: new FormControl("",[Validators.required]),
         address: new FormControl("", []),
-        zipCode: new FormControl("", [Validators.pattern('^([0-9]{10})$')]),
+        zipCode: new FormControl("", [Validators.pattern('^(([0-9]{5})|([0-9]{7})|([0-9]{9}))$')]),
         city: new FormControl("",[Validators.required]),
         email: new FormControl("", [Validators.required,Validators.email,Validators.maxLength(50)]),
         phone: new FormControl("", [Validators.required,Validators.pattern(/^0(([23489]{1}\d{7})|[57]{1}\d{8})$/)]),
@@ -67,7 +67,7 @@ export class GraduateFormComponent implements OnChanges,OnInit {
       firstName: new FormControl(this.graduate.firstName, [Validators.required,Validators.maxLength(50)]),
       dateOfBirth: new FormControl(this.graduate.dateOfBirth,[Validators.required]),
       address: new FormControl(this.graduate.address, []),
-      zipCode: new FormControl(this.graduate.zipCode, [Validators.pattern('^([0-9]{10})$')]),
+      zipCode: new FormControl(this.graduate.zipCode, [Validators.pattern('^(([0-9]{5})|([0-9]{7})|([0-9]{9}))$')]),
       city: new FormControl(
         this.graduate.Id? this.Eservice.cities.find(c=>this.graduate.City.Id==c.Id):"",
          [Validators.required]),
@@ -161,7 +161,7 @@ executeUploadFile(fileToUpload: File ,name:string){
     let _formData = new FormData();
     name += fileToUpload.name.substr(fileToUpload.name.lastIndexOf('.'));;
     _formData.append("file", fileToUpload, name);
-    this.Mservice.UploadCVFile(_formData).subscribe(res => { })
+    this.Mservice.UploadCVFile(_formData).subscribe(res => { },err=>{this.Mservice.showServerError()})
     console.log(fileToUpload);
 }
 }

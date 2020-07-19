@@ -56,6 +56,15 @@ pre{
 .spacer {
   flex: 1 1 auto;
 } 
+.err-msg{ 
+  color: red;
+  font-size: 16px !important;
+  text-align: center;
+  font-weight: bold;
+  .mat-simple-snackbar-action {    
+    color: rgb(236, 236, 236);
+  }
+}
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;

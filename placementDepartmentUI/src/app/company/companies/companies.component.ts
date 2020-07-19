@@ -91,8 +91,10 @@ export class CompaniesComponent implements OnInit {
             duration: 6000,
             direction:"rtl",
           });
-        });
-        
+        },
+        err=>
+        this.Mservice.showServerError()
+        );        
       }
     });
   }

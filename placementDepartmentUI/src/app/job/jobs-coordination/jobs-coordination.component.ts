@@ -61,7 +61,7 @@ import { FormControl } from '@angular/forms';
     
   updateStatus(jobsCoordinationForEdit:JobsCoordination): void {
     //go to service for edit
-    this.Mservice.Edit('JobsCoordination',jobsCoordinationForEdit).subscribe(res=>{this.ngOnInit();});
+    this.Mservice.Edit('JobsCoordination',jobsCoordinationForEdit).subscribe(res=>{this.ngOnInit();},err=>this.Mservice.showServerError());
   }
   SendCVToContact(Massege){
     //go to func 'send CV' in Email cntrl.
@@ -71,7 +71,7 @@ import { FormControl } from '@angular/forms';
         this.ngOnInit();
         this.sendCndidate.emit();
         this.applyFilter("");
-      });
+      },err=>this.Mservice.showServerError());
     this.OK=false;
   }
 

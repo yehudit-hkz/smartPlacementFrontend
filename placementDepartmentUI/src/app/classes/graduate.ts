@@ -34,3 +34,13 @@ export class GraduateLanguages{
     languageName:string;
     level:number;
 }
+
+
+export class MainGraduate{
+    Id:string;
+    Name:string;
+    branchName:string;
+    expertiseName:string;
+    endYear:string;
+    isActive:boolean;
+ }

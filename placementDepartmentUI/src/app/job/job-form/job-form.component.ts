@@ -78,7 +78,7 @@ export class JobFormComponent implements OnInit {
         // handles  : new FormControl("",[Validators.required]),
       });
       },
-     err=>{console.log(err);}
+     err=>{this.Mservice.showServerError()}
     );
   }
 
@@ -120,7 +120,7 @@ export class JobFormComponent implements OnInit {
        });  
      },
      error => {
-       //temporary as well
+      this.Mservice.showServerError()
      });  }
      else{
      // add new -function;
@@ -134,7 +134,7 @@ export class JobFormComponent implements OnInit {
        });  
      },
      (error => {
-       //temporary as well
+      this.Mservice.showServerError()
      })
    );}
   }

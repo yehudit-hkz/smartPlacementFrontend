@@ -139,6 +139,6 @@ export class MatchJobCandidatesComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Id + 1}`;
   }
   addCoordination(){
-    this.Mservice.SaveCoordinations(this.data.job,this.selection.selected).subscribe(res=>console.log());
+    this.Mservice.SaveCoordinations(this.data.job,this.selection.selected).subscribe(res=>this.Mservice.showServerError());
   }
 }

@@ -51,7 +51,9 @@ export class CompanyFormComponent implements OnInit {
         address: new FormControl(this.company.address),
         descriptiovOfActivity: new FormControl(this.company.descriptiovOfActivity),
       });},
-     err=>{console.log(err);}
+     err=>{
+      this.Mservice.showServerError()
+     }
     );
    }
   
@@ -84,10 +86,11 @@ export class CompanyFormComponent implements OnInit {
         this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",
-        });  
+        }); 
+      this.location.back();
       },
       error => {
-        //temporary as well
+        this.Mservice.showServerError()
       }); 
       else
       // add new function;
@@ -98,10 +101,9 @@ export class CompanyFormComponent implements OnInit {
         });  
       },
       (error => {
-        //temporary as well
+        this.Mservice.showServerError()
       })
     );
-      this.location.back();
    }
 
 }

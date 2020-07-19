@@ -54,7 +54,7 @@ export class GraduateDetailsComponent implements OnInit {
           });  
           this.location.back();
         });
-        err=>{}
+        err=>{this.service.showServerError()}
       }
     });
   }

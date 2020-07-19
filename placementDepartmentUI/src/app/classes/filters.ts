@@ -13,3 +13,11 @@ export class CompanyFilters
     mainSubject:number;
     subjectByJobs:number;
 }
+export class GraduateFilters
+{
+    name:string;
+    gender:string[];
+    active:boolean[];
+    expertise:number[];
+    branch:number[];
+}
