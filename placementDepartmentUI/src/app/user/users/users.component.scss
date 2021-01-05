@@ -1,0 +1,25 @@
+table,mat-paginator {
+    width: 100%;
+    }
+td, th {
+    width: 20%;
+    padding-right: 5px !important;
+}
+    
+::ng-deep .mat-paginator {
+
+// override material paginator page switch
+// .mat-paginator-range-label {
+//     order: 2;
+// }
+    .mat-paginator-navigation-previous {
+        // order: 1;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+    .mat-paginator-navigation-next {
+        // order: 3;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}

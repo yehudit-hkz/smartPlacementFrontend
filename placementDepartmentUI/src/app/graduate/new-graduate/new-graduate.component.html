@@ -1,20 +1,29 @@
 <mat-toolbar>
-    <span>הוספת בוגר חדש</span>
+    <span>{{importState?"ייבוא בוגרים מאקסל":"הוספת בוגר חדש"}}</span>
 </mat-toolbar>
-<div class="container">
-    <br><br>
-    <!-- <div class="row justify-content-end">
-        <button class="col-md-3"  (click)="importFromExcel()"  mat-raised-button>
+<br><br>
+<div *ngIf="!importState" class="container">
+    <div class="row justify-content-end">
+        <button class="col-md-3"  (click)="importState=true"  mat-raised-button>
             <mat-icon svgIcon="excel" style=" vertical-align: top;" ></mat-icon>&nbsp;
             ייבוא בוגרים מאקסל</button>
     </div>  
-    <br> -->
+    <br>
     <div class="row">
         <!-- [graduateForEdit]="graduate" (submitGraduate)="editDetails($event)" -->
         <app-graduate-form (submitGraduate)="addNewGraduate($event)" class="mat-elevation-z8 col-md-12">
         </app-graduate-form>
     </div>
-    <br>
-    <br>
-    <br>    
 </div>
+
+<div *ngIf="importState" class="container" >
+    <div  class="row mat-elevation-z8">
+        <button style="margin: 10px;" (click)="importState=false;" mat-icon-button>
+            <mat-icon class="mat-icon-ltr-mirror" matTooltip="חזור">arrow_forward</mat-icon>
+        </button>
+        <app-import-from-excel  class=" col-md-11"></app-import-from-excel>  
+    </div>
+</div>
+<br> 
+<br> 
+<br>

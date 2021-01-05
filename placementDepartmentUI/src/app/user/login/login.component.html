@@ -1,0 +1,35 @@
+<br><br> 
+<br><br>
+<mat-card>
+    <!-- <mat-card-header > -->
+        <mat-toolbar>
+            <span>כניסה למערכת</span>
+        </mat-toolbar>
+    <!-- </mat-card-header> -->
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <br>
+        <mat-error *ngIf="loginInvalid">שם משתמש וסיסמה שגויים</mat-error>
+        <div dir="rtl">
+        <mat-form-field appearance="outline" >
+            <input dir="ltr" matInput name="username" placeholder='דוא"ל' formControlName="username" required>
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error>נא הזן כתובת דוא"ל חוקית</mat-error>
+        </mat-form-field>
+        </div>
+        <br>
+        <div dir="rtl">
+        <mat-form-field appearance="outline">
+          <input matInput name="password" [type]="hide ? 'password' : 'text'" placeholder="סיסמה" formControlName="password" required>
+          <button  type="button" mat-icon-button matSuffix (click)="hide = !hide" >
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          <mat-error>נא הזן סיסמה חוקית</mat-error>
+        </mat-form-field>
+        </div>
+        <br>
+        <button color="primary" mat-flat-button>כניסה</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

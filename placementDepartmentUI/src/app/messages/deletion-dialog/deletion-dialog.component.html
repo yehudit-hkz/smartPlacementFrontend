@@ -4,11 +4,9 @@
 <mat-dialog-content>
   <span>האים הינך בטוח\ה שברצונך למחוק את ה</span>
   <span>{{data.type}} <b>{{data.name}}</b></span>
-  <br><br>
-  <span *ngIf="data.sub" style="font-size: 12px;">**בעת מחיקת ה{{data.type}} ימחקו {{data.sub}} </span>
 </mat-dialog-content>
 <br>
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true">אישור</button>
-    <button mat-button mat-dialog-close cdkFocusInitial>ביטול</button>
+    <button mat-button color="primary" [mat-dialog-close]="true">אישור</button>
+    <button mat-button color="primary"  mat-dialog-close cdkFocusInitial>ביטול</button>
   </mat-dialog-actions>

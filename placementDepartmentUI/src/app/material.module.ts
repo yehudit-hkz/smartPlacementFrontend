@@ -26,10 +26,16 @@ import {
     MatStepperModule,
     MatAutocompleteModule,
     MatChipsModule,
-    
+    MatBadgeModule,
+    MatCardModule,
+    MatMenuModule,
 
 } from '@angular/material';
+
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+
+import { SatDatepickerModule, SatNativeDateModule } from 'saturn-datepicker';
+
 
 @NgModule({
     imports: [
@@ -58,6 +64,11 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatStepperModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatBadgeModule,
+        MatCardModule,
+        MatMenuModule,
+        SatDatepickerModule,
+        SatNativeDateModule,
 
     ],
     exports: [
@@ -86,10 +97,18 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
         MatStepperModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatBadgeModule,
+        MatCardModule,
+        MatMenuModule,
+        SatDatepickerModule,
+        SatNativeDateModule,
 
     ],
     providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'he-IL' },
+    { 
+        provide: MAT_DATE_LOCALE, 
+        useValue: 'he-IL' 
+    }
     ]
 })
 export class MaterialModule { }

@@ -17,22 +17,42 @@
  <mat-dialog-content >
  <mat-sidenav-container class="example-container">
         <mat-sidenav mode="side" position="end" #sidenav  >
+          <div style="margin: 10px;">
+          <mat-checkbox (change)="applyFilter('')" [(ngModel)]="CVFilter">
+            <span class="text">קו"ח</span>
+          </mat-checkbox>
+        </div>
+        <div style="margin: 10px;">
+          <mat-checkbox (change)="applyFilter('')" [(ngModel)]="graduateFilter">
+            <span class="text">בוגר</span>
+          </mat-checkbox>
+        </div>
+        <div style="margin: 10px;">
+          <mat-checkbox (change)="applyFilter('')" [(ngModel)]="diplomFilter">
+            <span class="text">מדופלם</span>
+          </mat-checkbox>
+        </div>
+        <div style="margin: 10px;">
+          <mat-checkbox (change)="applyFilter('')" [(ngModel)]="experienceFilter">
+            <span class="text">נסיון בתחום</span>
+          </mat-checkbox>
+          </div>
           <mat-accordion  multi="true">
             <mat-expansion-panel  *ngFor="let item of panellist" class="mat-elevation-z0" >
-         <mat-expansion-panel-header >
+              <mat-expansion-panel-header >
                   {{item.name}}
               </mat-expansion-panel-header>
               <mat-selection-list  >
                 <mat-list-option  
-                checkboxPosition="before" 
-                (click)="subItem.active=!subItem.active;applyFilter('')" 
-                [selected]="subItem.active" 
-                [value]="subItem.value"
-                *ngFor="let subItem of item.sublist" >
-                  <span style="margin-right: 10px;">{{subItem.name}}</span>
+                  checkboxPosition="before" 
+                  (click)="subItem.active=!subItem.active;applyFilter('')" 
+                  [selected]="subItem.active" 
+                  [value]="subItem.value"
+                  *ngFor="let subItem of item.sublist" >
+                   <span style="margin-right: 10px;">{{subItem.name}}</span>
                 </mat-list-option>
               </mat-selection-list>
-            </mat-expansion-panel >
+            </mat-expansion-panel > 
           </mat-accordion>
         </mat-sidenav>
         <mat-sidenav-content> 
@@ -81,7 +101,7 @@
           <mat-icon> {{g.linkToCV?"check":""}}</mat-icon>
         </td>
       </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"
         (click)="selection.toggle(row)">
     </tr>
@@ -92,6 +112,6 @@
 </mat-dialog-content>
 </div>
 <mat-dialog-actions>
-    <button mat-button (click)='addCoordination()' [disabled]="selection.isEmpty()"  [mat-dialog-close]="true">שלח הצעת משרה</button>
-    <button mat-button mat-dialog-close cdkFocusInitial>ביטול</button>
+    <button mat-button color="primary" (click)='addCoordination()' [disabled]="selection.isEmpty()"  >שלח הצעת משרה</button>
+    <button mat-button color="primary" mat-dialog-close cdkFocusInitial>ביטול</button>
   </mat-dialog-actions>

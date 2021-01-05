@@ -1,21 +1,19 @@
 <br>
 <div class="container">
-<form [formGroup]="graduateForm" autocomplete novalidate (ngSubmit)="createGraduate(graduateForm.value)" >
-  <div class="row">
+<form [formGroup]="graduateForm"  novalidate (ngSubmit)="createGraduate(graduateForm.value) " >
+  <div class="row ">
   <mat-form-field class="col-md-3">
         <input matInput type="text" placeholder='ת"ז' formControlName="Id" required [readonly]="graduate.Id!=null"> 
         <mat-error *ngIf="hasError('Id', 'required')">זהו שדה חובה!</mat-error>
         <mat-error *ngIf="hasError('Id', 'pattern')">הזן מספר זהות חוקי בעל 9 ספרות</mat-error>
     </mat-form-field >
     <mat-form-field class="col-md-3"> 
-        <input matInput type="text" placeholder="שם משפחה" formControlName="lastName" required >
+        <input matInput type="text" maxlength="50" placeholder="שם משפחה" formControlName="lastName" required >
         <mat-error *ngIf="hasError('lastName', 'required')">זהו שדה חובה!</mat-error>
-        <mat-error *ngIf="hasError('lastName', 'maxlength')">אפשרי עד 50 תווים</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input matInput type="text" placeholder="שם פרטי" formControlName="firstName" required >
+        <input matInput type="text" maxlength="50" placeholder="שם פרטי" formControlName="firstName" required >
         <mat-error *ngIf="hasError('firstName', 'required')">זהו שדה חובה!</mat-error>
-        <mat-error *ngIf="hasError('firstName', 'maxlength')">אפשרי עד 50 תווים</mat-error>
       </mat-form-field>
       </div>
       <br>
@@ -39,10 +37,14 @@
       <div class="row">
         <mat-icon style="align-self: center;text-align: center;">pin_drop</mat-icon>
         <mat-form-field class="col-md-3"> 
-          <mat-select placeholder="עיר" formControlName="city" required>
-            <mat-option *ngFor="let c of Eservice.cities" [value]="c">{{c.name}}</mat-option>
-          </mat-select>
+          <input type="text" #cityInpt placeholder="עיר" matInput required formControlName="city" [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #auto="matAutocomplete">
+            <mat-option *ngFor="let c of Lservice.cities | filter:cityInpt.value" [value]="c">
+              {{c.name}}
+            </mat-option>
+          </mat-autocomplete>
           <mat-error *ngIf="hasError('city', 'required')">נא לבחור עיר</mat-error>
+          <mat-error *ngIf="hasError('city', 'invalidCity')">הזן עיר קיימת במערכת</mat-error>
         </mat-form-field>
       <mat-form-field class="col-md-3">
         <input matInput type="text" placeholder="כתובת" formControlName="address" >
@@ -61,27 +63,52 @@
         <mat-error *ngIf="hasError('phone', 'pattern')">הזן מס' פלאפון חוקי</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-4">
-        <input matInput type="email" placeholder='דוא"ל' formControlName="email" required style="direction: ltr;" >
+        <input matInput type="email" maxlength="50" placeholder='דוא"ל' formControlName="email" required dir="ltr" >
         <mat-icon matSuffix>email</mat-icon>
         <mat-error *ngIf="hasError('email', 'required')">זהו שדה חובה!</mat-error>
         <mat-error *ngIf="hasError('email', 'email')">הזן כתובת דוא"ל חוקית</mat-error>
-        <mat-error *ngIf="hasError('email', 'maxlength')">אפשרי עד 50 תווים</mat-error>
       </mat-form-field>
       </div>
       <br>
-      <!-- <div class="row">
-        <li *ngFor="let gl of graduate.Languages">
-        <mat-form-field class="col-md-4">
-          <mat-select placeholder="שפה"  formControlName="languages" [(ngModel)]="gl.languageId" >
-            <mat-option *ngFor="let l of languages" [value]="l.Id">{{l.name}}</mat-option>
-          </mat-select>
-          </mat-form-field>
-          <mat-checkbox class="col-md-3" formControlName="languages" [(ngModel)]="gl.level" >
-            <span class="text">שפת אם</span>
-          </mat-checkbox>
+      <div formArrayName="languages">
+        <li *ngFor="let lg of graduateForm.get('languages').controls; let i = index;" [formGroupName]="i" >
+          <button type="button" mat-icon-button (click)="removeLanguage(i)" >
+            <mat-icon  matTooltip="הסרה">remove_circle_outline</mat-icon>
+          </button>
+          <mat-form-field class="col-md-4">
+            <input type="text" #LNGInpt  matInput required formControlName="languageId" [matAutocomplete]="autol">
+            <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autol="matAutocomplete">
+              <mat-option *ngFor="let l of Lservice.languages | filter:LNGInpt.value" [value]="l">
+                {{l.name}}
+              </mat-option>
+            </mat-autocomplete>
+               <mat-error *ngIf="lg.get('languageId').hasError('required')">נא לבחור שפה</mat-error>
+               <mat-error *ngIf="lg.get('languageId').hasError('invalidLanguage')">הזן שפה קיימת במערכת</mat-error>
+            </mat-form-field>
+            <mat-checkbox class="col-md-3" formControlName="level" >
+              <span class="text">שפת אם</span>
+            </mat-checkbox>
         </li>
+        <li [formGroup]="languageForm">
+          <button [disabled]="languageForm.invalid" type="button" mat-icon-button (click)="addLanguage()" >
+            <mat-icon matTooltip="הוספה">add_circle_outline</mat-icon>
+          </button>
+          <mat-form-field class="col-md-4">
+            <input type="text" #LNGInpt placeholder="שפה" matInput required formControlName="languageId" [matAutocomplete]="autol">
+          <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autol="matAutocomplete">
+            <mat-option *ngFor="let l of Lservice.languages | filter:LNGInpt.value" [value]="l">
+              {{l.name}}
+            </mat-option>
+          </mat-autocomplete>
+             <mat-error *ngIf="languageForm.get('languageId').hasError('required')">נא לבחור שפה</mat-error>
+             <mat-error *ngIf="languageForm.get('languageId').hasError('invalidLanguage')">הזן שפה קיימת במערכת</mat-error>
+            </mat-form-field>
+            <mat-checkbox class="col-md-3" formControlName="level" >
+              <span class="text">שפת אם</span>
+            </mat-checkbox>
+          </li>
       </div>
-      <br> -->
+      <br>
       <div class="row">
         <mat-form-field class="col-md-3">
         <mat-select placeholder="שלוחה" formControlName="branch" required>
@@ -90,10 +117,14 @@
         <mat-error *ngIf="hasError('branch', 'required')">נא לבחור שלוחה</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3"> 
-        <mat-select placeholder="תחום הכשרה" formControlName="expertise" required>
-          <mat-option *ngFor="let e of Lservice.expertise" [value]="e">{{e.name}}</mat-option>
-        </mat-select>
+        <input type="text" #expertiseInpt placeholder="תחום הכשרה" matInput required formControlName="expertise" [matAutocomplete]="autoe">
+        <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autoe="matAutocomplete">
+          <mat-option *ngFor="let e of Lservice.expertises | filter:expertiseInpt.value" [value]="e">
+            {{e.name}}
+          </mat-option>
+        </mat-autocomplete>
         <mat-error *ngIf="hasError('expertise', 'required')">נא לבחור תחום הכשרה</mat-error>
+        <mat-error *ngIf="hasError('expertise', 'invalidExpertise')">הזן הכשרה קיימת במערכת</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-2">
         <input matInput type="text" (change)="onStartYearChange(startY.value)" #startY placeholder="שנת תחילת הלימודים" formControlName="startYear" required >
@@ -126,12 +157,10 @@
       <br>
       <div class="row align-items-center" *ngIf="isWork.checked">
         <mat-form-field class="col-md-3">  
-          <input matInput type="text" placeholder="שם החברה" formControlName="companyName" >
-        <mat-error *ngIf="hasError('companyName', 'maxlength')">אפשרי עד 50 תווים</mat-error>
+          <input matInput type="text"  maxlength="50" placeholder="שם החברה" formControlName="companyName" >
       </mat-form-field>
         <mat-form-field class="col-md-3">  
-          <input matInput type="text" placeholder="תפקיד" formControlName="role" >
-        <mat-error *ngIf="hasError('role', 'maxlength')">אפשרי עד 50 תווים</mat-error>
+          <input matInput type="text" maxlength="50" placeholder="תפקיד" formControlName="role" >
       </mat-form-field>
         <mat-checkbox class="col-md-3" formControlName="placedByThePlacementDepartment" >
           <span class="text">הושם ע"י מחלקת ההשמה</span>
@@ -143,17 +172,18 @@
           <span class="text">פעיל</span>
         </mat-checkbox>
         </div>
-      <br><br>
+      <br>
       <div class="row"> 
         <mat-form-field class="col-md-5">
-          <ngx-mat-file-input formControlName="uploadfile" placeholder='העלאת קובץ קו"ח'  accept=".doc,.docx,.pdf"></ngx-mat-file-input>
+          <ngx-mat-file-input formControlName="uploadfile" placeholder='העלאת קובץ קו"ח'  accept=".pdf"></ngx-mat-file-input>
           <mat-icon matSuffix>folder</mat-icon>
         </mat-form-field>
-        </div>  <br>
-      <div style="text-align: center;">
-        <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
-        <button mat-raised-button type="submit" [disabled]="graduateForm.invalid||!graduateForm.dirty">{{graduate.Id==null?"הוסף":"עדכן"}}</button>  
+        </div><br><br>
+        <div class="row justify-content-center">
+          <div class="col-md-4"></div>
+        <button class="col-md-1" mat-stroked-button color="primary" type="button" (click)="onCancel()">ביטול</button>&nbsp;
+        <button class="col-md-1" mat-stroked-button color="primary" type="submit" [disabled]="graduateForm.invalid||!graduateForm.dirty">{{graduate.Id==null?"הוסף":"עדכן"}}</button>  
       </div>
 </form>
-<br><br><br>
+<br> 
 </div>

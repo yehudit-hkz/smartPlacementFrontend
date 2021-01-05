@@ -27,47 +27,30 @@ table,mat-paginator {
       background: rgb(93, 94, 93) !important;
       font-size: 14px;
   }
-//   .arrow-up{
-//     width: 0; 
-//     height: 0; 
-//     border-top: 10px solid transparent;
-//     border-bottom: 10px solid transparent;
+
+    //// for lazy louding
+    .table-container {
+      position: relative;
+    justify-content: center;
+    min-height: 140px;
+    }
+    .example-loading-shade {
+      position: absolute;
+      top: 0;
+      // left: 0;
+      bottom: 0; 
+      // right: 0;
+      width: 97.5%;
+      background: rgba(0, 0, 0, 0.15);
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     
-//     border-left: 10px solid rgb(93, 94, 93); 
-// }
-// span {
-//   padding: 10px;
-//   display: inline;
-// }
-
-// [matTooltip] {
-//   position: relative;
-// }
-
-// // [title]:hover:before {
-// //   background: #333;
-// //   top: 100%;
-// //   background: rgba(0, 0, 0, .8);
-// //   border-radius: 5px;
-// //   color: #fff;
-// //   content: attr(title);
-// //   padding: 5px 15px;
-// //   position: absolute;
-// //   z-index: 98;
-// //   width: auto;
-// //   margin-top: 10px;
-// // }
-
-// [matTooltip]:hover:after {
- 
-//   width: 0; 
-//   height: 0; 
-//   border-top: 5px solid transparent;
-//   border-bottom: 5px solid transparent;
-  
-//   border-left: 10px solid rgb(93, 94, 93); 
-//   content: '';
-//   position: absolute;
-//   top: 40%;
-//   right: 100%;
-// }
+    .example-rate-limit-reached {
+      color: #980000;
+      max-width: 360px;
+      text-align: center;
+      font-size: 22px;
+    }

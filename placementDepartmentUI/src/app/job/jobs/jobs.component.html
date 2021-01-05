@@ -18,7 +18,7 @@
                      height:20px !important;
                      width:20px !important;" 
                      *ngIf="item.name=='תקופה'?periodValue:item.selecedlist.length>0" 
-                     (click)="item.name=='תקופה'?periodValue='':item.selecedlist=[];applyFilter();" 
+                     (click)="item.name=='תקופה'?cleanPeriod():item.selecedlist=[];applyFilter();" 
                      mat-icon-button>
                       <mat-icon style="
                       margin-top  : -30px;
@@ -34,41 +34,39 @@
                    (click)="applyFilter()" 
                    [value]="subItem.Id"
                    *ngFor="let subItem of item.sublist" >
-                     <span class="mat-sidenav-content-item">{{subItem.name}}</span>
+                     <span class="mat-sidenav-content-item">
+                       {{item.name!='סיבת סגירה'?subItem.name:subItem.description}}
+                      </span>
                    </mat-list-option>
                  </mat-selection-list>
                  <!-- period  list -->
                  <mat-radio-group 
                  [(ngModel)]="periodValue" 
-                 (change)="applyFilter()"
+                 (change)="periodValue == 1 || periodValue == 2 && date.begin != null ? applyFilter():'' "
                  *ngIf="item.name=='תקופה'" >
                  <!-- radio -->
                       <mat-radio-button style="margin: 7px;" value="1">
                         <span class="mat-sidenav-content-item">חודש אחרון</span>
                       </mat-radio-button><br>
-                      <mat-radio-button style="margin: 7px;" value="2" 
-                      [disabled]="!start.value || !end.value || (!!start.value && start.value > end.value)">
+                      <mat-radio-button style="margin: 7px;" value="2" >
                         <span class="mat-sidenav-content-item">בין התאריכים:</span>
                       </mat-radio-button>
                       <br>
                  <!-- date -->
-                      <mat-form-field  style="max-width: 90px;font-size: 14px;margin-right: 10px;">
-                        <input matInput #start [matDatepicker]="spicker" [(ngModel)]='startDateValue' placeholder="מהתאריך"  id="startDateValue" 
-                            readonly [max]="maxDate"
-                            (click)="spicker.open()">
-                        <mat-datepicker-toggle matSuffix [for]="spicker"></mat-datepicker-toggle>
-                        <mat-datepicker dir="rtl"  #spicker></mat-datepicker>
+                      <mat-form-field style="max-width: 100%;font-size: 15px;">
+                        <input matInput
+                            placeholder="בחר טווח"
+                            [satDatepicker]="picker"
+                            readonly
+                            [disabled]="periodValue != 2"
+                            [max]="maxDate"
+                            [(ngModel)]="date"
+                            (click)="picker.open()"
+                            (dateChange)="periodValue == 2?applyFilter():''">
+                        <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+                        <sat-datepicker #picker dir="rtl" [rangeMode]="true" ></sat-datepicker>
                       </mat-form-field>
-                      <span> -</span>
-                      <mat-form-field style="max-width: 110px;font-size: 14px;margin-right: 10px;">
-                        <input matInput #end [matDatepicker]="epicker" [(ngModel)]='endDateValue' placeholder="עד התאריך"  id="endDateValue" 
-                            readonly [max]="maxDate"
-                            (click)="epicker.open()">
-                        <mat-datepicker-toggle matSuffix [for]="epicker"></mat-datepicker-toggle>
-                        <mat-datepicker dir="rtl"  #epicker></mat-datepicker>
-                      </mat-form-field>
-                      <mat-error *ngIf="(start.value && end.value && start.value > end.value)">טווח לא תקין</mat-error>
-                </mat-radio-group>
+                    </mat-radio-group>
                </mat-expansion-panel >
         </mat-accordion>
         
@@ -77,7 +75,7 @@
 <!-- main  -->
   <div class="container"  >
     <div class="row justify-content-end">
-    <div class="col-md-1" style="text-align: center;">
+      <div class="col-md-1" style="text-align: center;">
     <a mat-icon-button routerLink="/job-form/-" routerLinkActive="activeLink">
       <mat-icon matTooltip="הוספת משרה חדשה">add</mat-icon>
     </a>
@@ -91,7 +89,7 @@
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
       <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
   <mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
-     &nbsp; ארעה שגיאה בשרת      
+     &nbsp; ארעה שגיאה      
       </div>
     </div>
     <!-- <div class="row"> -->
@@ -179,7 +177,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-    <mat-paginator style="margin-top: 7px;"  [length]="resultsLength" [pageSizeOptions]="[  10, 5, 25, 50, 100]"></mat-paginator>
+    <mat-paginator style="margin-top: 7px;"  [length]="resultsLength" [pageSizeOptions]="[ 50, 30, 100, 200]"></mat-paginator>
   </div>
   </div>
   </div>

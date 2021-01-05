@@ -1,10 +1,8 @@
 <mat-toolbar >
     <span>{{job.Id==null?"הוספת משרה חדשה":"עריכת משרה"}}</span>
     <span class="spacer"></span>
-    <a *ngIf="job.Id!=null" [href]="location.path()+'#jobsCoordination'">
-    <button mat-icon-button  >
+    <a mat-icon-button *ngIf="job.Id!=null" [href]="location.path()+'#jobsCoordination'">
       <mat-icon >people</mat-icon>
-    </button>
   </a>
   <span *ngIf="job.Id!=null" style="margin-left: 30px;font-size: 13px;">מועמדים</span>
 
@@ -13,34 +11,42 @@
 <div class="container mat-elevation-z4">
     <br><br>
 <form [formGroup]="jobForm"  autocomplete novalidate (ngSubmit)="createJob(jobForm.value)" >
-    <div class="row ">
-      <mat-form-field class="col-md-3">
-        <input matInput type="text" placeholder="כותרת משרה" formControlName="title" required >
+      <div class="row ">
+        <div class="col-md-1"></div>
+        <mat-form-field class="col-md-3">
+        <input matInput type="text" maxlength="50" placeholder="כותרת משרה" formControlName="title" required >
         <mat-error *ngIf="hasError('title', 'required')">זהו שדה חובה!</mat-error>
-        <mat-error *ngIf="hasError('title', 'maxlength')">אפשרי עד 50 תווים</mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3"> 
-        <mat-select placeholder="מקצוע" formControlName="subject" required>
-            <mat-option></mat-option>
-          <mat-option *ngFor="let s of Lservice.subjects" [value]="s">{{s.name}}</mat-option>
-        </mat-select>
+        <input type="text" #subjectInpt placeholder="מקצוע" matInput required formControlName="subject" [matAutocomplete]="autos">
+        <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autos="matAutocomplete">
+          <mat-option *ngFor="let s of Lservice.subjects | filter:subjectInpt.value" [value]="s">
+            {{s.name}}
+          </mat-option>
+        </mat-autocomplete>
         <mat-error *ngIf="hasError('subject', 'required')">נא לבחור מקצוע</mat-error>
+        <mat-error *ngIf="hasError('subject', 'invalidSubject')">הזן מקצוע קיים במערכת</mat-error>
       </mat-form-field>
     </div>
     <br>
     <div class="row ">
-      <mat-form-field class="col-md-6" >
-        <textarea rows="5" matInput placeholder='תיאור המשרה' formControlName="description"></textarea>
+        <div class="col-md-1"></div>
+        <mat-form-field class="col-md-6" >
+        <textarea rows="4" matInput placeholder='תיאור המשרה' formControlName="description"></textarea>
       </mat-form-field >
     </div>
-    <br><br>
+    <br>
     <div class="row ">
-      <mat-form-field class="col-md-3 readonly-wrapper"> 
-        <mat-select placeholder="חברה" formControlName="company" class="readonly-block" [disabled]="job.Id!=null" >
-          <!-- <mat-option ></mat-option> -->
-          <mat-option *ngFor="let cm of  Mservice.compenies" [value]="cm">{{cm.name}}</mat-option>
-        </mat-select>
-        <!-- <mat-error *ngIf="hasError('contact', 'required')">נא לבחור איש קשר</mat-error> -->
+        <div class="col-md-1"></div>
+        <mat-form-field class="col-md-3 readonly-wrapper"> 
+        <input type="text" #companyInpt placeholder="חברה" matInput required formControlName="company" [matAutocomplete]="autoc" >
+        <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autoc="matAutocomplete">
+          <mat-option *ngFor="let c of CCservice.companies | filter:companyInpt.value" [value]="c">
+            {{c.name}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="hasError('company', 'required')">נא לבחור חברה</mat-error>
+        <mat-error *ngIf="hasError('company', 'invalidCompany')">הזן חברה קיימת במערכת</mat-error>
       </mat-form-field>
     <mat-form-field class="col-md-3"> 
       <mat-select placeholder="איש הקשר" formControlName="contact" required>
@@ -57,9 +63,23 @@
       <span  >חדש</span>
     </span> -->
   </div>
+    <br>
+    <div class="row ">
+    <div class="col-md-1"></div>
+  <mat-form-field class="col-md-3">
+    <input matInput type="text" placeholder='מקבל' formControlName="getting" required readonly> 
+</mat-form-field >
+  <mat-form-field class="col-md-3">
+    <mat-select placeholder="מטפל" formControlName="handles" required>
+      <mat-option *ngFor="let u of Lservice.users" [value]="u">{{u.name}}</mat-option>
+    </mat-select>
+    <mat-error *ngIf="hasError('handles', 'required')">נא לבחור מטפל</mat-error>
+  </mat-form-field>
+</div>
   <br>
-    <div class="row align-items-center">
-          <mat-checkbox class="col-md-3" #didSendCV formControlName="didSendCV">
+    <div class="row align-items-center" *ngIf="job.Id!=null">
+        <div class="col-md-1"></div>
+        <mat-checkbox class="col-md-3" #didSendCV formControlName="didSendCV">
             <span class="text">נשלחו מועמדים</span>
           </mat-checkbox>
           <mat-checkbox class="col-md-2" #isActive formControlName="isActive">
@@ -71,10 +91,11 @@
             </mat-select>
         </mat-form-field>
         </div>
-      <br><br>
+      <br>
       <div class="row justify-content-center">
-        <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
-        <button mat-raised-button type="submit" [disabled]="jobForm.invalid||!jobForm.dirty">{{job.Id==null?"הוסף":"עדכן"}}</button>
+        <div class="col-md-4"></div>
+        <button class="col-md-1" mat-stroked-button color="primary" type="button" (click)="onCancel()">ביטול</button>&nbsp;
+        <button class="col-md-1" mat-stroked-button color="primary" type="submit" [disabled]="jobForm.invalid||!jobForm.dirty">{{job.Id==null?"הוסף":"עדכן"}}</button>
         </div>
         </form>
         <br>
@@ -83,14 +104,14 @@
 <div class="container">
   <div class="row justify-content-center" *ngIf="job.Id!=null">
    
-      <button (click)="MatchJobCandidates()" class="col-md-4" mat-stroked-button >
+      <button (click)="MatchJobCandidates()" class="col-md-4" mat-raised-button >
         <a *ngIf="job.Id!=null" [href]="location.path()+'#jobsCoordination'"></a>
         התאמת מועמדים למשרה
       </button>
   </div>
 <br><br>
 <div class="row"  *ngIf="job.Id!=null">
-      <app-jobs-coordination id="jobsCoordination" [jobID]='job.Id' (sendCndidate)="didSendCV.checked = true;" class="col-md-12"></app-jobs-coordination>
+      <app-jobs-coordination id="jobsCoordination" [jobID]='job.Id' (placed)="onPlaced();" (sendCndidate)="onPlaced()" class="col-md-12"></app-jobs-coordination>
     </div>
 </div>
 

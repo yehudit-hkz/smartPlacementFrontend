@@ -1,12 +1,12 @@
 table {
-    width: 98%;
-   margin-right: 9px ;
+  width: 98%;
+  margin-right: 9px ;
   overflow: auto;
   direction: rtl;
-  }
-  th,td{
-      width: 18%;
-  }
+}
+th,td{
+    width: 18%;
+}
 
 //   .example-container {
 //     position: absolute;
@@ -17,10 +17,12 @@ table {
 //    // background: #eee;
 
 //  }
+
  mat-sidenav{
  width: 20%;
  background: rgb(252, 252, 252);
  } 
  mat-sidenav-content{
    background-color: white;
+   height: 450px;
  }

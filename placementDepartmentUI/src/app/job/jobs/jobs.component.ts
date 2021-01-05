@@ -6,9 +6,10 @@ import { MainService } from '../../services/main.service';
 import { JobFilters } from '../../classes/filters';
 import { EnumListsService } from '../../services/enum-lists.service';
 import { ListsService } from '../../services/lists.service';
-import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog.component';
+import { DeletionDialogComponent } from '../../messages/deletion-dialog/deletion-dialog.component';
   import {merge, Observable, of as observableOf} from 'rxjs';
   import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
   
 
 @Component({
@@ -19,7 +20,7 @@ import { DeletionDialogComponent } from 'src/app/deletion-dialog/deletion-dialog
     trigger('detailExpand', [
       state('collapsed', style({height: '0px', minHeight: '0'})),
       state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('expanded <=> collapsed', animate('500ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
@@ -32,23 +33,23 @@ export class JobsComponent implements OnInit, AfterViewInit {
   isRateLimitReached = false;
   expandedElement: Job | null;
   filters:JobFilters;
-  panelList;
+  panelList:any[];
   sendCV;
   active;
-  dates;
   periodValue;
-  startDateValue;
-  endDateValue = new Date();
   maxDate=new Date();
+  date = {begin: new Date(''), end: new Date('')}
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor( 
-    public dialog: MatDialog,
-    private snackBar: MatSnackBar,
+    private snackBar:MatSnackBar,
+    public dialog   :MatDialog,
     public Mservice :MainService,
-    public Eservice:EnumListsService,
-    public Lservice:ListsService) 
+    public Eservice :EnumListsService,
+    public Lservice :ListsService,
+    private authService: AuthService) 
     {
       this.sendCV=[
           {Id:true,name:'נשלחו'},
@@ -69,7 +70,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
         switchMap(() => {
           this.isLoadingResults = true;
           return this.Mservice.GetLazyList( "Job",
-           " ,"+this.sort.active+" "+this.sort.direction,
+           this.sort.active+" "+this.sort.direction+", ",
             this.paginator.pageIndex,this.paginator.pageSize,
             this.filters);
         }),
@@ -90,12 +91,17 @@ export class JobsComponent implements OnInit, AfterViewInit {
       ).subscribe(data =>{
         this.jobs = data; 
         if(!this.panelList)
+        {
           this.panelList=[
           { name:"שליחת מועמדים", sublist:this.sendCV, selecedlist:[]},
           { name:"פעילה", sublist:this.active, selecedlist:[]},
+          { name:"סיבת סגירה", sublist:this.Eservice.reasonsForClosing, selecedlist:[]},
           { name:"תקופה", sublist:[], selecedlist:[]},
           { name:"מקצוע", sublist:this.Lservice.subjects, selecedlist:[]},
         ];
+        if(this.authService.user.Permission.Id == 1)
+          this.panelList.push({ name:"משתמש", sublist:this.Lservice.users, selecedlist:[]})
+      }
       });
   }
 
@@ -108,28 +114,28 @@ export class JobsComponent implements OnInit, AfterViewInit {
        this.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
      
   }
+
   applyFilter(){
 
     this.filters=new JobFilters();
     this.filters.sendCV=this.panelList[0].selecedlist;
     this.filters.active=this.panelList[1].selecedlist;
-
+    this.filters.ReasonClosing=this.panelList[2].selecedlist;
     this.filters.period=this.periodValue;
     if(this.filters.period==2)
     {
-      if(!this.endDateValue)this.endDateValue = new Date();
-      if(!this.startDateValue)this.startDateValue = this.endDateValue;
-      this.filters.startDate =this.startDateValue.toISOString(); 
-      this.filters.endDate =this.endDateValue.toISOString();
+      this.filters.startDate =this.date.begin.toISOString(); 
+      this.filters.endDate =this.date.end.toISOString();
     }
-    this.filters.subjects=this.panelList[3].selecedlist;
+    this.filters.subjects=this.panelList[4].selecedlist;
+    this.filters.user=this.panelList[5].selecedlist;
     this.paginator.pageIndex = 0;
    merge().pipe(
       startWith({}),
       switchMap(() => {
         this.isLoadingResults = true;
         return this.Mservice.GetLazyList( "Job",
-         " ,"+this.sort.active+" "+this.sort.direction,
+        this.sort.active+" "+this.sort.direction+", ",
           this.paginator.pageIndex,this.paginator.pageSize,
           this.filters);
       }),
@@ -152,31 +158,28 @@ export class JobsComponent implements OnInit, AfterViewInit {
 
 cleanPeriod(){
   this.periodValue='';
-  this.startDateValue='';
-  this.endDateValue=new Date();
+  this.date = {begin: null, end: null};
 }
 
-  openDeletionDialog(job:Job): void {
-    const dialogRef = this.dialog.open(DeletionDialogComponent, {
-      width: '300px',
-      data: {name: job.title , type: "משרה", sub:"ההתאמות שלה עבור הבוגרים"}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      if(result==true){
-        console.log(`Dialog result: ${result}`);
-        this.Mservice.Delete('Job',job.Id).subscribe(res=>{
-          this.jobs = this.jobs.filter(j=> j.Id != job.Id);
-          this.snackBar.open("המשרה נמחקה בהצלחה!", "סגור", {
-            duration: 6000,
-            direction:"rtl",
-          });  
-        }
-        ,err=>this.Mservice.showServerError());
-       
-      }
-    });
-  }
+openDeletionDialog(job:Job): void {
+  const dialogRef = this.dialog.open(DeletionDialogComponent, {
+    width: '300px',
+    data: {name: job.title , type: "משרה"}
+  });
+  dialogRef.afterClosed().subscribe(result => {
+    console.log('The dialog was closed');
+    if(result==true){
+      console.log(`Dialog result: ${result}`);
+      this.Mservice.Delete('Job',job.Id).subscribe(res=>{
+        this.jobs = this.jobs.filter(j=> j.Id != job.Id);
+        this.snackBar.open("המשרה נמחקה בהצלחה!", "סגור", {
+          duration: 6000,
+          direction:"rtl",
+        }); 
+      })
+    }
+  });
+}
 
 }
 

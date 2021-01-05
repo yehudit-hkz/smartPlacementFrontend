@@ -5,4 +5,5 @@ export class ChartsDetails
     end:string;
     branches:number[];
     areas:string[];
+    userid:number;
 } 

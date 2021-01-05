@@ -13,6 +13,7 @@ import {map, startWith} from 'rxjs/operators';
 import { ChartsDetails } from '../classes/chartDetails';
 import { Branch } from '../classes/my-enum-list';
 import { EnumListsService } from '../services/enum-lists.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-charts',
@@ -23,7 +24,6 @@ import { EnumListsService } from '../services/enum-lists.service';
   }]
 })
 export class ChartsComponent implements OnInit {
-
   public barChartType: ChartType = 'bar';
   public barChartLabels: Label[];
   public barChartData: ChartDataSets[] = [
@@ -46,33 +46,37 @@ export class ChartsComponent implements OnInit {
       }
     },
   };
-  // public chartColors: Array<any> = [
-  //   { // first color
-  //     backgroundColor: 'rgba(225,10,24,0.2)',
-  //     borderColor: 'rgba(225,10,24,0.2)',
-  //     pointBackgroundColor: 'rgba(225,10,24,0.2)',
-  //     pointBorderColor: '#fff',
-  //     pointHoverBackgroundColor: '#fff',
-  //     pointHoverBorderColor: 'rgba(225,10,24,0.2)'
-  //   },
-  //   { // second color
-  //     backgroundColor: 'rgba(77, 10, 15, 0.2)',
-  //     borderColor: 'rgba(77, 10, 15, 0.2)',
-  //     pointBackgroundColor: 'rgba(77, 10, 15, 0.2)',
-  //     pointBorderColor: '#fff',
-  //     pointHoverBackgroundColor: '#fff',
-  //     pointHoverBorderColor: 'rgba(77, 10, 15, 0.2)'
-  //   }];
+  public chartColors: Array<any> = [
+    { // first color
+      backgroundColor: 'rgba(255, 214, 0,0.5)',
+      borderColor: 'rgba(255, 214, 0,0.5)',
+      pointBackgroundColor: 'rgba(255, 214, 0,0.5)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(255, 214, 0,0.5)'
+    },
+    { // second color
+      backgroundColor: 'rgba(20, 84, 34, 0.5)',
+      borderColor: 'rgba(20, 84, 34, 0.5)',
+      pointBackgroundColor: 'rgba(20, 84, 34, 0.5)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(20, 84, 34, 0.5)'
+    }];
   chartsDetails:ChartsDetails=new ChartsDetails();
   typeFormGroup: FormGroup;
   detailsFormGroup: FormGroup;
   minDate: Date = new Date(1999,12,1);
   maxDate: Date = new Date();
   autoLength;
+  userid:number;
+  lastIndex = 2;
+  typeIndex = 0;
   constructor(private _formBuilder: FormBuilder,
-    private Lservice:ListsService,
+    public Lservice:ListsService,
     public Eservice:EnumListsService,
-    private Mservice:MainService) { }
+    private Mservice:MainService,
+    public authService: AuthService) { }
      
 
   ngOnInit() {
@@ -85,11 +89,18 @@ export class ChartsComponent implements OnInit {
       areas:[[]],
       branches:[[]],
     });
+    this.userid = this.authService.user.Id;
+    if(this.authService.user.Permission.Id == 1)
+    {
+      this.lastIndex = 3;
+      this.typeIndex = 1;
+    }
     // this.filteredBranches = this.branchCtrl.valueChanges.pipe(  //this.detailsFormGroup.controls["branches"].valueChanges.pipe(
     //   startWith(null),
     //   map((branch: string | null) => branch ? this._filter(branch) : this.Lservice.branches));
     //   this.branchCtrl.valueChanges.subscribe(res=>{this.autoLength=this._filter(res).length;})
   }
+  
   
   public hasError = (controlName: string, errorName: string) =>{
     return this.typeFormGroup.controls[controlName].hasError(errorName);
@@ -99,8 +110,9 @@ export class ChartsComponent implements OnInit {
   initChart(){
     console.log();
     this.barChartLabels=this.Lservice.subjects.map(s=>s.name);  
+    this.chartsDetails.userid=this.userid;
     this.chartsDetails.type=this.typeFormGroup.value.type;
-    if(this.chartsDetails.type in [1,3]){
+    if(this.chartsDetails.type != 2){
     this.chartsDetails.start=this.detailsFormGroup.value.startDateValue!=null?
     this.detailsFormGroup.value.startDateValue.toISOString():
     new Date('2000-01-01').toISOString();
@@ -123,13 +135,6 @@ export class ChartsComponent implements OnInit {
       );
    
   }
-  // public chartClicked({ event, active }: { event: MouseEvent, active: {}[] }): void {
-  //   // console.log(event, active);
-  // }
-
-  // public chartHovered({ event, active }: { event: MouseEvent, active: {}[] }): void {
-  //   // console.log(event, active);
-  // }
   public randomize(): void {
     this.barChartType = this.barChartType === 'bar' ? 'line' : 'bar';
   }
@@ -173,14 +178,7 @@ export class ChartsComponent implements OnInit {
     this.removeFirst(branches, branche);
     this.detailsFormGroup.setValue({["branches"]:branches}); // To trigger change detection
   }
-
-  // private removeFirst<T>(array: T[], toRemove: T): void {
-  //   const index = array.indexOf(toRemove);
-  //   if (index !== -1) {
-  //     array.splice(index, 1);
-  //   }
-  // }
-
+  
   onAreaRemoved(area: string) {
     const areas = this.detailsFormGroup.value.areas as string[];
     this.removeFirst(areas, area);

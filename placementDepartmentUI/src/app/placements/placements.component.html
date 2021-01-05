@@ -1,0 +1,147 @@
+<mat-toolbar>
+    <span >השמות</span>
+</mat-toolbar>
+    <!-- sidenav filter -->
+    <mat-sidenav-container class="example-container">
+      <mat-sidenav mode="side" position="end" opened  >
+        <mat-toolbar style="background-color: white;"><span>סינון</span></mat-toolbar>
+        <mat-divider [inset]="true"></mat-divider>
+        <br>
+        <mat-accordion  multi="true">
+          <mat-expansion-panel  *ngFor="let item of panelList" class="mat-elevation-z0" >
+            <mat-expansion-panel-header >
+                     <span>{{item.name}}</span>
+                     <span class="example-spacer"></span>
+                     <!-- clear button -->
+                     <button style="
+                     margin-left: 15px;
+                     height:20px !important;
+                     width:20px !important;" 
+                     *ngIf="item.name=='תקופה'?periodValue:item.selecedlist.length>0" 
+                     (click)="item.name=='תקופה'?cleanPeriod():item.selecedlist=[];applyFilter();" 
+                     mat-icon-button>
+                      <mat-icon style="
+                      margin-top  : -30px;
+                      height:14px !important;
+                      width:14px !important;
+                      font-size:15px !important;" matTooltip="ניקוי">clear</mat-icon>
+                    </button>
+                 </mat-expansion-panel-header>
+                 <!-- select list -->
+                 <mat-selection-list *ngIf="item.name!='תקופה'" [(ngModel)]="item.selecedlist">
+                   <mat-list-option  
+                   checkboxPosition="before" 
+                   (click)="applyFilter()" 
+                   [value]="subItem.Id"
+                   *ngFor="let subItem of item.sublist" >
+                     <span class="mat-sidenav-content-item">
+                       {{item.name!='סטטוס'?subItem.name:subItem.description}}
+                      </span>
+                   </mat-list-option>
+                 </mat-selection-list>
+                  <!-- period  list -->
+                  <mat-radio-group 
+                  [(ngModel)]="periodValue" 
+                  (change)="periodValue == 1 || periodValue == 2 && date.begin != null ? applyFilter():'' "
+                  *ngIf="item.name=='תקופה'" >
+                  <!-- radio -->
+                       <mat-radio-button style="margin: 7px;" value="1">
+                         <span class="mat-sidenav-content-item">חודש אחרון</span>
+                       </mat-radio-button><br>
+                       <mat-radio-button style="margin: 7px;" value="2" >
+                         <span class="mat-sidenav-content-item">בין התאריכים:</span>
+                       </mat-radio-button>
+                       <br>
+                  <!-- date -->
+                       <mat-form-field style="max-width: 100%;font-size: 15px;">
+                         <input matInput
+                             placeholder="בחר טווח"
+                             [satDatepicker]="picker"
+                             readonly
+                             [disabled]="periodValue != 2"
+                             [max]="maxDate"
+                             [(ngModel)]="date"
+                             (click)="picker.open()"
+                             (dateChange)="periodValue == 2?applyFilter():''">
+                         <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+                         <sat-datepicker #picker dir="rtl" [rangeMode]="true" ></sat-datepicker>
+                       </mat-form-field>
+                     </mat-radio-group>
+               </mat-expansion-panel >
+        </mat-accordion>
+      </mat-sidenav>
+<mat-sidenav-content>
+<!-- main  -->
+<div class="container">
+  <br>
+  <!-- placement list -->
+  <div class="row  table-container" >
+    <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+    <mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
+     &nbsp; ארעה שגיאה      
+      </div>
+    </div>
+    <!-- <div class="row"> -->
+    <div class="col-md-12 ">
+<table mat-table [dataSource]="jobsCoordination" class="mat-elevation-z2"  matSort >
+    <ng-container matColumnDef="jobId">
+      <th mat-header-cell *matHeaderCellDef  mat-sort-header style="width: 6% !important;"> קוד משרה  </th>
+      <td mat-cell *matCellDef="let jc" style="width: 6% !important;"> 
+        <a  routerLink="/job-form/{{jc.jobId}}" matTooltip="לפרטי המשרה">{{jc.jobId}}</a>
+      </td>
+    </ng-container>
+      <ng-container matColumnDef="jobSubject">
+        <th mat-header-cell *matHeaderCellDef  mat-sort-header> מקצוע  </th>
+        <td mat-cell *matCellDef="let jc"> {{jc.jobSubject.name}} </td>
+      </ng-container>
+      <ng-container matColumnDef="companyName">
+        <th mat-header-cell *matHeaderCellDef  mat-sort-header> חברה  </th>
+        <td mat-cell *matCellDef="let jc"> {{jc.companyName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="candidateName">
+        <th mat-header-cell *matHeaderCellDef  mat-sort-header> שם המועמד </th>
+        <td mat-cell *matCellDef="let jc"> 
+        <a routerLink="/graduate-editing/{{jc.candidateId}}" matTooltip="לפרטי הבוגר"> {{jc.candidateName}}</a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="placementStatus">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 14% !important;"> סטטוס </th>
+        <td mat-cell *matCellDef="let jc" style="width: 14% !important;">
+          <mat-select  [(ngModel)]="jc.Status.Id">
+          <mat-option *ngFor="let s of Eservice.jobCoordinationStatuses" [value]="s.Id">{{s.description}}</mat-option>
+        </mat-select>
+          </td>
+      </ng-container>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef style="width: 6% !important;"></th>
+        <td mat-cell *matCellDef="let jc" style="text-align: center;width: 6% !important;"> 
+          <button (click)="updateStatus(jc)" mat-icon-button>
+              <mat-icon matTooltip="שמור">save</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="dateReceived" >
+        <th mat-header-cell *matHeaderCellDef  mat-sort-header class="date"> תאריך רישום </th>
+        <td mat-cell *matCellDef="let jc" class="date"> {{jc.dateReceived|date:'dd/MM/yyyy'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="lastUpdateDate" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="date">תאריך עדכון אחרון </th>
+          <td mat-cell *matCellDef="let jc"class="date" >{{jc.lastUpdateDate|date:'dd/MM/yyyy'}} </td>
+        </ng-container>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay"></tr>
+  </table>
+</div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+<mat-paginator style="margin-top: 7px;"  [length]="resultsLength" [pageSizeOptions]="[50, 30, 100, 200]"></mat-paginator>
+</div>
+</div>
+</div>
+<br>
+<br>
+</mat-sidenav-content>
+</mat-sidenav-container>

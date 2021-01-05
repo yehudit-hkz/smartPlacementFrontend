@@ -1,14 +1,27 @@
 <section id="wrapper" > 
     <mat-toolbar class="mat-elevation-z6">
-        <img src="assets/img/logo-b.png" height="50px">
+        <img src="assets/img/logo-gp.png" height="50px">
         &nbsp; &nbsp; &nbsp;
         <div >
-            <a mat-button routerLink="graduates">בוגרים</a>
-            <a mat-button routerLink="jobs">משרות</a>
-            <a mat-button routerLink="companies">חברות</a>
-            <a mat-button routerLink="Charts">תרשימים</a>
-            
+          <a mat-button *ngFor="let p of authService.pages" routerLink="/{{p.uri}}">{{p.name}}</a>
         </div>
+        <span class="spacer"></span>
+        <span *ngIf="authService.user" style="font-size: 16px;">
+          {{authService.user.name}}
+          <button mat-icon-button [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="ChangeInitPassword()">
+              <mat-icon>lock</mat-icon>
+              <span>החלפת סיסמא</span>
+            </button>
+            <button mat-menu-item (click)="authService.logout(false);" >
+              <mat-icon>power_settings_new</mat-icon>
+              <span>יציאה</span>
+            </button>
+          </mat-menu>
+        </span>
       </mat-toolbar>
         <article>
            <router-outlet></router-outlet>

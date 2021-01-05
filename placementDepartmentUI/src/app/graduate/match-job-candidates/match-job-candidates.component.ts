@@ -1,11 +1,12 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import {SelectionModel } from '@angular/cdk/collections'
-import { MatTableDataSource, MAT_DIALOG_DATA, MatSort } from '@angular/material';
+import { MatTableDataSource, MAT_DIALOG_DATA, MatSort, MatSnackBar, MatDialog, MatDialogRef } from '@angular/material';
 import { MainService } from 'src/app/services/main.service';
 import { Subject } from 'src/app/classes/my-enum-list';
 import { Graduate } from 'src/app/classes/graduate';
 import { ListsService } from 'src/app/services/lists.service';
 import { EnumListsService } from 'src/app/services/enum-lists.service';
+import { IOerrorComponent } from 'src/app/messages/ioerror/ioerror.component';
 
 export interface MatchData {
   subject: number;
@@ -28,22 +29,18 @@ export class MatchJobCandidatesComponent implements OnInit {
   dataSource:MatTableDataSource<Graduate>;
   selection = new SelectionModel<Graduate>(true, []);
 
+  CVFilter:boolean;
+  graduateFilter:boolean;
+  diplomFilter:boolean;
+  experienceFilter:boolean;
+
   panellist;
-  CVFilter: filter[] = [
-    { value: true, active: false, name: 'יש' },
-    { value: false, active: false, name: 'אין' },
-  ];
   genderFilter: filter[] = [
     { value: 'זכר', active: false, name: 'זכר' },
     { value: 'נקבה', active: false, name: 'נקבה' },
   ];
-  experienceFilter: filter[]=[
-    { value: true, active: false, name: 'יש' },
-    { value: false, active: false, name: 'אין' },
-  ]
   branchFilter: filter[]=[];
   areasFilter: filter[]=[];
-  // expertiseFilter: filter[]=[];
 
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -51,20 +48,19 @@ export class MatchJobCandidatesComponent implements OnInit {
   constructor(public Mservice:MainService,
     public Eservice:EnumListsService,
    public Lservice:ListsService,
+   private snackBar: MatSnackBar,
+   private dialog :MatDialog,
+   public dialogRef: MatDialogRef<MatchJobCandidatesComponent>,
    @Inject(MAT_DIALOG_DATA) public data:MatchData) { 
     this.panellist=[
-      { name:'קו"ח',sublist:this.CVFilter},
-      { name:'ניסיון',sublist:this.experienceFilter},
       { name:"מגדר",sublist:this.genderFilter},
       { name:"שלוחה",sublist:this.branchFilter},
       { name:"איזור מגורים",sublist:this.areasFilter},
-      // { name:"תחום הכשרה",sublist:this.expertiseFilter}
   ];
     }
 
   ngOnInit() {
       this.Mservice.GetGraduateForJob(this.data.subject,this.data.job).subscribe(graduates=>
-      // this.Mservice.GetAllList('Graduate').subscribe(graduates=>
         {
          //Assign the data to the data source for the table to render
          this.dataSource = new MatTableDataSource(graduates);
@@ -80,27 +76,26 @@ export class MatchJobCandidatesComponent implements OnInit {
          this.dataSource.filterPredicate=this.customFilterPredicate();
          this.Lservice.branches.forEach(b=>
           this.branchFilter.push({value:b.Id,active:false,name:b.name}));
-          this.Eservice.areas.forEach(a=>
+          this.Lservice.areas.forEach(a=>
             this.areasFilter.push({value:a,active:false,name:a}));
-          // this.Lservice.expertise.forEach(e=>
-          //   this.expertiseFilter.push({value:e.Id,active:false,name:e.name}));
        } ,
         err=>{console.log(err);}
        );
   }
   customFilterPredicate() {
     const myFilterPredicate = (data: Graduate, filter: string): boolean => {
-      let res= (this.CVFilter.filter(has => !has.active).length === this.CVFilter.length ||
-          this.CVFilter.filter(has => has.active).some(has => has.value === (data.linkToCV?true:false))) &&
+      let res =
+          (!this.CVFilter || this.CVFilter === (data.linkToCV?true:false)) &&
+          (!this.graduateFilter || this.graduateFilter === data.didGraduate) &&
+          (!this.diplomFilter || this.diplomFilter === data.hasDiploma) &&
+          (!this.experienceFilter || this.experienceFilter === data.hasExperience) &&
           (this.genderFilter.filter(gender => !gender.active).length === this.genderFilter.length ||
-             this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.gender))&&
-             (this.areasFilter.filter(area => !area.active).length === this.areasFilter.length ||
-             this.areasFilter.filter(area => area.active).some(area => area.value === data.City.area))&&
-             (this.branchFilter.filter(branch => !branch.active).length === this.branchFilter.length ||
-             this.branchFilter.filter(branch => branch.active).some(branch => branch.value === data.Branch.Id));//&&
-            //  (this.expertiseFilter.filter(expertise => !expertise.active).length === this.expertiseFilter.length ||
-            //  this.expertiseFilter.filter(expertise => expertise.active).some(expertise => expertise.value === data.Expertise.Id));
-    
+           this.genderFilter.filter(gender => gender.active).some(gender => gender.value === data.gender))&&
+          (this.areasFilter.filter(area => !area.active).length === this.areasFilter.length ||
+           this.areasFilter.filter(area => area.active).some(area => area.value === data.City.area))&&
+          (this.branchFilter.filter(branch => !branch.active).length === this.branchFilter.length ||
+           this.branchFilter.filter(branch => branch.active).some(branch => branch.value === data.Branch.Id));//&&
+         
     if(this.selection.isSelected(data)&&res==false)
           this.selection.toggle(data);
     return res;
@@ -138,7 +133,27 @@ export class MatchJobCandidatesComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.Id + 1}`;
   }
+  
   addCoordination(){
-    this.Mservice.SaveCoordinations(this.data.job,this.selection.selected).subscribe(res=>this.Mservice.showServerError());
+    this.snackBar.open("שולח...", "סגור", {
+      duration: 360000,
+      direction:"rtl",
+    });
+    this.Mservice.SaveCoordinations(this.data.job,this.selection.selected).subscribe(async res=>{
+      this.dialogRef.close(true);
+      if(res.length == 0){
+        this.snackBar.open("המיילים נשלחו בהצלחה", "סגור", {
+          duration: 6000,
+          direction:"rtl",
+        }) 
+      }
+      else{
+        const EdialogRef = this.dialog.open(IOerrorComponent, {
+          width: '300px',
+          data: {type: 'E' , desc:"ארעה שגיאה בשליחת ההצעה עבור הבוגרים:", items:res}
+        });
+        await EdialogRef.afterClosed().toPromise();
+      }
+    });
   }
 }

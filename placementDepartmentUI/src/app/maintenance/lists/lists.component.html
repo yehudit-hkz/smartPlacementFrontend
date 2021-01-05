@@ -1,0 +1,22 @@
+<mat-toolbar>
+    <span >תחזוקת נתונים</span>
+</mat-toolbar>
+<br>
+<br>
+<div class="container">
+    <div  class="row justify-content-around">
+<a  *ngFor="let c of controllers" routerLink="/{{c.link}}" class="col-md-4">
+    <mat-card >
+        <mat-card-header>
+          <mat-card-title>{{c.name}}</mat-card-title>
+          <span class="spacer"></span>
+          <mat-icon>{{c.icon}}</mat-icon>
+        </mat-card-header>
+        <mat-card-content style="text-align: right;white-space: pre-wrap;overflow-wrap: normal;">
+            <p>
+            {{c.desc}}
+            </p>
+        </mat-card-content>
+    </mat-card>
+</a>
+</div>

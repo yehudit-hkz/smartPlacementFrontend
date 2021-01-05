@@ -26,7 +26,9 @@ table,mat-paginator {
     }
 }
 
- 
+.example-spacer {
+  flex: 1 1 auto;
+}
   .example-icon {
      padding-left: 200px;    
   }
@@ -49,5 +51,36 @@ table,mat-paginator {
   } 
   mat-sidenav-content{
     background-color: white;
+  }
+  .mat-sidenav-content-item{
+    margin-right: 10px !important;
+    font-size: 15px !important;
+  }
+
+//lazy lauding
+  .table-container {
+    position: relative;
+  justify-content: center;
+  min-height: 140px;
+  }
+  .example-loading-shade {
+    position: absolute;
+    top: 0;
+    // left: 0;
+    bottom: 0; 
+    // right: 0;
+    width: 97.5%;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .example-rate-limit-reached {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+    font-size: 22px;
   }
   

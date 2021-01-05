@@ -7,13 +7,10 @@
     <div class="row">
         <span style="font-size: 28px;" class="col-md-8">{{graduate.firstName}}&nbsp;{{graduate.lastName}}</span>
         <div class="col-md-4" style="text-align: center;">
-            <!-- <button (click)="openCVFile()" mat-icon-button>
+            <button (click)="openCVFile()" [disabled]="!graduate?.linkToCV" mat-icon-button>
                 <mat-icon matTooltip='פתיחת קובץ קו"ח'>insert_drive_file</mat-icon>
-           </button>  -->
-            <a target="_blank" [disabled]="!graduate.linkToCV" [href]="service.URL+graduate.linkToCV" mat-icon-button>
-                <mat-icon matTooltip='פתיחת קובץ קו"ח'>insert_drive_file</mat-icon>
-            </a>‏
-            <a routerLink="/graduate-editing/{{graduate.Id}}" routerLinkActive="activeLink" mat-icon-button>
+           </button> 
+            <a routerLink="/graduate-editing/{{graduate?.Id}}" routerLinkActive="activeLink" mat-icon-button>
                 <mat-icon matTooltip="עריכה">edit</mat-icon>
             </a>
             <button (click)="openDeletionDialog()" mat-icon-button>
@@ -56,12 +53,12 @@
                 </tr>
                 <tr>
                     <td class="title">דוא"ל:</td>
-                    <td style="direction: ltr;">{{graduate.email}}</td>
+                    <td dir="ltr">{{graduate.email}}</td>
                 </tr>
                 <tr>
                     <td class="title"> שפות נוספות:</td>
                     <td>
-                        <li *ngFor="let l of graduate.Languages">{{l.languageName}}&nbsp;{{l.level==1?"-שפת אם":""}}</li>
+                        <li *ngFor="let l of graduate?.Languages">{{l.languageName}}&nbsp;{{l.level==1?"-שפת אם":""}}</li>
                     </td>
                 </tr>
                 <tr>
@@ -96,15 +93,15 @@
                     <td class="title">עובד בתחום?</td>
                     <td>{{graduate.isWorkerInProfession?"כן":"לא"}}</td>
                 </tr>
-                <tr *ngIf="graduate.isWorkerInProfession">
+                <tr *ngIf="graduate?.isWorkerInProfession">
                     <td class="title">שם החברה:</td>
                     <td>{{graduate.companyName}}</td>
                 </tr>
-                <tr *ngIf="graduate.isWorkerInProfession">
+                <tr *ngIf="graduate?.isWorkerInProfession">
                     <td class="title">תפקיד:</td>
                     <td>{{graduate.role}}</td>
                 </tr>
-                <tr *ngIf="graduate.isWorkerInProfession">
+                <tr *ngIf="graduate?.isWorkerInProfession">
                     <td class="title">הושם ע"י מחלקת ההשמה?</td>
                     <td>{{graduate.placedByThePlacementDepartment?"כן":"לא"}}</td>
                 </tr>
@@ -132,5 +129,5 @@
 
     <br><br>
     <br><br>
-<br>
+    <br>
 </div>

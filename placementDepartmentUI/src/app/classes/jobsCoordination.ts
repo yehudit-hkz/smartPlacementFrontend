@@ -2,11 +2,13 @@ import{Subject,JobCoordinationStatus} from './my-enum-list'
 
 export class JobsCoordination{
     Id:number;
-    dateReceived:Date;
-    lastUpdateDate:Date; 
     candidateId:string;
     candidateName:string;
+    linkToCV:string;
     jobId:number;
     jobSubject:Subject;
+    companyName:string;
     Status:JobCoordinationStatus;
+    dateReceived:Date;
+    lastUpdateDate:Date; 
 }

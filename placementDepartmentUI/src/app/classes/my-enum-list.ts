@@ -33,8 +33,3 @@ export class ReasonForClosingThePosition{
     description:string;
 }
 
-/////////////////////////
-export class Permission{
-    Id:number;
-    description:string;
-}

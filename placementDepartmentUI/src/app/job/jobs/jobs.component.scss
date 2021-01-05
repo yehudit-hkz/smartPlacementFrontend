@@ -16,12 +16,9 @@
   }
   
   tr.example-element-row.example-expanded-row {
-    font-weight: bold;
+    font-weight: bolder;
     font-style: italic;
-    
-    // background:rgb(230, 230, 230 ); 
-    background: rgb(245, 245, 255);
-
+    background:rgb(237, 245, 240);
   }
 
   tr.example-element-row:not(.example-expanded-row):hover {
@@ -36,12 +33,12 @@
     border-bottom-width: 0;
   }
   .example-element-row.example-expanded-row td {
-  color:rgb(29, 14, 95);
+  color:rgb(20, 84, 41);
   }
   
   .example-element-detail {
     overflow: hidden;
-    color:rgb(29, 14, 95);
+    color:rgb(20, 84, 41)
     // display: flex;
   }
   
@@ -61,47 +58,47 @@
 
   }
   
-    ::ng-deep .mat-paginator {
-     
-      // override material paginator page switch
-      // .mat-paginator-range-label {
-      //     order: 2;
-      // }
-      .mat-paginator-navigation-previous {
-          // order: 1;
-          -webkit-transform: scaleX(-1);
-          transform: scaleX(-1);
-      }
-      .mat-paginator-navigation-next {
-          // order: 3;
-          -webkit-transform: scaleX(-1);
-          transform: scaleX(-1);
-      }
+  ::ng-deep .mat-paginator {
+    
+    // override material paginator page switch
+    // .mat-paginator-range-label {
+    //     order: 2;
+    // }
+    .mat-paginator-navigation-previous {
+        // order: 1;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+    .mat-paginator-navigation-next {
+        // order: 3;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+}
+      
+  .example-container {
+      position: absolute;
+    top: 150px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    // background: #eee;
   }
-        
-    .example-container {
-       position: absolute;
-      top: 150px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      // background: #eee;
-    }
-    mat-sidenav{
-    width: 20%;
-    background: rgb(252, 252, 252);
-    border: 3px;
-    } 
-    mat-sidenav-content{
-      background-color: white;
-    }
-    .mat-sidenav-content-item{
-      margin-right: 10px !important;
-      font-size: 15px !important;
-    }
-    .example-spacer {
-      flex: 1 1 auto;
-    }
+  mat-sidenav{
+  width: 20%;
+  background: rgb(252, 252, 252);
+  border: 3px;
+  } 
+  mat-sidenav-content{
+    background-color: white;
+  }
+  .mat-sidenav-content-item{
+    margin-right: 10px !important;
+    font-size: 15px !important;
+  }
+  .example-spacer {
+    flex: 1 1 auto;
+  }
 
 
    //// for lazy louding
@@ -130,4 +127,3 @@
     text-align: center;
     font-size: 22px;
   }
-  

@@ -5,25 +5,42 @@
     <br><br>
 <mat-vertical-stepper linear  #stepper >
     <ng-template matStepperIcon="edit" let-index="index">
-        <mat-icon *ngIf="index == 2">bar_chart</mat-icon>
-        <mat-icon *ngIf="index != 2">edit</mat-icon>
+        <mat-icon *ngIf="index == lastIndex">bar_chart</mat-icon>
+        <mat-icon *ngIf="index != lastIndex">edit</mat-icon>
     </ng-template>
     <ng-template matStepperIcon="done" let-index="index">
-        <mat-icon *ngIf="index == 2">bar_chart</mat-icon>
-        <mat-icon *ngIf="index != 2">done</mat-icon>
+        <mat-icon *ngIf="index == lastIndex">bar_chart</mat-icon>
+        <mat-icon *ngIf="index != lastIndex">done</mat-icon>
     </ng-template>
 
+    <mat-step *ngIf="authService.user.Permission.Id == 1" [stepControl]="UserFormGroup">
+      <ng-template matStepLabel>
+        <span class="text">בחר משתמש</span>
+      </ng-template>
+       <mat-radio-group [(ngModel)]="userid">
+        <span *ngFor="let u of Lservice.users">
+          <mat-radio-button [value]="u.Id"><span class="text">{{u.name}}</span></mat-radio-button>
+          <br>
+        </span>
+        <button mat-icon-button matStepperNext >
+          <mat-icon class="arrow"  matTooltip="הבא">arrow_back_ios</mat-icon>
+      </button>
+        </mat-radio-group>
+    </mat-step>
     <mat-step [stepControl]="typeFormGroup" >
       <ng-template matStepLabel>
-        <span [ngStyle]="{'color': hasError('type', 'required') ? 'red' : 'black'}" class="text">בחר תרשים- *חובה</span>
-      </ng-template>
+        <span [ngStyle]="{'color': stepper.selectedIndex == typeIndex && hasError('type', 'required') ? 'red' : 'black'}" class="text">בחר תרשים- *חובה </span>
+    </ng-template>
       <form [formGroup]="typeFormGroup">
             <mat-radio-group  aria-label="Select an option" formControlName="type" required>
               <mat-radio-button value="1"><span class="text">משרות שנפתחו</span></mat-radio-button><br>
               <mat-radio-button value="2"><span class="text">בוגרים מול משרות</span></mat-radio-button><br>
               <mat-radio-button value="3"><span class="text">השמות</span></mat-radio-button>
             </mat-radio-group>
-        <div>
+        <div class="row">
+          <button mat-icon-button matStepperPrevious *ngIf="authService.user.Permission.Id == 1" >
+            <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
+        </button> 
           <button mat-icon-button matStepperNext >
             <mat-icon class="arrow"  matTooltip="הבא">arrow_back_ios</mat-icon>
         </button>
@@ -90,17 +107,19 @@
           </mat-autocomplete>
         </mat-form-field> -->
         <mat-form-field  class="example-chip-list">
-          <mat-select formControlName="branches" multiple placeholder="בחר שלוחות" >
+          <mat-select color="accent" formControlName="branches" multiple placeholder="בחר שלוחות" >
         <mat-select-trigger>
           <mat-chip-list>
-            <mat-chip *ngFor="let branch of detailsFormGroup.value.branches"
+            <mat-chip  *ngFor="let branch of detailsFormGroup.value.branches"
               [removable]="true" (removed)="onBrachRemoved(branch)">
               <mat-icon matChipRemove>cancel</mat-icon>
               {{ branch.name }}
             </mat-chip>
           </mat-chip-list>
         </mat-select-trigger>
-        <mat-option *ngFor="let optBranch of Lservice.branches" [value]="optBranch">{{optBranch.name}}</mat-option>
+        <mat-option *ngFor="let optBranch of Lservice.branches" [value]="optBranch">
+          <span class="text" >{{optBranch.name}}</span>
+        </mat-option>
       </mat-select>
     </mat-form-field>
         <br>
@@ -115,7 +134,9 @@
                 </mat-chip>
               </mat-chip-list>
             </mat-select-trigger>
-            <mat-option *ngFor="let optArea of Eservice.areas" [value]="optArea">{{optArea}}</mat-option>
+            <mat-option *ngFor="let optArea of Lservice.areas" [value]="optArea">
+              <span>{{optArea}}</span>
+            </mat-option>
           </mat-select>
         </mat-form-field>
         <br/>
@@ -138,14 +159,12 @@
       <div class="row justify-content-center">
         <div class="col-md-12" style="display: block">
           <canvas baseChart 
-                [datasets]="barChartData" 
+              [datasets]="barChartData" 
               [labels]="barChartLabels" 
               [options]="barChartOptions"
               [legend]="barChartLegend" 
               [chartType]="barChartType" 
               [colors]="chartColors">
-              <!-- (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)" -->
           </canvas>
         </div>
       </div>
@@ -156,7 +175,7 @@
                 <mat-icon class="arrow" matTooltip="הקודם">arrow_forward_ios</mat-icon>
             </button>
             <button mat-icon-button (click)="stepper.reset();" >
-                <mat-icon matTooltip="אפס">refresh</mat-icon>
+                <mat-icon matTooltip="רענן">refresh</mat-icon>
             </button>
           </div>  
         <button class="col-md-2"  mat-button (click)="randomize()">החלפת תרשים</button>

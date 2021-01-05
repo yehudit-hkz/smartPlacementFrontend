@@ -3,13 +3,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Job }from '../../classes/job';
-import { Company } from '../../classes/company';
 import { MainService } from 'src/app/services/main.service';
 import { ListsService } from 'src/app/services/lists.service';
 import { EnumListsService } from 'src/app/services/enum-lists.service';
 import { MatSnackBar, MatDialog } from '@angular/material';
 import { MatchJobCandidatesComponent } from '../../graduate/match-job-candidates/match-job-candidates.component';
 import { JobsCoordinationComponent } from '../../job/jobs-coordination/jobs-coordination.component'
+import { CompanyService } from 'src/app/services/company.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-job-form',
@@ -27,24 +28,26 @@ export class JobFormComponent implements OnInit {
     private route:ActivatedRoute,
     public dialog: MatDialog,
     public Mservice :MainService,
+    public CCservice :CompanyService,
     public Lservice :ListsService,
-    public Eservice :EnumListsService) 
+    public Eservice :EnumListsService,
+    private authService: AuthService) 
     {
       this.jobForm = new FormGroup({
-        title: new FormControl("", [Validators.required,Validators.maxLength(50)]),
+        title: new FormControl("", [Validators.required]),
         subject: new FormControl("",[Validators.required]),
         description: new FormControl(""),
-        //// dateReceived: new FormControl("",[Validators.required]),
-        //// lastUpdateDate: new FormControl("",[Validators.required]),
         didSendCV: new FormControl(""),
         isActive: new FormControl(""),
         ReasonForClosing: new FormControl(""),
-        company : new FormControl(new Company()),
+        company : new FormControl("",[Validators.required]),
         contact: new FormControl(null,[Validators.required]),
-        // getting: new FormControl("",[Validators.required]),
-        // handles  : new FormControl("",[Validators.required]),
+        getting  : new FormControl(this.authService.user.name),
+        handles  : new FormControl(
+          this.Lservice.users?this.Lservice.users.find(u=>this.authService.user.Id==u.Id):""
+          ,[Validators.required]),
       });
-      Mservice.compenies
+      this.job.gettingId = this.authService.user.Id;
      }
 
   ngOnInit() {
@@ -54,36 +57,61 @@ export class JobFormComponent implements OnInit {
   });
   if(this.job.Id)
     this.Mservice.GetByID('Job',this.job.Id).subscribe(job=>
-     { this.job=job;
-           let tepCopmpany=this.Mservice.compenies.find(cm=>this.job.companyId==cm.Id);
+     { 
+      this.job=job;
+      this.CCservice.companiesObs.subscribe(res=>{
+        let tepCopmpany=res.find(cm=>this.job.companyId==cm.Id);
       this.jobForm = new FormGroup({
-        title: new FormControl( this.job.title,[Validators.required,Validators.maxLength(50)]),
+        title: new FormControl( this.job.title,[Validators.required]),
         subject: new FormControl(
          this.Lservice.subjects.find(s=>this.job.Subject.Id==s.Id)
          ,[Validators.required]),
         description: new FormControl(this.job.description),
-        ////view??
-        //// dateReceived: new FormControl("",[Validators.required]),
-        //// lastUpdateDate: new FormControl("",[Validators.required]),
         didSendCV: new FormControl(this.job.didSendCV),
         isActive: new FormControl(!this.job.isActive),
         ReasonForClosing: new FormControl(
           this.job.ReasonForClosing?this.Eservice.reasonsForClosing.find(r=>this.job.ReasonForClosing.Id==r.Id):''),
-        company: new FormControl(tepCopmpany),
-          contact: new FormControl(
-            tepCopmpany.Contact.find(cn=>this.job.contactId==cn.Id),
-            [Validators.required]),
-        //later:
-        //// getting: new FormControl("",[Validators.required]),
-        // handles  : new FormControl("",[Validators.required]),
+        company: new FormControl(tepCopmpany,[Validators.required]),
+        contact: new FormControl(
+          tepCopmpany.Contact.find(cn=>this.job.contactId==cn.Id),
+          [Validators.required]),
+        getting  : new FormControl(this.job.gettingName),
+        handles  : new FormControl(
+          this.Lservice.users?this.Lservice.users.find(u=>this.job.handlesId==u.Id):""
+          ,[Validators.required]),
+        });
       });
-      },
-     err=>{this.Mservice.showServerError()}
-    );
+      });
+    this.onList()
   }
 
+  displayFn(item?: any): string | undefined {
+    return item ? item.name : undefined;
+  }
   public hasError = (controlName: string, errorName: string) =>{
     return this.jobForm.controls[controlName].hasError(errorName);
+  }
+  onList(){
+    this.jobForm.controls["subject"].valueChanges.subscribe(subject=>{
+      subject = typeof(subject) == "string" ? subject : subject.name;
+      if(subject != '')
+      if( this.Lservice.subjects.findIndex(s=> s.name == subject ) == -1 ){
+        this.jobForm.controls["subject"].setErrors({invalidSubject:true})  
+      }
+      else{
+        this.jobForm.controls["subject"].setErrors(null)
+      }
+    })
+    this.jobForm.controls["company"].valueChanges.subscribe(company=>{
+      company = typeof(company) == "string" ? company : company.name;
+      if(company != '')
+      if(this.CCservice.companies.findIndex(c=> c.name == company ) == -1 ){
+        this.jobForm.controls["company"].setErrors({invalidCompany:true})  
+      }
+      else{
+        this.jobForm.controls["company"].setErrors(null)
+      }
+    })
   }
  
   public onCancel = () => {
@@ -108,36 +136,33 @@ export class JobFormComponent implements OnInit {
     newJob.ReasonForClosing=jobFormValue.ReasonForClosing;
     newJob.companyId=jobFormValue.company.Id;
     newJob.contactId=jobFormValue.contact.Id;
-    newJob.gettingId=1;
-    newJob.handlesId=1;
+    newJob.gettingId=this.job.gettingId;
+    newJob.handlesId=jobFormValue.handles.Id;
      if(this.job.Id){
        newJob.dateReceived=this.job.dateReceived;
       //edit -function;
       this.Mservice.Edit('Job',newJob).subscribe(res => {
-       this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
+       this.job=newJob;
+         this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
          duration: 6000,
          direction:"rtl",
        });  
-     },
-     error => {
-      this.Mservice.showServerError()
-     });  }
+     });  
+    }
      else{
      // add new -function;
      this.Mservice.Save('Job',newJob).subscribe(res => {
        console.log(res);
        this.job.Id= res
-       this.job.Subject=newJob.Subject;
+       this.job=newJob;
        this.snackBar.open("המשרה נוספה בהצלחה!", "סגור", {
          duration: 6000,
          direction:"rtl",
        });  
-     },
-     (error => {
-      this.Mservice.showServerError()
-     })
-   );}
+     });
+    }
   }
+  
   MatchJobCandidates(){
     const dialogRef = this.dialog.open(MatchJobCandidatesComponent, {
       width: '99%',
@@ -147,10 +172,12 @@ export class JobFormComponent implements OnInit {
       console.log('The dialog was closed');
       if(result==true){
         console.log(`Dialog result: ${result}`);
-        // send offerd email
         this.childC.ngOnInit();
       }
     });
+  }
+  onPlaced(){
+    this.ngOnInit();
   }
 }
 

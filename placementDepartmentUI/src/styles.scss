@@ -4,14 +4,15 @@ html, body { height: 100%;  }
 
 body,ng-template,mat-dialog-content{ margin:1 ;  direction: rtl; text-align: right;font-family: 'Varela Round', sans-serif;}
 span,th,td,.mat-paginator,ng-template,mat-expansion-panel,mat-list,.matStepLabel,p,Input,.mat-error,label ,.mat-tooltip,a,pre,mat-chip,textarea,div,mat-dialog-title{font-family: 'Varela Round', sans-serif !important;}
-.mat-icon-button {
-    color: rgb(93, 94, 93);
-  }
+
+// .mat-icon-button {
+//     color: rgb(93, 94, 93) !important;
+//   }
 .mat-icon-button:hover
 {
-   background-color:rgb(237, 237, 237);     
-  color: black;
-   border-radius: 240px;
+  background-color:rgb(239, 240, 236);     
+  color: rgb(255, 214, 0);//rgb(31, 94, 52);
+  border-radius: 240px;
 }
 .mat-toolbar {
     height: 80px !important;
@@ -24,18 +25,16 @@ span,th,td,.mat-paginator,ng-template,mat-expansion-panel,mat-list,.matStepLabel
     direction: rtl !important;
   }
 th.date,td.date{
-  width: 12% !important;
+  width: 11% !important;
 }
 th.bool,td.bool{
   width: 12% !important;
 }
 a.mat-button{
-  // color:rgb(29, 14, 95);
-  color:rgb(36, 19, 110);
+  color:rgb(20, 84, 41);
   font-size: 18px;
   text-decoration-line: none !important; 
   font-weight: bold;
-      // color:rgb(22, 11, 71) !important;
 }
 // a[tabindex]:focus {
 
@@ -57,14 +56,38 @@ pre{
   flex: 1 1 auto;
 } 
 .err-msg{ 
-  color: red;
   font-size: 16px !important;
   text-align: center;
-  font-weight: bold;
-  .mat-simple-snackbar-action {    
-    color: rgb(236, 236, 236);
-  }
+  .mat-simple-snackbar-action {
+    //font-weight: bolder !important;
+    color: #D50000 !important;
 }
+}
+.mat-toolbar{
+  color:rgb(20, 84, 41) !important;
+  font-size: 23px !important;
+  padding-right: 40px !important;
+}
+
+.cdk-overlay-connected-position-bounding-box[dir="rtl"] {
+  .mat-datepicker-content {
+  .mat-calendar {
+  .mat-calendar-content {
+  .mat-calendar-body {
+  .mat-calendar-body-cell {
+  &.mat-calendar-body-begin-range {
+  border-radius: 0 100% 100% 0;
+  }
+  &.mat-calendar-body-end-range {
+  border-radius: 100% 0 0 100%;
+  }
+  }
+  }
+  }
+  }
+  }
+  }
+
 /*font-family: 'Arimo', sans-serif;
 font-family: 'Varela Round', sans-serif;*/
 // font-family: 'Anton', sans-serif;

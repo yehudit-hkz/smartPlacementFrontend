@@ -1,0 +1,172 @@
+        <br>
+  <div class="container">
+  <form [formGroup]="excelForm"  novalidate (ngSubmit)="createGraduate(excelForm.value)" >
+    <div class="row align-items-center">
+<mat-form-field class="col-md-6 offset-md-1">
+    <ngx-mat-file-input placeholder='העלאת קובץ אקסל' formControlName="xlFile" required accept=".xls,.xlsm,.xlsx" ></ngx-mat-file-input>
+    <mat-icon matSuffix>folder</mat-icon>
+  </mat-form-field>
+  <mat-label class="col-md-1">מהשורה</mat-label>
+  <mat-form-field class="col-md-1">
+    <input matInput type="number" min="1" formControlName="startLine" required style="text-align: center;">
+  </mat-form-field >
+  <mat-label class="col-md-1">עד(כולל)</mat-label>
+  <mat-form-field class="col-md-1">
+    <input matInput type="number" formControlName="endLine" required style="text-align: center;">
+  </mat-form-field >
+    </div>
+  <br>
+  <br>
+    <div class="row align-items-center">
+      <mat-label class="col-md-2">ת"ז</mat-label>
+      <mat-form-field class="col-md-1 offset-md-1">
+        <input matInput type="text" maxlength="2" formControlName="Id" required style="text-align: center;">
+        <mat-error *ngIf="hasError('Id', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('Id', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+      <mat-label class="col-md-2">שם משפחה</mat-label>
+      <mat-form-field class="col-md-1 offset-md-1" >
+        <input matInput type="text" maxlength="2" formControlName="lastName" required style="text-align: center;">
+        <mat-error *ngIf="hasError('lastName', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('lastName', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+      <mat-label class="col-md-2">שם פרטי</mat-label>
+      <mat-form-field class="col-md-1" >
+        <input matInput type="text" maxlength="2" formControlName="firstName" required style="text-align: center;">
+        <mat-error *ngIf="hasError('firstName', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('firstName', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+        </div>
+        <div class="row align-items-center">
+        <mat-label class="col-md-2">תאריך לידה</mat-label>
+      <mat-form-field class="col-md-1 offset-md-1" >
+        <input matInput type="text" maxlength="2" formControlName="dateOfBirth" required style="text-align: center;">
+        <mat-error *ngIf="hasError('dateOfBirth', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('dateOfBirth', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+      <mat-label class="col-md-2">פלאפון</mat-label>
+      <mat-form-field class="col-md-1 offset-md-1">
+        <input matInput type="text" maxlength="2" formControlName="phone" required style="text-align: center;">
+        <mat-error *ngIf="hasError('phone', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('phone', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+      <mat-label class="col-md-2">דוא"ל</mat-label>
+      <mat-form-field class="col-md-1" >
+        <input matInput type="text" maxlength="2" formControlName="email" style="text-align: center;">
+        <mat-error *ngIf="hasError('email', 'required')">זהו שדה חובה!</mat-error>
+        <mat-error *ngIf="hasError('email', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+      </mat-form-field >
+    </div>
+        <div class="row align-items-center">
+          <mat-label class="col-md-2">עיר</mat-label>
+          <mat-form-field class="col-md-1 offset-md-1">
+            <input matInput type="text" maxlength="2" formControlName="city" required style="text-align: center;">
+            <mat-error *ngIf="hasError('city', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('city', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+          <mat-label class="col-md-2">כתובת</mat-label>
+          <mat-form-field class="col-md-1 offset-md-1" >
+            <input matInput type="text" maxlength="2" formControlName="address" required style="text-align: center;">
+            <mat-error *ngIf="hasError('address', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('address', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+          <mat-label class="col-md-2">מיקוד</mat-label>
+          <mat-form-field class="col-md-1" >
+            <input matInput type="text" maxlength="2" formControlName="zipCode" required style="text-align: center;">
+            <mat-error *ngIf="hasError('zipCode', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('zipCode', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+      </div>
+        <div class="row align-items-center">
+          <mat-label class="col-md-2">שנת תחילת הלימודים</mat-label>
+          <mat-form-field class="col-md-1 offset-md-1">
+            <input matInput type="text" maxlength="2" formControlName="startYear" required style="text-align: center;">
+            <mat-error *ngIf="hasError('startYear', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('startYear', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+          <mat-label class="col-md-2">שנת סיום הלימודים</mat-label>
+          <mat-form-field class="col-md-1" >
+            <input matInput type="text" maxlength="2" formControlName="endYear" style="text-align: center;">
+            <mat-error *ngIf="hasError('endYear', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('endYear', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+      </div>
+      <div class="row align-items-center">
+        <mat-label class="col-md-2">מדופלם</mat-label>
+        <mat-form-field class="col-md-1 offset-md-1" >
+          <input matInput type="text" maxlength="2" formControlName="hasDiploma" required style="text-align: center;">
+          <mat-error *ngIf="hasError('hasDiploma', 'required')">זהו שדה חובה!</mat-error>
+          <mat-error *ngIf="hasError('hasDiploma', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+        </mat-form-field >
+        <mat-label class="col-md-2">נסיון מקצועי בתחום</mat-label>
+        <mat-form-field class="col-md-1 offset-md-1" >
+          <input matInput type="text" maxlength="2" formControlName="hasExperience" required style="text-align: center;">
+          <mat-error *ngIf="hasError('hasExperience', 'required')">זהו שדה חובה!</mat-error>
+          <mat-error *ngIf="hasError('hasExperience', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+        </mat-form-field >
+        <mat-label class="col-md-2">עובד בתחום</mat-label>
+          <mat-form-field class="col-md-1">
+            <input matInput type="text" maxlength="2" formControlName="isWorkerInProfession" required style="text-align: center;">
+            <mat-error *ngIf="hasError('isWorkerInProfession', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('isWorkerInProfession', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+    </div>
+        <div class="row align-items-center">
+          <mat-label class="col-md-2">הושם ע"י מחלקת ההשמה</mat-label>
+          <mat-form-field class="col-md-1 offset-md-1" >
+            <input matInput type="text" maxlength="2" formControlName="placedByThePlacementDepartment" required style="text-align: center;">
+            <mat-error *ngIf="hasError('placedByThePlacementDepartment', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('placedByThePlacementDepartment', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+          <mat-label class="col-md-2">שם החברה</mat-label>
+          <mat-form-field class="col-md-1 offset-md-1">
+            <input matInput type="text" maxlength="2" formControlName="companyName" required style="text-align: center;">
+            <mat-error *ngIf="hasError('companyName', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('companyName', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+          <mat-label class="col-md-2">תפקיד</mat-label>
+          <mat-form-field class="col-md-1" >
+            <input matInput type="text" maxlength="2" formControlName="role" required style="text-align: center;">
+            <mat-error *ngIf="hasError('role', 'required')">זהו שדה חובה!</mat-error>
+            <mat-error *ngIf="hasError('role', 'pattern')">הזן שם עמודה חוקי!</mat-error>
+          </mat-form-field >
+           </div>
+        <br>
+        <br>
+        <div class="row align-items-center">
+          <mat-form-field class="col-md-3">
+            <mat-select placeholder="מגדר" formControlName="gender" required >
+              <mat-option value="זכר">זכר</mat-option>
+              <mat-option value="נקבה">נקבה</mat-option>
+            </mat-select>
+            <mat-error *ngIf="hasError('gender', 'required')">נא לבחור מגדר</mat-error>
+          </mat-form-field>
+            <mat-form-field class="col-md-3">
+          <mat-select placeholder="שלוחה" formControlName="branch" required>
+            <mat-option *ngFor="let b of Lservice.branches" [value]="b.Id">{{b.name}}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="hasError('branch', 'required')">נא לבחור שלוחה</mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3"> 
+        <input type="text" #expertiseInpt placeholder="תחום הכשרה" matInput required formControlName="expertise" [matAutocomplete]="autoe">
+        <mat-autocomplete autoActiveFirstOption [displayWith]="displayFn" #autoe="matAutocomplete">
+          <mat-option *ngFor="let e of Lservice.expertises | filter:expertiseInpt.value" [value]="e">
+            {{e.name}}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="hasError('expertise', 'required')">נא לבחור תחום הכשרה</mat-error>
+        <mat-error *ngIf="hasError('expertise', 'invalidExpertise')">הזן הכשרה קיימת במערכת</mat-error>
+        </mat-form-field>
+        <mat-checkbox class="col-md-3" formControlName="didGraduate">
+          <span class="text">בוגר לימודים</span>
+        </mat-checkbox>
+        </div>
+        <br>
+        <br>
+        <div style="text-align: center;">
+          <button mat-raised-button type="button" (click)="onCancel()">ביטול</button>&nbsp;
+          <button mat-raised-button type="submit" [disabled]="excelForm.invalid||!excelForm.dirty">הוסף</button>  
+        </div>
+  </form>
+  <br><br><br>
+  </div>

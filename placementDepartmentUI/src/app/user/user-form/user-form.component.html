@@ -1,0 +1,50 @@
+<mat-toolbar>
+    <span>{{user.Id==null?"הוספת משתמש חדש":"עריכת משתמש"}}</span>
+</mat-toolbar>
+<br>
+<div class="container mat-elevation-z4">
+    <br><br>
+<form [formGroup]="userForm" autocomplete (ngSubmit)="createUser(userForm.value)" >
+  <br>
+    <div class="row align-items-center">
+      <div class="col-md-2"></div>
+      <mat-form-field class="col-md-3">
+        <input matInput type="text" placeholder="שם" formControlName="name" required >
+        <mat-error *ngIf="hasError('name', 'required')">זהו שדה חובה!</mat-error>
+      </mat-form-field>
+    </div>
+    <br>
+    <div class="row align-items-center">
+        <div class="col-md-2"></div>
+        <mat-form-field class="col-md-4">
+            <input matInput type="email" placeholder='דוא"ל' formControlName="email" required dir="ltr" >
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error *ngIf="hasError('email', 'email')">הזן כתובת דוא"ל חוקית</mat-error>
+            <mat-error *ngIf="hasError('email', 'required')">זהו שדה חובה!</mat-error>
+          </mat-form-field>
+    </div>
+    <br>
+    <div class="row  align-items-center">
+      <div class="col-md-2"></div>
+        <mat-form-field class="col-md-3 offset-md-1">  
+            <mat-select placeholder="תפקיד" formControlName="permission" >
+                <mat-option *ngFor="let p of Eservice.permissions" [value]="p">{{p.description}}</mat-option>
+            </mat-select>
+        </mat-form-field> 
+    </div>
+    <br>
+    <div class="row align-items-center">
+        <div class="col-md-2"></div>
+        <mat-checkbox class="col-md-2" #isActive formControlName="isActive">
+            <span class="text">פעיל</span>
+        </mat-checkbox>
+    </div>
+  <br><br>
+      <div class="row justify-content-center">
+      <div class="col-md-2"></div>
+        <button class="col-md-1" mat-stroked-button color="primary" type="button" (click)="onCancel()">ביטול</button>&nbsp;
+        <button class="col-md-1" mat-stroked-button color="primary" type="submit" [disabled]="userForm.invalid||!userForm.dirty">{{user.Id==null?"הוסף":"עדכן"}}</button>
+        </div>
+        </form>
+        <br><br>  
+</div>

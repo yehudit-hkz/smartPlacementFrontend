@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import{Graduate}from '../../classes/graduate';
 import{MainService}from '../../services/main.service';
 import {MatDialog,MatSnackBar} from '@angular/material';
-import{DeletionDialogComponent}from '../../deletion-dialog/deletion-dialog.component';
+import{DeletionDialogComponent}from '../../messages/deletion-dialog/deletion-dialog.component';
 import { Location } from '@angular/common';
 
 
@@ -38,8 +38,7 @@ export class GraduateDetailsComponent implements OnInit {
   openDeletionDialog(): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
       width: '300px',
-      // data: {name: this.graduate.firstName+" "+this.graduate.lastName , type: "בוגר"}
-      data: {name: this.graduate.firstName+' '+this.graduate.lastName , type: "בוגר", sub:"ההתאמות שלו למשרות"}
+      data: {name: this.graduate.firstName+' '+this.graduate.lastName , type: "בוגר"}
 
     });
 
@@ -54,40 +53,25 @@ export class GraduateDetailsComponent implements OnInit {
           });  
           this.location.back();
         });
-        err=>{this.service.showServerError()}
       }
     });
   }
-//   openCVFile()
-//   {
-//     this.GTS.getFile(this.id).subscribe(blob=>
-//       {
-//         var newBlob = new Blob([blob], {type: "application/pdf"});
-//         //- open in current tab 
-//         // var link = document.createElement('a');
-//         // link.download = "Je kar.pdf";
-//         // link.href = URL.createObjectURL(newBlob);
-//         // link.click();
+  openCVFile()
+  {
+    this.service.getCVFile(this.graduate.linkToCV).subscribe(stream=>
+      {
+        var blob = new Blob([stream], {type: "application/pdf"});
+        var name = `${this.graduate.firstName} ${this.graduate.lastName}.pdf`;
 
-//        //- open in other tab 
-//         var objectUrl = URL.createObjectURL(newBlob);
-//         window.open(objectUrl);
-//       },
-//      err=>{console.log(err);}
-//     );
-//     // this.GTS.getURLFile().subscribe(path=>
-//     //   {
-//     //     //- open in current tab 
-//     //     // var link = document.createElement('a');
-//     //     // link.download = "Je kar.pdf";
-//     //     // link.href = this.GTS.baseURL+path;
-//     //     // link.click();
+        //- open in new tab 
+        var objectUrl = URL.createObjectURL(blob);
+        let w = window.open(objectUrl);
+        w.addEventListener('load', function () {
+            w.document.title = name;
+        });
 
-//     //    //- open in other tab 
-//     //     window.open("http://localhost:50748/"+path);
-      
-//     //   },
-//     //  err=>{console.log(err);}
-//     // );
-//   }
+      },
+     err=>{console.log(err);}
+    );
+  }
 }

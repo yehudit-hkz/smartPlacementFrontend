@@ -1,25 +1,21 @@
 <mat-toolbar>
     <span>עריכת בוגר</span>
     <span class="spacer"></span>
-    <a [href]="location.path()+'#jobsCoordination'">
-    <button mat-icon-button  >
+    <a mat-icon-button [href]="location.path()+'#jobsCoordination'">
       <mat-icon>work</mat-icon>
-    </button>
-  </a>
+    </a>
   <span style="margin-left: 30px;font-size: 13px;">משרות</span>
-
 </mat-toolbar>
+
+<br>
 <div class="container">
-    <div class="row">
-    <br>
-    </div>
 <div class="row">
     <app-graduate-form [graduateForEdit]="graduate" (submitGraduate)="editDetailsGraduate($event)"  class="mat-elevation-z2 col-md-12"> </app-graduate-form>
 </div>
 <br><br>
 <br><br>
 <div class="row">
-<app-jobs-coordination id="jobsCoordination" [graduateID]='graduate.Id' class="col-md-12"></app-jobs-coordination>
+<app-jobs-coordination id="jobsCoordination" [graduateID]='graduate.Id' (placed)="onPlaced();" class="col-md-12"></app-jobs-coordination>
 </div>
 <br><br>
 </div>

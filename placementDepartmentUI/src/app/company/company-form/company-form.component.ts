@@ -7,6 +7,7 @@ import { MainService } from 'src/app/services/main.service';
 import { ListsService } from 'src/app/services/lists.service';
 import { EnumListsService } from 'src/app/services/enum-lists.service';
 import { MatSnackBar } from '@angular/material';
+import { CompanyService } from 'src/app/services/company.service';
 
 @Component({
   selector: 'app-company-form',
@@ -21,6 +22,7 @@ export class CompanyFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private route:ActivatedRoute,
     public Mservice :MainService,
+    public CCservice :CompanyService,
     public Lservice :ListsService,
     public Eservice :EnumListsService) {
       this.companyForm = new FormGroup({
@@ -38,24 +40,50 @@ export class CompanyFormComponent implements OnInit {
           this.company.Id=params.companyID
   });
   if(this.company.Id)
-    this.Mservice.GetByID('Company',this.company.Id).subscribe(company=>
-     { this.company=company;
+    this.CCservice.GetCompanyByID(this.company.Id).subscribe(company=>
+     { 
+      this.company = company;
       this.companyForm = new FormGroup({
         name: new FormControl(this.company.name, [Validators.required]),
         subject: new FormControl(
          this.Lservice.subjects.find(s=>this.company.Subject.Id==s.Id),
          [Validators.required]),
         city: new FormControl(
-         this.Eservice.cities.find(c=>this.company.City.Id==c.Id),
+         this.Lservice.cities.find(c=>this.company.City.Id==c.Id),
          [Validators.required]),
         address: new FormControl(this.company.address),
         descriptiovOfActivity: new FormControl(this.company.descriptiovOfActivity),
-      });},
-     err=>{
-      this.Mservice.showServerError()
-     }
-    );
+      });
+    });
+    this.onList();
    }
+
+   displayFn(item?: any): string | undefined {
+    return item ? item.name : undefined;
+  }
+
+  onList(){
+    this.companyForm.controls["city"].valueChanges.subscribe(city=>{
+      city = typeof(city) == "string" ? city : city.name;
+      if(city != '')     
+      if( this.Lservice.cities.findIndex(c=> c.name == city )==-1 ){
+        this.companyForm.controls["city"].setErrors({invalidCity:true})  
+      }
+      else{
+        this.companyForm.controls["city"].setErrors(null)
+      }
+    })
+    this.companyForm.controls["subject"].valueChanges.subscribe(subject=>{
+      subject = typeof(subject) == "string" ? subject : subject.name;
+      if(subject != '')
+      if( this.Lservice.subjects.findIndex(s=> s.name == subject ) == -1 ){
+        this.companyForm.controls["subject"].setErrors({invalidSubject:true})  
+      }
+      else{
+        this.companyForm.controls["subject"].setErrors(null)
+      }
+    })
+  }
   
    public hasError = (controlName: string, errorName: string) =>{
      return this.companyForm.controls[controlName].hasError(errorName);
@@ -82,28 +110,20 @@ export class CompanyFormComponent implements OnInit {
       newCompany.descriptiovOfActivity=companyFormValue.descriptiovOfActivity;
       if(this.company.Id)
        //edit function;
-       this.Mservice.Edit('Company',newCompany).subscribe(res => {
+       this.CCservice.Edit('Company',newCompany).subscribe(res => {
         this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",
         }); 
       this.location.back();
-      },
-      error => {
-        this.Mservice.showServerError()
       }); 
       else
       // add new function;
-      this.Mservice.Save('Company',newCompany).subscribe(res => {
+      this.CCservice.Save('Company',newCompany).subscribe(res => {
         this.snackBar.open("החברה נוספה בהצלחה!", "סגור", {
           duration: 6000,
           direction:"rtl",
         });  
-      },
-      (error => {
-        this.Mservice.showServerError()
-      })
-    );
+      });
    }
-
 }

@@ -1,0 +1,44 @@
+<mat-toolbar>
+    <span >{{title}}</span>
+</mat-toolbar>
+<br>
+<br>
+<div class="container">
+<form [formGroup]="listForm" class="row justify-content-center">
+<div formArrayName="array" class="col-md-11">
+    <li [formGroup]="dataForm">
+        <button [disabled]="dataForm.invalid" type="button" mat-icon-button (click)="add()" >
+          <mat-icon matTooltip="הוספה">add_circle_outline</mat-icon>
+        </button>
+        <mat-form-field class="col-md-4">
+          <input type="text" matInput required placeholder="שם" formControlName="name">
+         <mat-error *ngIf="dataForm.get('name').hasError('required')">נא הזן שם</mat-error>
+         <mat-error *ngIf="dataForm.get('name').hasError('Duplicate')">הערך כבר קיים במערכת</mat-error>
+      </mat-form-field> 
+      <mat-form-field class="col-md-3" *ngIf="controller=='City'">
+        <input type="text" matInput required placeholder="אזור" formControlName="area">
+       <mat-error *ngIf="dataForm.get('area').hasError('required')">נא הזן אזור</mat-error>
+    </mat-form-field>  
+    </li>
+    <li *ngFor="let c of listForm.get('array').controls; let i = index;" [formGroupName]="i" >
+        <button type="button" mat-icon-button (click)="remove(i)" >
+            <mat-icon  matTooltip="הסרה">remove_circle_outline</mat-icon>
+        </button>
+        <mat-form-field class="col-md-4">
+            <input type="text" matInput required formControlName="name">
+           <mat-error *ngIf="c.get('name').hasError('required')">נא הזן שם</mat-error>
+           <mat-error *ngIf="c.get('name').hasError('Duplicate')">הערך כבר קיים במערכת</mat-error>
+        </mat-form-field> 
+        <mat-form-field class="col-md-3" *ngIf="controller=='City'">
+            <input type="text" matInput required formControlName="area">
+           <mat-error *ngIf="c.get('area').hasError('required')">נא הזן אזור</mat-error>
+        </mat-form-field>   
+        <button *ngIf="c.dirty" [disabled]="c.invalid" type="button" mat-icon-button (click)="save(c)" >
+            <mat-icon  matTooltip="שמור">save</mat-icon>
+        </button>
+    </li>
+  </div>
+</form>
+</div>
+<br>
+<br>

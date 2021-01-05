@@ -26,8 +26,7 @@ export class GraduateEditingComponent implements OnInit {
     this.route.params.subscribe((params)=>
     this.id=params.graduateID);
     this.service.GetByID('Graduate',this.id).subscribe(graduate=>
-      {this.graduate=graduate;},
-     err=>{this.service.showServerError()}
+      this.graduate=graduate
     );
     
   }
@@ -37,11 +36,13 @@ export class GraduateEditingComponent implements OnInit {
     this.snackBar.open("הפרטים עודכנו בהצלחה!", "סגור", {
       duration: 6000,
       direction:"rtl",
-    });  
-  },
-  error => {
-    this.service.showServerError()
+    });
+    this.location.back();
   }); 
     console.log(editingGraduate)
+  }
+
+  onPlaced(){
+    this.ngOnInit();
   }
 }

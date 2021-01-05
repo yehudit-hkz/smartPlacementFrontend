@@ -8,20 +8,62 @@
       <mat-divider [inset]="true"></mat-divider>
       <br>
       <mat-accordion  multi="true">
-        <mat-expansion-panel  *ngFor="let item of panellist" class="mat-elevation-z0" >
+        <mat-expansion-panel  *ngFor="let item of panelList" class="mat-elevation-z0" >
      <mat-expansion-panel-header >
               {{item.name}}
+              <span class="example-spacer"></span>
+                     <!-- clear button -->
+                     <button style="
+                     margin-left: 15px;
+                     height:20px !important;
+                     width:20px !important;"
+                     *ngIf="item.name=='תקופה'?periodValue:item.selecedlist.length>0" 
+                     (click)="item.name=='תקופה'?cleanPeriod():item.selecedlist=[];applyFilter(filtering.value);"
+                     mat-icon-button>
+                      <mat-icon style="
+                      margin-top  : -30px;
+                      height:14px !important;
+                      width:14px !important;
+                      font-size:15px !important;" matTooltip="ניקוי">clear</mat-icon>
+                    </button>
           </mat-expansion-panel-header>
-          <mat-selection-list [(ngModel)]="selectedOptions">
+          <mat-selection-list *ngIf="item.name!='תקופה'" [(ngModel)]="item.selecedlist">
             <mat-list-option  
             checkboxPosition="before" 
-            (click)="subItem.active=!subItem.active;applyFilter(filtering.value)" 
-            [selected]="subItem.active" 
-            [value]="subItem.value"
+            (click)="applyFilter(filtering.value)" 
+            [value]="subItem.Id"
             *ngFor="let subItem of item.sublist" >
               <span style="margin-right: 10px;">{{subItem.name}}</span>
             </mat-list-option>
           </mat-selection-list>
+           <!-- period  list -->
+           <mat-radio-group 
+           [(ngModel)]="periodValue" 
+           (change)="periodValue == 1 || periodValue == 2 && date.begin != null ? applyFilter(filtering.value):'' "
+           *ngIf="item.name=='תקופה'" >
+           <!-- radio -->
+                <mat-radio-button style="margin: 7px;" value="1">
+                  <span class="mat-sidenav-content-item">היום</span>
+                </mat-radio-button><br>
+                <mat-radio-button style="margin: 7px;" value="2" >
+                  <span class="mat-sidenav-content-item">בין התאריכים:</span>
+                </mat-radio-button>
+                <br>
+           <!-- date -->
+                <mat-form-field style="max-width: 100%;font-size: 15px;">
+                  <input matInput
+                      placeholder="בחר טווח"
+                      [satDatepicker]="picker"
+                      readonly
+                      [disabled]="periodValue != 2"
+                      [max]="maxDate"
+                      [(ngModel)]="date"
+                      (click)="picker.open()"
+                      (dateChange)="periodValue == 2?applyFilter(filtering.value):''">
+                  <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+                  <sat-datepicker #picker dir="rtl" [rangeMode]="true" ></sat-datepicker>
+                </mat-form-field>
+              </mat-radio-group>
         </mat-expansion-panel >
       </mat-accordion>
     </mat-sidenav>
@@ -40,20 +82,28 @@
   <span >חדש</span>
   </div>
 </div>
-<div class="row">
-  <div class="col-md-12 mat-elevation-z4">
-<table mat-table [dataSource]="graduates" matSort>
+<div class="row  table-container" >
+  <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+    <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+<mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
+   &nbsp; ארעה שגיאה      
+    </div>
+  </div>
+  <!-- <div class="row"> -->
+  <div class="col-md-12 ">
+<table mat-table [dataSource]="graduates" matSort class="mat-elevation-z4">
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef  mat-sort-header>  שם </th>
-        <td mat-cell *matCellDef="let g"> {{g.firstName}}&nbsp;{{g.lastName}}</td>
+        <td mat-cell *matCellDef="let g"> {{g.Name}}</td>
       </ng-container>
       <ng-container matColumnDef="expertise">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> תחום הכשרה </th>
-        <td mat-cell *matCellDef="let g"> {{g.Expertise.name}} </td>
+        <td mat-cell *matCellDef="let g"> {{g.expertiseName}} </td>
       </ng-container>
       <ng-container matColumnDef="branch">
         <th mat-header-cell *matHeaderCellDef  mat-sort-header> שלוחה </th>
-        <td mat-cell *matCellDef="let g"> {{g.Branch.name}} </td>
+        <td mat-cell *matCellDef="let g"> {{g.branchName}} </td>
       </ng-container>
       <ng-container matColumnDef="endYear">
         <th mat-header-cell *matHeaderCellDef mat-sort-header > שנת סיום </th>
@@ -77,7 +127,7 @@
   </div>
   <div class="row">
     <div class="col-md-12">
-  <mat-paginator style="margin-top: 7px;"  [pageSizeOptions]="[ 5, 10, 25, 50, 100]"></mat-paginator>
+  <mat-paginator style="margin-top: 7px;" [length]="resultsLength" [pageSizeOptions]="[50, 30, 100, 200]"></mat-paginator>
 </div>
 </div>
 </div>

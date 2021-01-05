@@ -44,3 +44,8 @@ export class MainGraduate{
     endYear:string;
     isActive:boolean;
  }
+
+ export class ImportRes{
+    errLine:number[];
+    readLine:Graduate[];
+ }
