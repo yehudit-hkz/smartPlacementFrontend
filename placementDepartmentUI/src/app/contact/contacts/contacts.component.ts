@@ -16,6 +16,7 @@ export class ContactsComponent implements OnInit {
   companyName;
   contacts: MatTableDataSource<Contact>;
   columnsToDisplay = ['name',"officePhone","phone","email","action"];
+  isNonResults = false;
   
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -24,32 +25,35 @@ export class ContactsComponent implements OnInit {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     public Mservice: MainService,
-  public CCservice: CompanyService) { 
-  }
+    public CCservice: CompanyService) {  }
 
   ngOnInit() {
     this.route.params.subscribe((params)=>{
-    this.companyId=params.companyID;
-    this.companyName=params.companyName;});
+      this.companyId=params.companyID;
+      this.companyName=params.companyName;
+    });
     this.CCservice.GetContactsByCompany(this.companyId).subscribe(
       contacts=>{
         this.contacts = new MatTableDataSource(contacts); 
+        this.isNonResults = (this.contacts.data.length === 0);            
         this.contacts.sort = this.sort;
-           this.contacts.paginator = this.paginator;
-           this.contacts.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
-           this.contacts.paginator._intl.nextPageLabel     = 'עמוד הבא';
-           this.contacts.paginator._intl.previousPageLabel = 'עמוד הקודם';
-           this.contacts.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
-          }
+        this.contacts.paginator = this.paginator;
+        this.contacts.paginator._intl.itemsPerPageLabel='פריטים לעמוד:'
+        this.contacts.paginator._intl.nextPageLabel     = 'עמוד הבא';
+        this.contacts.paginator._intl.previousPageLabel = 'עמוד הקודם';
+        this.contacts.paginator._intl.getRangeLabel = this.Mservice.dutchRangeLabel;
+      }
     )
   }
 
   applyFilter(filterValue: string) {
-    this.contacts.filter =filterValue;
+    this.contacts.filter = filterValue;
+    this.isNonResults = (this.contacts.data.length === 0);            
     if (this.contacts.paginator) {
       this.contacts.paginator.firstPage();
     }
   }
+
   openDeletionDialog(contact:Contact): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
       width: '300px',

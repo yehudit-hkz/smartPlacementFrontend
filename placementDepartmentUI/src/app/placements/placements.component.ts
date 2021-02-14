@@ -20,6 +20,7 @@ import { AuthService } from '../services/auth.service';
   columnsToDisplay = ["jobId","jobSubject","companyName","candidateName","placementStatus","action","dateReceived","lastUpdateDate"];//,"action"];
   resultsLength = 0;
   isLoadingResults = true;
+  isNonResults = false;
   isRateLimitReached = false;
   filters:JobCoordinationFilters;
   gender;
@@ -70,6 +71,7 @@ import { AuthService } from '../services/auth.service';
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
+          this.isNonResults = (data.totalCount === 0);
           this.resultsLength = data.totalCount;
 
           return data.items;
@@ -125,6 +127,7 @@ import { AuthService } from '../services/auth.service';
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
         this.resultsLength = data.totalCount;
+        this.isNonResults = (data.totalCount === 0);
         return data.items;
       }),
       catchError(() => {

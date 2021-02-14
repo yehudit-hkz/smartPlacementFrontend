@@ -20,10 +20,11 @@ export interface filter {
   styleUrls: ['./graduates.component.scss']
 })
 export class GraduatesComponent implements OnInit {
-  graduates: MainGraduate[];//MatTableDataSource<Graduate>;
+  graduates: MainGraduate[];
   columnsToDisplay = ['name',"expertise","branch","endYear","action"];
   resultsLength = 0;
   isLoadingResults = true;
+  isNonResults = false;
   isRateLimitReached = false;
   panelList;
   filters:GraduateFilters;
@@ -80,6 +81,7 @@ export class GraduatesComponent implements OnInit {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
+          this.isNonResults = (data.totalCount === 0);            
           this.resultsLength = data.totalCount;
 
           return data.items;
@@ -145,7 +147,7 @@ export class GraduatesComponent implements OnInit {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
-
+          this.isNonResults = (data.totalCount === 0);            
           this.resultsLength = data.totalCount;
           return data.items;
         }),

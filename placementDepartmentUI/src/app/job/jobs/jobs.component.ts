@@ -30,6 +30,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
   columnsToDisplay = ['title', 'Subject.name', 'isActive', 'didSendCV','lastUpdateDate','action'];
   resultsLength = 0;
   isLoadingResults = true;
+  isNonResults = false;    
   isRateLimitReached = false;
   expandedElement: Job | null;
   filters:JobFilters;
@@ -78,6 +79,7 @@ export class JobsComponent implements OnInit, AfterViewInit {
           // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
+          this.isNonResults = (data.totalCount === 0);
           this.resultsLength = data.totalCount;
 
           return data.items;
@@ -143,8 +145,9 @@ export class JobsComponent implements OnInit, AfterViewInit {
         // Flip flag to show that loading has finished.
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
-
+        this.isNonResults = (data.totalCount === 0);
         this.resultsLength = data.totalCount;
+        
         return data.items;
       }),
       catchError(() => {

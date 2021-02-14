@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Subject, City } from '../../classes/my-enum-list';
 import { CompanyFilters } from '../../classes/filters';
-import {Company} from '../../classes/company';
+import { Company } from '../../classes/company';
 import { MatTableDataSource, MatPaginator, MatSort, MatDialog, MatSnackBar } from '@angular/material';
 import { MainService } from '../../services/main.service';
 import { ListsService } from '../../services/lists.service';
@@ -18,6 +17,7 @@ export class CompaniesComponent implements OnInit {
   columnsToDisplay = ["name","city","address","subject","descriptiovOfActivity","action"];
   isLoadingResults = true;
   isRateLimitReached = false;
+  isNonResults = false;
   filters:CompanyFilters;
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
@@ -56,10 +56,10 @@ export class CompaniesComponent implements OnInit {
         // Flip flag to show that loading has finished.
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
+        this.isNonResults = (companies.length === 0);  
      } ,
       err=>{
         console.log(err);
-        
         this.isLoadingResults = false;
         // Catch if the API has reached its rate limit. Return empty data.
         this.isRateLimitReached = true;
@@ -75,22 +75,33 @@ export class CompaniesComponent implements OnInit {
       return myFilterPredicate;
     }
    
-     applyFilter(filterValue: string) {
-    
-    this.Mservice.GetListByFilters("Company",this.filters).subscribe(companies=>
-      {console.log(companies);
-      this.companies.data=companies},
-      err=>{console.log(err);}
-     );
-      let filter={value:filterValue};
-        this.companies.filter=JSON.stringify(filter);
-    //  this.companies.filter =filterValue;
-       if (this.companies.paginator) {
-         this.companies.paginator.firstPage();
-       }
-     }
+  applyFilter(filterValue: string) {
+    this.isLoadingResults = true;
+    this.Mservice.GetListByFilters("Company",this.filters).subscribe(
+      companies=> {
+        console.log(companies);
+        this.companies.data=companies
 
-     openDeletionDialog(company:Company): void {
+        // Flip flag to show that loading has finished.
+        this.isLoadingResults = false;
+        this.isRateLimitReached = false;
+      },
+      err=>{
+        console.log(err);
+        this.isLoadingResults = false;
+        // Catch if the API has reached its rate limit. Return empty data.
+        this.isRateLimitReached = true;
+      }
+     );
+    let filter={value:filterValue};
+    this.companies.filter=JSON.stringify(filter);
+    this.isNonResults = (this.companies.data.length === 0);  
+    if (this.companies.paginator) {
+      this.companies.paginator.firstPage();
+    }
+  }
+
+  openDeletionDialog(company:Company): void {
     const dialogRef = this.dialog.open(DeletionDialogComponent, {
       width: '300px',
       data: {name: company.name , type: "חברה"}

@@ -33,11 +33,14 @@
   </div >
   <br>
   <div class="row  table-container" >
-    <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+    <div class="col-md-12 example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached || isNonResults">
       <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
       <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-  <mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
-     &nbsp; ארעה שגיאה      
+        <mat-icon style="padding-right: 110px;color: #980000;vertical-align: middle">warning</mat-icon>
+        &nbsp; ארעה שגיאה      
+      </div>
+      <div class="example-rate-limit-reached" style="color: rgb(20, 84, 41);" *ngIf="isNonResults">
+        לא נמצאו נתונים      
       </div>
     </div>
     <!-- <div class="row"> -->
