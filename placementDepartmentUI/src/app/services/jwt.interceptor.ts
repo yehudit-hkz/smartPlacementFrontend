@@ -27,6 +27,7 @@ export class JwtInterceptor implements HttpInterceptor {
     //   }
     }, (err: any) => {
       if (err instanceof HttpErrorResponse) {
+          console.log(err);
           switch (err.status) {
                 case 401:
                   if(window.location.pathname != "/login" ){
@@ -58,7 +59,7 @@ export class JwtInterceptor implements HttpInterceptor {
                       })
                     break;
                 default:
-                    this.snackBar.open("ארעה שגיאה", "סגור", {
+                    this.snackBar.open("ארעה שגיאה נא פנה למנהל המערכת", "סגור", {
                         duration: 8000,
                         direction:"rtl",
                         verticalPosition:'top',
